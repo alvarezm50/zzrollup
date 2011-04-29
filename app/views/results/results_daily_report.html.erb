@@ -1,0 +1,17 @@
+<table border="1">
+  <%header_row = true%>
+  <%@rollup_data.each do |row|%>
+    <tr>
+    <%if header_row%>
+      <%header_row = false%>
+      <%row.each do |item|%>
+        <th><%=item%></th>
+      <%end%>
+    <%else%>
+      <%row.each do |item|%>
+         <td><%=item%></td>
+      <%end%>
+    <%end%>
+    </tr>
+  <%end%>
+</table>

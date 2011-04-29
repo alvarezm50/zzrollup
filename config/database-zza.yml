@@ -1,0 +1,21 @@
+# read only access to zza db
+common: &common
+ adapter: mysql2
+ database: zzaproduction
+ encoding: utf8
+ host: zza-db.ckikxby0s3p8.us-east-1.rds.amazonaws.com
+ username: zzuser
+ password: share1001photos
+
+development:
+  <<: *common
+
+# make sure these are kept in sync with the EY servers
+# NOTE: since the deploy user only has access to photos
+# we need to use that database rather than the preferred
+# approach of giving it a standalone database.  This is
+# ok for production because the main database is an AmazonRDS instance
+#
+production:
+  <<: *common
+
