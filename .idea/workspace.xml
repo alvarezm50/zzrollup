@@ -36,7 +36,7 @@
       <file leaf-file-name=".gitignore" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="1" column="0" selection-start="11" selection-end="11" vertical-scroll-proportion="0.019323671">
+            <state line="3" column="0" selection-start="24" selection-end="24" vertical-scroll-proportion="0.057971016">
               <folding />
             </state>
           </provider>
@@ -90,7 +90,7 @@
       <file leaf-file-name="zangzing_config.yml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/config/zangzing_config.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="35" selection-start="261" selection-end="272" vertical-scroll-proportion="0.0">
+            <state line="9" column="36" selection-start="273" selection-end="273" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -134,7 +134,6 @@
         <option value="$PROJECT_DIR$/lib/base_sweep.rb" />
         <option value="$PROJECT_DIR$/config/database-zza.yml" />
         <option value="$PROJECT_DIR$/config/database-photos.yml" />
-        <option value="$PROJECT_DIR$/config/zangzing_config.yml" />
         <option value="$PROJECT_DIR$/config/schedule.rb" />
         <option value="$PROJECT_DIR$/config/unicorn.rb" />
         <option value="$PROJECT_DIR$/deploy/zza.conf" />
@@ -142,6 +141,7 @@
         <option value="$PROJECT_DIR$/initial_config.rb" />
         <option value="$PROJECT_DIR$/run_unicorn.rb" />
         <option value="$PROJECT_DIR$/lib/rollup_tasks.rb" />
+        <option value="$PROJECT_DIR$/config/zangzing_config.yml" />
         <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
@@ -927,13 +927,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config/zangzing_config.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="35" selection-start="261" selection-end="272" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lib/rollup_tasks.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state line="41" column="18" selection-start="1418" selection-end="1418" vertical-scroll-proportion="-7.6153846">
@@ -941,9 +934,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/config/zangzing_config.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="36" selection-start="273" selection-end="273" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="0" selection-start="11" selection-end="11" vertical-scroll-proportion="0.019323671">
+        <state line="3" column="0" selection-start="24" selection-end="24" vertical-scroll-proportion="0.057971016">
           <folding />
         </state>
       </provider>
