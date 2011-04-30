@@ -7,6 +7,7 @@ class ResultsController < ApplicationController
 
     zip_it = false
     t = RollupTasks.create_csv(span, zip_it, base_file_name)
+    t.flush
 
     # send it
     if zip_it
