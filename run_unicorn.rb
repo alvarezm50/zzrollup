@@ -24,6 +24,6 @@ if running
   do_cmd "kill -s USR2 #{pid}"
 else
   # start from scratch
-  do_cmd "unicorn -E production -c #{app_dir}/config/unicorn.rb -D #{app_dir}/config.ru"
+  do_cmd "~/.rvm/gems/ree-1.8.7-2011.03/bin/unicorn_rails -E production -c #{app_dir}/config/unicorn.rb -D #{app_dir}/config.ru"
 end
 
