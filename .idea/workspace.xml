@@ -27,7 +27,7 @@
       <file leaf-file-name="rollup_tasks.rb" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/rollup_tasks.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="87" column="23" selection-start="2908" selection-end="2908" vertical-scroll-proportion="-11.346154">
+            <state line="86" column="0" selection-start="2828" selection-end="2858" vertical-scroll-proportion="-10.884615">
               <folding />
             </state>
           </provider>
@@ -45,7 +45,7 @@
       <file leaf-file-name="results_controller.rb" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/controllers/results_controller.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="17" column="7" selection-start="511" selection-end="511" vertical-scroll-proportion="0.33943427">
+            <state line="17" column="20" selection-start="502" selection-end="502" vertical-scroll-proportion="0.32850242">
               <folding />
             </state>
           </provider>
@@ -64,15 +64,6 @@
         <entry file="file://$PROJECT_DIR$/config/zangzing_config.yml">
           <provider selected="true" editor-type-id="text-editor">
             <state line="9" column="35" selection-start="261" selection-end="272" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="initial_config.rb" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/initial_config.rb">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="35" column="0" selection-start="863" selection-end="863" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -836,13 +827,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/config/database.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="19" selection-start="538" selection-end="538" vertical-scroll-proportion="0.36714977">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/config/unicorn.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state line="30" column="40" selection-start="923" selection-end="923" vertical-scroll-proportion="-13.846154">
@@ -906,13 +890,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config/application.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="0" selection-start="1277" selection-end="1277" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/config/schedule.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state line="20" column="25" selection-start="551" selection-end="551" vertical-scroll-proportion="0.0">
@@ -929,7 +906,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/rollup_tasks.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="87" column="23" selection-start="2908" selection-end="2908" vertical-scroll-proportion="-11.346154">
+        <state line="86" column="0" selection-start="2828" selection-end="2858" vertical-scroll-proportion="-10.884615">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/application.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="27" column="0" selection-start="1277" selection-end="1277" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -941,9 +925,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/rubystubs18/io.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="900" column="6" selection-start="28359" selection-end="28359" vertical-scroll-proportion="0.5124792">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/controllers/results_controller.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="7" selection-start="511" selection-end="511" vertical-scroll-proportion="0.33943427">
+        <state line="17" column="20" selection-start="502" selection-end="502" vertical-scroll-proportion="0.32850242">
           <folding />
         </state>
       </provider>

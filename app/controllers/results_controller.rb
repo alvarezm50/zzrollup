@@ -14,11 +14,11 @@ class ResultsController < ApplicationController
     if zip_it
       send_file t.path, :type => 'application/zip', :filename => "#{base_file_name}.zip"
     else
-      render :text => RollupTasks.rollup_raw_data(span)
+      f = File.open(t.path, "rb")
+      buff = f.read()
+      send_data buff, :type => 'text/csv', :filename => "#{base_file_name}.csv"
       #send_file t.path, :type => 'text/csv', :filename => "#{base_file_name}.csv"
     end
-
-    t.delete
   end
 
   def daily_report_table
