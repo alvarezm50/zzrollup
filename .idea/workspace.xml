@@ -81,7 +81,7 @@
       <file leaf-file-name="unicorn_rollup.monitrc" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/deploy/unicorn_rollup.monitrc">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="2" column="36" selection-start="117" selection-end="117" vertical-scroll-proportion="0.039933443">
+            <state line="3" column="23" selection-start="225" selection-end="225" vertical-scroll-proportion="0.059900165">
               <folding />
             </state>
           </provider>
@@ -943,7 +943,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/deploy/unicorn_rollup.monitrc">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="36" selection-start="117" selection-end="117" vertical-scroll-proportion="0.039933443">
+        <state line="3" column="23" selection-start="225" selection-end="225" vertical-scroll-proportion="0.059900165">
           <folding />
         </state>
       </provider>

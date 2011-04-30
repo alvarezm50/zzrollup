@@ -1,6 +1,6 @@
 check process unicorn_rollup
   with pidfile /var/run/zangzing/unicorn_rollup.pid
-  start program = "su - ec2-user -c 'cd /home/ec2-user/rails/rollup && /home/ec2-user/rails/rollup/run_unicorn.rb'"
-  stop program = "su - ec2-user -c 'cd /home/ec2-user/rails/rollup && /home/ec2-user/rails/rollup/stop_unicorn.rb'"
+  start program = "/bin/su - ec2-user -c 'cd /home/ec2-user/rails/rollup && /home/ec2-user/rails/rollup/run_unicorn.rb'"
+  stop program = "/bin/su - ec2-user -c 'cd /home/ec2-user/rails/rollup && /home/ec2-user/rails/rollup/stop_unicorn.rb'"
   if mem > 255.0 MB for 2 cycles then restart
   if cpu > 100% for 2 cycles then restart
