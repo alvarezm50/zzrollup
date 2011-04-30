@@ -34,8 +34,8 @@ class GeckoController < ApplicationController
     # now build the json result by first placing in a hash
     gecko_result = {
         :item => [
-            {:text => stat, :value => latest.sum_value},
-            {:text => stat, :value => previous.sum_value}
+            {:text => latest.reported_at.in_time_zone("Tijuana").strftime("%Y-%m-%d %I:%M %p"), :value => latest.sum_value},
+            {:text => previous.reported_at.in_time_zone("Tijuana").strftime("%Y-%m-%d %I:%M %p"), :value => previous.sum_value}
         ]
     }
     json_str = JSON.fast_generate(gecko_result)
