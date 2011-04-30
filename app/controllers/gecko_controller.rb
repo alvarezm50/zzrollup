@@ -1,5 +1,5 @@
 class GeckoController < ApplicationController
-  before_filter :authenticate, :except => [:before_after]
+  #before_filter :authenticate, :except => [:before_after]
 
   # this is for gathering stats in JSON format for geckoboard
   # you specify as an argument the name of the stat (one of the
