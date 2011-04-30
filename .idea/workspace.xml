@@ -60,10 +60,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="unicorn.rb" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="unicorn.rb" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/config/unicorn.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="76" selection-start="315" selection-end="315" vertical-scroll-proportion="-0.1092437">
+            <state line="12" column="76" selection-start="315" selection-end="315" vertical-scroll-proportion="2.5">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="database.yml" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/config/database.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="19" column="19" selection-start="538" selection-end="538" vertical-scroll-proportion="0.36714977">
               <folding />
             </state>
           </provider>
@@ -126,7 +135,6 @@
         <option value="$PROJECT_DIR$/lib/evt_sweep.rb" />
         <option value="$PROJECT_DIR$/lib/album_sweep.rb" />
         <option value="$PROJECT_DIR$/lib/base_sweep.rb" />
-        <option value="$PROJECT_DIR$/config/database.yml" />
         <option value="$PROJECT_DIR$/config/database-zza.yml" />
         <option value="$PROJECT_DIR$/config/database-photos.yml" />
         <option value="$PROJECT_DIR$/config/zangzing_config.yml" />
@@ -134,6 +142,7 @@
         <option value="$PROJECT_DIR$/lib/rollup_tasks.rb" />
         <option value="$PROJECT_DIR$/config/unicorn.rb" />
         <option value="$PROJECT_DIR$/deploy/zza.conf" />
+        <option value="$PROJECT_DIR$/config/database.yml" />
       </list>
     </option>
   </component>
@@ -809,13 +818,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config/database.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="0" selection-start="413" selection-end="413" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/config/database-zza.yml">
       <provider selected="true" editor-type-id="text-editor">
         <state line="18" column="0" selection-start="529" selection-end="529" vertical-scroll-proportion="0.0">
@@ -895,7 +897,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/config/unicorn.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="76" selection-start="315" selection-end="315" vertical-scroll-proportion="-0.1092437">
+        <state line="12" column="76" selection-start="315" selection-end="315" vertical-scroll-proportion="2.5">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/database.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="19" selection-start="538" selection-end="538" vertical-scroll-proportion="0.36714977">
           <folding />
         </state>
       </provider>

@@ -17,7 +17,7 @@ production:
   <<: *common
   database: rollup_prod
   host: zza-db.ckikxby0s3p8.us-east-1.rds.amazonaws.com
-  username: zzadbadmin
+  username: zzadmin
   password: share1001photos
 
 
