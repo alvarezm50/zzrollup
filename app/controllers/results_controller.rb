@@ -14,7 +14,8 @@ class ResultsController < ApplicationController
     if zip_it
       send_file t.path, :type => 'application/zip', :filename => "#{base_file_name}.zip"
     else
-      send_file t.path, :type => 'text/csv', :filename => "#{base_file_name}.csv"
+      render :text => RollupTasks.rollup_raw_data(span)
+      #send_file t.path, :type => 'text/csv', :filename => "#{base_file_name}.csv"
     end
 
     t.delete
