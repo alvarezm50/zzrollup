@@ -25,8 +25,9 @@ class ApplicationController < ActionController::Base
         end
         # if didn't do gecko custom, check normal
         if ok == false
-          username == basic_auth_user && password == basic_auth_password
+          ok = username == basic_auth_user && password == basic_auth_password
         end
+        ok
       end
     end
   end

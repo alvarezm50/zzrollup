@@ -27,7 +27,16 @@
       <file leaf-file-name="application_controller.rb" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/controllers/application_controller.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="18" column="0" selection-start="638" selection-end="638" vertical-scroll-proportion="0.3478261">
+            <state line="29" column="10" selection-start="1164" selection-end="1164" vertical-scroll-proportion="0.5603865">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="zangzing_config.yml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/config/zangzing_config.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="10" column="22" selection-start="289" selection-end="296" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -667,13 +676,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config/zangzing_config.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="16" selection-start="300" selection-end="314" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/.rvm/gems/ruby-1.8.7-p302/gems/actionpack-3.0.3/lib/action_dispatch/http/mime_negotiation.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state line="47" column="0" selection-start="1432" selection-end="1432" vertical-scroll-proportion="0.3327787">
@@ -751,9 +753,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/config/zangzing_config.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="22" selection-start="289" selection-end="296" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/controllers/application_controller.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="0" selection-start="638" selection-end="638" vertical-scroll-proportion="0.3478261">
+        <state line="29" column="10" selection-start="1164" selection-end="1164" vertical-scroll-proportion="0.5603865">
           <folding />
         </state>
       </provider>
