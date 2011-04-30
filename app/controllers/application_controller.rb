@@ -3,17 +3,30 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
 
   def protect_with_http_auth
-    allowed = Set.new (
-#          'gecko#before_after'
+    allowed = Set.new(
+
+    )
+    # special case for gecko and it's wacky scheme
+    # authenticated with special user/pw
+    gecko_custom = Set.new(
+        'gecko#before_after'
     )
     basic_auth_user = ZangZingConfig.config[:basic_auth_user]
     basic_auth_password = ZangZingConfig.config[:basic_auth_password]
     method = "#{params[:controller]}##{params[:action]}"
     unless allowed.include?(method)
       authenticate_or_request_with_http_basic('ZZRollup') do |username, password|
-        Rails.logger.info("UN: #{username}, PW: #{password}")
-        return true if method == 'gecko#before_after'
-        username == basic_auth_user && password == basic_auth_password
+        ok = false
+        if gecko_custom.include?(method)
+          # special case the gecko board requests because they always pass X as password
+          gecko_user = ZangZingConfig.config[:gecko_user]
+          gecko_password = ZangZingConfig.config[:gecko_password]
+          ok = username == gecko_user && password == gecko_password
+        end
+        # if didn't do gecko custom, check normal
+        if ok == false
+          username == basic_auth_user && password == basic_auth_password
+        end
       end
     end
   end

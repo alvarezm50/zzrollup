@@ -8,6 +8,8 @@
 common: &common
   basic_auth_user: "zzadmin"
   basic_auth_password: "1001results"
+  gecko_user: "zzgecko"
+  gecko_password: "X"   # They always append X as the password
 
 development:
   <<: *common
