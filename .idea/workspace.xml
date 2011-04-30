@@ -33,19 +33,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="schedule.rb" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="schedule.rb" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/config/schedule.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="26" column="36" selection-start="671" selection-end="684" vertical-scroll-proportion="0.0">
+            <state line="24" column="2" selection-start="613" selection-end="613" vertical-scroll-proportion="0.47920132">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="rollup_tasks.rb" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="rollup_tasks.rb" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/rollup_tasks.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="135" column="20" selection-start="4042" selection-end="4042" vertical-scroll-proportion="0.76870745">
+            <state line="135" column="20" selection-start="4042" selection-end="4042" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -130,10 +130,10 @@
         <option value="$PROJECT_DIR$/app/controllers/application_controller.rb" />
         <option value="$PROJECT_DIR$/lib/evt_sweep.rb" />
         <option value="$PROJECT_DIR$/lib/photo_sweep.rb" />
-        <option value="$PROJECT_DIR$/config/schedule.rb" />
         <option value="$PROJECT_DIR$/lib/rollup_tasks.rb" />
         <option value="$PROJECT_DIR$/lib/album_sweep.rb" />
         <option value="$PROJECT_DIR$/lib/user_sweep.rb" />
+        <option value="$PROJECT_DIR$/config/schedule.rb" />
       </list>
     </option>
   </component>
@@ -817,13 +817,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config/schedule.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="36" selection-start="671" selection-end="684" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lib/photo_sweep.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state line="16" column="0" selection-start="258" selection-end="453" vertical-scroll-proportion="0.0">
@@ -847,7 +840,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/rollup_tasks.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="135" column="20" selection-start="4042" selection-end="4042" vertical-scroll-proportion="0.76870745">
+        <state line="135" column="20" selection-start="4042" selection-end="4042" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/schedule.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="24" column="2" selection-start="613" selection-end="613" vertical-scroll-proportion="0.47920132">
           <folding />
         </state>
       </provider>
