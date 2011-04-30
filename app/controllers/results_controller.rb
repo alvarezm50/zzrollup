@@ -14,6 +14,8 @@ class ResultsController < ApplicationController
     else
       send_file t.path, :type => 'text/csv', :filename => "#{base_file_name}.csv"
     end
+
+    t.delete
   end
 
   def daily_report_table

@@ -97,7 +97,7 @@ class RollupTasks
       stream_csv(span, t)
     end
 
-    t.close
+    t.rewind
     return t
   end
 
