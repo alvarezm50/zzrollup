@@ -27,7 +27,7 @@
       <file leaf-file-name="rollup_tasks.rb" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lib/rollup_tasks.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="83" column="20" selection-start="2773" selection-end="2782" vertical-scroll-proportion="0.4395018">
+            <state line="87" column="23" selection-start="2908" selection-end="2908" vertical-scroll-proportion="0.52491105">
               <folding />
             </state>
           </provider>
@@ -141,8 +141,8 @@
         <option value="$PROJECT_DIR$/deploy/unicorn_rollup.monitrc" />
         <option value="$PROJECT_DIR$/config/application.rb" />
         <option value="$PROJECT_DIR$/config/schedule.rb" />
-        <option value="$PROJECT_DIR$/lib/rollup_tasks.rb" />
         <option value="$PROJECT_DIR$/app/controllers/results_controller.rb" />
+        <option value="$PROJECT_DIR$/lib/rollup_tasks.rb" />
       </list>
     </option>
   </component>
@@ -943,7 +943,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/rollup_tasks.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="83" column="20" selection-start="2773" selection-end="2782" vertical-scroll-proportion="0.4395018">
+        <state line="87" column="23" selection-start="2908" selection-end="2908" vertical-scroll-proportion="0.52491105">
           <folding />
         </state>
       </provider>

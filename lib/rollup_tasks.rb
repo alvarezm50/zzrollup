@@ -82,9 +82,10 @@ class RollupTasks
   end
 
   def self.dump_file(path)
+    Rails.logger.info("Dumping file:")
     f = File.open(path, "rb")
     f.lines.each do |line|
-      puts line
+      Rails.logger.info line
     end
     f.close
   end
