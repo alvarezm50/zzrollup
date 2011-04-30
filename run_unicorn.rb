@@ -11,12 +11,17 @@ end
 app_dir = Dir.pwd
 pid_file = "/var/run/zangzing/unicorn_rollup.pid"
 
-do_cmd "ps -fp `cat #{pid_file}`"
-running = $?.exitstatus == 0
+pid = `cat #{pid_file}`
+running = false
+
+if !pid.empty?
+  do_cmd "ps -fp #{pid}"
+  running = $?.exitstatus == 0
+end
 
 if running
   # restart gracefully
-  do_cmd "kill -s USR2 `cat #{pid_file}`"
+  do_cmd "kill -s USR2 #{pid}"
 else
   # start from scratch
   do_cmd "unicorn -E production -c #{app_dir}/config/unicorn.rb -D #{app_dir}/config.ru"
