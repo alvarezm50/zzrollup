@@ -39,7 +39,7 @@ class RollupTasks
 
       # output the headers which are the ordered query names
       headers = db.execute("SELECT distinct query_name FROM rollup_results ORDER BY query_name")
-      return rollup_data if headers.empty?
+      return rollup_data if headers.count == 0
       out_row = ["Date"]
       headers.each do |header|
         out_row << header[0]

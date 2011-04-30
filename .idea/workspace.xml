@@ -27,7 +27,7 @@
       <file leaf-file-name="rollup_tasks.rb" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lib/rollup_tasks.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="42" column="0" selection-start="1443" selection-end="1443" vertical-scroll-proportion="0.46391752">
+            <state line="41" column="0" selection-start="1400" selection-end="1400" vertical-scroll-proportion="0.33333334">
               <folding />
             </state>
           </provider>
@@ -823,6 +823,10 @@
           <url>file://$PROJECT_DIR$/run_unicorn.rb</url>
           <line>10</line>
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="ruby-line">
+          <url>file://$PROJECT_DIR$/lib/rollup_tasks.rb</url>
+          <line>41</line>
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
@@ -934,7 +938,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/rollup_tasks.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="42" column="0" selection-start="1443" selection-end="1443" vertical-scroll-proportion="0.46391752">
+        <state line="41" column="0" selection-start="1400" selection-end="1400" vertical-scroll-proportion="0.33333334">
           <folding />
         </state>
       </provider>
