@@ -24,28 +24,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="user_sweep.rb" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lib/user_sweep.rb">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="8" column="0" selection-start="149" selection-end="149" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="schedule.rb" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/config/schedule.rb">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="8" column="22" selection-start="297" selection-end="297" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="rollup_tasks.rb" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/rollup_tasks.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="8" column="40" selection-start="209" selection-end="209" vertical-scroll-proportion="0.0">
+            <state line="41" column="18" selection-start="1418" selection-end="1418" vertical-scroll-proportion="-7.6153846">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".gitignore" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="1" column="0" selection-start="11" selection-end="11" vertical-scroll-proportion="0.019323671">
               <folding />
             </state>
           </provider>
@@ -78,10 +69,28 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="run_unicorn.rb" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="run_unicorn.rb" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/run_unicorn.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="2" column="0" selection-start="21" selection-end="21" vertical-scroll-proportion="0.038647342">
+            <state line="2" column="0" selection-start="21" selection-end="21" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="routes.rb" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/config/routes.rb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="2" column="29" selection-start="150" selection-end="169" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="zangzing_config.yml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/config/zangzing_config.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="9" column="35" selection-start="261" selection-end="272" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -127,13 +136,13 @@
         <option value="$PROJECT_DIR$/config/database-photos.yml" />
         <option value="$PROJECT_DIR$/config/zangzing_config.yml" />
         <option value="$PROJECT_DIR$/config/schedule.rb" />
-        <option value="$PROJECT_DIR$/lib/rollup_tasks.rb" />
         <option value="$PROJECT_DIR$/config/unicorn.rb" />
         <option value="$PROJECT_DIR$/deploy/zza.conf" />
         <option value="$PROJECT_DIR$/config/database.yml" />
         <option value="$PROJECT_DIR$/initial_config.rb" />
-        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/run_unicorn.rb" />
+        <option value="$PROJECT_DIR$/lib/rollup_tasks.rb" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -827,23 +836,9 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/config/database-zza.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="0" selection-start="529" selection-end="529" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/config/database-photos.yml">
       <provider selected="true" editor-type-id="text-editor">
         <state line="18" column="0" selection-start="537" selection-end="537" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config/zangzing_config.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="0" selection-start="350" selection-end="350" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -865,13 +860,6 @@
     <entry file="file://$PROJECT_DIR$/lib/base_sweep.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state line="28" column="15" selection-start="779" selection-end="779" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/rollup_tasks.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="40" selection-start="209" selection-end="209" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -918,13 +906,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="7" selection-start="23" selection-end="23" vertical-scroll-proportion="0.038647342">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/initial_config.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state line="1" column="0" selection-start="0" selection-end="20" vertical-scroll-proportion="0.0">
@@ -934,7 +915,35 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/run_unicorn.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="0" selection-start="21" selection-end="21" vertical-scroll-proportion="0.038647342">
+        <state line="2" column="0" selection-start="21" selection-end="21" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/routes.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="29" selection-start="150" selection-end="169" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/zangzing_config.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="35" selection-start="261" selection-end="272" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/rollup_tasks.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="41" column="18" selection-start="1418" selection-end="1418" vertical-scroll-proportion="-7.6153846">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="0" selection-start="11" selection-end="11" vertical-scroll-proportion="0.019323671">
           <folding />
         </state>
       </provider>
