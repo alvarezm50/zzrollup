@@ -17,7 +17,7 @@ set :output, "#{Dir.pwd}/log/cron.log"
 set :environment, safe_rails_env
 #
 
-every 1.day, :at => '9:34 pm' do
+every 1.day, :at => '4:38 am' do
   runner "RollupTasks.daily_full_report_sweep"
 end
 
