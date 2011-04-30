@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 def do_cmd(cmd)
   puts cmd
   Kernel.system(cmd)

@@ -72,25 +72,16 @@
       <file leaf-file-name="initial_config.rb" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/initial_config.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="27" column="46" selection-start="589" selection-end="589" vertical-scroll-proportion="0.0">
+            <state line="1" column="0" selection-start="0" selection-end="20" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name=".gitignore" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/.gitignore">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="2" column="7" selection-start="23" selection-end="23" vertical-scroll-proportion="0.038647342">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="run_unicorn.rb" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="run_unicorn.rb" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/run_unicorn.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="8" column="0" selection-start="159" selection-end="159" vertical-scroll-proportion="0.0">
+            <state line="2" column="0" selection-start="21" selection-end="21" vertical-scroll-proportion="0.038647342">
               <folding />
             </state>
           </provider>
@@ -141,8 +132,8 @@
         <option value="$PROJECT_DIR$/deploy/zza.conf" />
         <option value="$PROJECT_DIR$/config/database.yml" />
         <option value="$PROJECT_DIR$/initial_config.rb" />
-        <option value="$PROJECT_DIR$/run_unicorn.rb" />
         <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/run_unicorn.rb" />
       </list>
     </option>
   </component>
@@ -830,7 +821,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="ruby-line">
           <url>file://$PROJECT_DIR$/run_unicorn.rb</url>
-          <line>5</line>
+          <line>7</line>
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -927,23 +918,23 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="7" selection-start="23" selection-end="23" vertical-scroll-proportion="0.038647342">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/initial_config.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="46" selection-start="589" selection-end="589" vertical-scroll-proportion="0.0">
+        <state line="1" column="0" selection-start="0" selection-end="20" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/run_unicorn.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="0" selection-start="159" selection-end="159" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="7" selection-start="23" selection-end="23" vertical-scroll-proportion="0.038647342">
+        <state line="2" column="0" selection-start="21" selection-end="21" vertical-scroll-proportion="0.038647342">
           <folding />
         </state>
       </provider>
