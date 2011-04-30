@@ -1,8 +1,8 @@
 check process unicorn_rollup
-  with pidfile /var/run/engineyard/unicorn_photos.pid
-  start program = "/bin/bash -l -c 'cd /Users/gseitz/Develop/ZZ/rollup && ./run_unicorn.rb'"
+  with pidfile /var/run/zangzing/unicorn_rollup.pid
+  start program = "/bin/bash -l -c 'cd /home/ec2-user/rails/rollup && ./run_unicorn.rb'"
     as uid ec2-user and gid ec2-user
-    stop program = "/bin/bash -l -c 'cd /Users/gseitz/Develop/ZZ/rollup && ./stop_unicorn.rb'"
+    stop program = "/bin/bash -l -c 'cd /home/ec2-user/rails/rollup && ./stop_unicorn.rb'"
     as uid ec2-user and gid ec2-user
   if mem > 255.0 MB for 2 cycles then restart
   if cpu > 100% for 2 cycles then restart
