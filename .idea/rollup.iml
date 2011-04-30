@@ -12,6 +12,12 @@
   <component name="GemRequirementsHolder" version="3">
     <requirement>
       <requirement>
+        <dependency name="json" version="0" bound="GREATER_OR_EQUAL" git="false" path="false" doRequire="true" />
+      </requirement>
+      <source from="Gemfile" />
+    </requirement>
+    <requirement>
+      <requirement>
         <dependency name="mysql2" version="0" bound="GREATER_OR_EQUAL" git="false" path="false" doRequire="true" />
       </requirement>
       <source from="Gemfile" />
@@ -64,6 +70,7 @@
     <orderEntry type="library" scope="PROVIDED" name="[gem] kgio (v2.1.1, /Users/gseitz/.rvm/gems/ruby-1.8.7-p302/gems/kgio-2.1.1)" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="[gem] unicorn (v3.3.1, /Users/gseitz/.rvm/gems/ruby-1.8.7-p302/gems/unicorn-3.3.1)" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="[gem] rubyzip (v0.9.4, /Users/gseitz/.rvm/gems/ruby-1.8.7-p302/gems/rubyzip-0.9.4)" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="[gem] json (v1.5.1, /Users/gseitz/.rvm/gems/ruby-1.8.7-p302/gems/json-1.5.1)" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="[gem] polyglot (v0.3.1, /Users/gseitz/.rvm/gems/ruby-1.8.7-p302/gems/polyglot-0.3.1)" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="[gem] builder (v2.1.2, /Users/gseitz/.rvm/gems/ruby-1.8.7-p302/gems/builder-2.1.2)" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="[gem] erubis (v2.6.6, /Users/gseitz/.rvm/gems/ruby-1.8.7-p302/gems/erubis-2.6.6)" level="application" />
