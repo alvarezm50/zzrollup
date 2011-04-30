@@ -6,12 +6,17 @@ class UserSweep < BaseSweep
   end
 
   def self.full(span)
-    full_query(db, "Users.all", span,
-               "SELECT count(*) FROM users")
+    minimal(span)
     full_query(db, "Users.active", span,
                "SELECT count(*) FROM users WHERE active=1")
     full_query(db, "Users.inactive", span,
                "SELECT count(*) FROM users WHERE active=0")
+  end
+
+  # this gets called at high frequency so only collect a few interesting stats
+  def self.minimal(span)
+    full_query(db, "Users.all", span,
+               "SELECT count(*) FROM users")
   end
 
 end

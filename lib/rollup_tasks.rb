@@ -127,10 +127,13 @@ class RollupTasks
     full_report_sweep(span)
   end
 
-  def self.hourly_full_report_sweep
+  def self.minimal_sweep
     set_now
-
-    full_report_sweep(QUARTER_HOURLY_REPORT_INTERVAL)
+    span = QUARTER_HOURLY_REPORT_INTERVAL
+    UserSweep.minimal(span)
+    AlbumSweep.minimal(span)
+    PhotoSweep.minimal(span)
+    EvtSweep.minimal(span)
   end
 
 
