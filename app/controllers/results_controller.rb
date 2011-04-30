@@ -7,7 +7,8 @@ class ResultsController < ApplicationController
 
     zip_it = false
     t = RollupTasks.create_csv(span, zip_it, base_file_name)
-    t.flush
+
+    RollupTasks.dump_file(t.path)
 
     # send it
     if zip_it
@@ -30,4 +31,5 @@ class ResultsController < ApplicationController
       render :action => "results_daily_report", :layout => "basic"
     end
   end
+
 end

@@ -24,10 +24,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="rollup_tasks.rb" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="rollup_tasks.rb" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lib/rollup_tasks.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="77" column="0" selection-start="2679" selection-end="2679" vertical-scroll-proportion="-6.730769">
+            <state line="83" column="20" selection-start="2773" selection-end="2782" vertical-scroll-proportion="0.4395018">
               <folding />
             </state>
           </provider>
@@ -42,10 +42,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="results_controller.rb" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="results_controller.rb" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/controllers/results_controller.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="4" selection-start="298" selection-end="298" vertical-scroll-proportion="0.19966722">
+            <state line="10" column="16" selection-start="303" selection-end="303" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -54,7 +54,7 @@
       <file leaf-file-name="streaming.rb" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$USER_HOME$/.rvm/gems/ruby-1.8.7-p302/gems/actionpack-3.0.3/lib/action_controller/metal/streaming.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="65" column="10" selection-start="3245" selection-end="3245" vertical-scroll-proportion="0.0">
+            <state line="77" column="50" selection-start="3809" selection-end="3830" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -927,23 +927,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/rollup_tasks.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="77" column="0" selection-start="2679" selection-end="2679" vertical-scroll-proportion="-6.730769">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/.rvm/gems/ruby-1.8.7-p302/gems/actionpack-3.0.3/lib/action_controller/metal/streaming.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="65" column="10" selection-start="3245" selection-end="3245" vertical-scroll-proportion="0.0">
+        <state line="77" column="50" selection-start="3809" selection-end="3830" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/controllers/results_controller.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="4" selection-start="298" selection-end="298" vertical-scroll-proportion="0.19966722">
+        <state line="10" column="16" selection-start="303" selection-end="303" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/rollup_tasks.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="83" column="20" selection-start="2773" selection-end="2782" vertical-scroll-proportion="0.4395018">
           <folding />
         </state>
       </provider>

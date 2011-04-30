@@ -81,11 +81,19 @@ class RollupTasks
     end
   end
 
+  def self.dump_file(path)
+    f = File.open(path, "rb")
+    f.lines.each do |line|
+      puts line
+    end
+    f.close
+  end
+
   # run the query to collect all results
   # and store in a temp csv file or optionally
   # into a zip file
   def self.create_csv(span, zip_it, base_file_name)
-    t = Tempfile.new("knuckknuck-#{Time.now.to_i}-#{rand(999999999)}")
+    t = Tempfile.new("knuckknuck-#{Time.now.to_i}")
     if zip_it
       # want the result zipped
       Zip::ZipOutputStream.open(t.path) do |zos|
@@ -97,6 +105,7 @@ class RollupTasks
       stream_csv(span, t)
     end
 
+    t.flush
     t.rewind
     return t
   end
