@@ -25,7 +25,7 @@ release_path = "/home/ec2-user/rails/rollup"
 
 # set up the initial configuration
 do_cmd "sudo mkdir -p /var/run/zangzing"
-do_cmd "sudo chown ec2-user:ec2-user zangzing"
+do_cmd "sudo chown ec2-user:ec2-user /var/run/zangzing"
 
 do_cmd "sudo ln -nfs #{release_path}/deploy/rollup.conf /etc/nginx/conf.d/rollup.conf"
 
