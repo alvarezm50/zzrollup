@@ -4,12 +4,15 @@ class ApplicationController < ActionController::Base
 
   def protect_with_http_auth
     allowed = Set.new (
-          'gecko#before_after'
+#          'gecko#before_after'
     )
     basic_auth_user = ZangZingConfig.config[:basic_auth_user]
     basic_auth_password = ZangZingConfig.config[:basic_auth_password]
-    unless allowed.include?("#{params[:controller]}##{params[:action]}")
+    method = "#{params[:controller]}##{params[:action]}"
+    unless allowed.include?(method)
       authenticate_or_request_with_http_basic('ZZRollup') do |username, password|
+        Rails.logger.info("UN: #{username}, PW: #{password}")
+        return true if method == 'gecko#before_after'
         username == basic_auth_user && password == basic_auth_password
       end
     end
