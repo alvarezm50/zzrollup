@@ -20,7 +20,11 @@ class ResultsController < ApplicationController
     span = RollupTasks::DAILY_REPORT_INTERVAL
 
     @rollup_data = RollupTasks.rollup_raw_data(span)
-    #@table_innards = as_table_innards(rollup_data)
-    render :action => "results_daily_report", :layout => "basic"
+
+    if @rollup_data.empty?
+      render :nothing => true
+    else
+      render :action => "results_daily_report", :layout => "basic"
+    end
   end
 end
