@@ -17,13 +17,13 @@ set :output, "#{Dir.pwd}/log/cron.log"
 set :environment, safe_rails_env
 #
 
-every 1.day, :at => '11:55 pm' do
+every 1.day, :at => '09:32 pm' do
   runner "RollupTasks.daily_full_report_sweep"
 end
 
 # just for short term testing
-every 1.minute do
-   runner "RollupTasks.daily_full_report_sweep"
-end
+#every 1.minute do
+#   runner "RollupTasks.daily_full_report_sweep"
+#end
 
 # Learn more: http://github.com/javan/whenever
