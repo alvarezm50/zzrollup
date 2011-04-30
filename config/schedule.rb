@@ -11,6 +11,8 @@ require 'config/initializers/zangzing_config'
 zc = ::ZangZingConfig.config
 
 env :MAILTO, ''
+env :TZ, 'US/Pacific'
+
 set :output, "#{Dir.pwd}/log/cron.log"
 set :environment, safe_rails_env
 #

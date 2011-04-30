@@ -27,7 +27,16 @@
       <file leaf-file-name="rollup_tasks.rb" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/rollup_tasks.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="41" column="0" selection-start="1400" selection-end="1400" vertical-scroll-proportion="-7.1923075">
+            <state line="19" column="56" selection-start="364" selection-end="409" vertical-scroll-proportion="-8.769231">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="application.rb" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/config/application.rb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="27" column="0" selection-start="1277" selection-end="1277" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -78,10 +87,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="unicorn_rollup.monitrc" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="unicorn_rollup.monitrc" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/deploy/unicorn_rollup.monitrc">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="23" selection-start="225" selection-end="225" vertical-scroll-proportion="0.059900165">
+            <state line="3" column="23" selection-start="225" selection-end="225" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="schedule.rb" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/config/schedule.rb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="13" column="20" selection-start="382" selection-end="392" vertical-scroll-proportion="0.25956738">
               <folding />
             </state>
           </provider>
@@ -91,24 +109,6 @@
         <entry file="file://$PROJECT_DIR$/stop_unicorn.rb">
           <provider selected="true" editor-type-id="text-editor">
             <state line="11" column="48" selection-start="192" selection-end="228" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="routes.rb" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/config/routes.rb">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="2" column="29" selection-start="150" selection-end="169" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="zangzing_config.yml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/config/zangzing_config.yml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="36" selection-start="273" selection-end="273" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -127,10 +127,8 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/lib/base_sweep.rb" />
         <option value="$PROJECT_DIR$/config/database-zza.yml" />
         <option value="$PROJECT_DIR$/config/database-photos.yml" />
-        <option value="$PROJECT_DIR$/config/schedule.rb" />
         <option value="$PROJECT_DIR$/config/unicorn.rb" />
         <option value="$PROJECT_DIR$/deploy/zza.conf" />
         <option value="$PROJECT_DIR$/config/database.yml" />
@@ -143,6 +141,8 @@
         <option value="$PROJECT_DIR$/initial_config.rb" />
         <option value="$PROJECT_DIR$/run_unicorn.rb" />
         <option value="$PROJECT_DIR$/deploy/unicorn_rollup.monitrc" />
+        <option value="$PROJECT_DIR$/config/application.rb" />
+        <option value="$PROJECT_DIR$/config/schedule.rb" />
       </list>
     </option>
   </component>
@@ -836,20 +836,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/models/rollup_db.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="14" selection-start="6" selection-end="14" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/models/zzadb.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="11" selection-start="6" selection-end="11" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/deploy/rollup.conf">
       <provider selected="true" editor-type-id="text-editor">
         <state line="1" column="34" selection-start="61" selection-end="61" vertical-scroll-proportion="0.0">
@@ -906,13 +892,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/rollup_tasks.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="41" column="0" selection-start="1400" selection-end="1400" vertical-scroll-proportion="-7.1923075">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/controllers/results_controller.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state line="23" column="0" selection-start="636" selection-end="636" vertical-scroll-proportion="0.0">
@@ -943,7 +922,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/deploy/unicorn_rollup.monitrc">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="23" selection-start="225" selection-end="225" vertical-scroll-proportion="0.059900165">
+        <state line="3" column="23" selection-start="225" selection-end="225" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/rollup_tasks.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="56" selection-start="364" selection-end="409" vertical-scroll-proportion="-8.769231">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/application.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="27" column="0" selection-start="1277" selection-end="1277" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/schedule.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="20" selection-start="382" selection-end="392" vertical-scroll-proportion="0.25956738">
           <folding />
         </state>
       </provider>
