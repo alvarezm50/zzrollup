@@ -17,7 +17,8 @@ set :output, "#{Dir.pwd}/log/cron.log"
 set :environment, safe_rails_env
 #
 
-every 1.day, :at => '4:38 am' do
+# even though TZ is set, time still appear to be in UTC
+every 1.day, :at => '6:55 am' do
   runner "RollupTasks.daily_full_report_sweep"
 end
 
