@@ -35,7 +35,8 @@ class RollupTasks
       # we use this to ensure the data always lines up even
       # when we have missing results
       db.execute("DELETE FROM name_and_time")
-      db.execute("INSERT INTO name_and_time(reported_at, query_name) select reported_at, query_name from (select distinct reported_at from rollup_results) as t, (select distinct query_name from rollup_results) as q")
+      db.execute("INSERT INTO name_and_time(reported_at, query_name) select reported_at, query_name FROM " +
+                 "(SELECT DISTINCT reported_at FROM rollup_results WHERE span=#{span}) as t, (SELECT DISTINCT query_name FROM rollup_results WHERE span=#{span}) as q")
 
       # output the headers which are the ordered query names
       headers = db.execute("SELECT distinct query_name FROM rollup_results ORDER BY query_name")
