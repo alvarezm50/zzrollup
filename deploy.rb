@@ -24,5 +24,6 @@ puts "Deploy the rollup server with the latest code from git."
 confirm_continue
 
 # hot restart or first time start unicorn
+do_cmd "git pull"
 do_cmd "run_unicorn.rb"
 
