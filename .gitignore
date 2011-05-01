@@ -1,6 +1,5 @@
+.idea
 .idea/*
-/.idea
-.idea*/*
 .bundle
 log/*.log
 tmp/**/*
