@@ -1,8 +1,6 @@
 #!/usr/bin/env ruby
 
-# this script prepares for a deploy by putting down
-# a label across all repositories and optionally
-# will create a branch for production fixes off of the master branch
+# Sets up the environment to host the server
 #
 #
 require 'readline'
