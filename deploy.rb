@@ -23,7 +23,15 @@ end
 puts "Deploy the rollup server with the latest code from git."
 confirm_continue
 
-# hot restart or first time start unicorn
+# pull the latest code
 do_cmd "git pull"
+
+# pull the latest code
+do_cmd "rake db:migrate"
+
+# hot restart or first time start unicorn
 do_cmd "run_unicorn.rb"
+
+# update any cron job changes
+do_cmd "RAILS_ENV=production whenever --update-crontab"
 

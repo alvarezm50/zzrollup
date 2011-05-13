@@ -48,23 +48,33 @@ class BaseSweep
   # this form handles a grouped by query where the first column
   # represents the name to append to base_name, and the second
   # contains the count
-  def self.grouped_query(db, base_name, span, query)
+  def self.grouped_query(db, base_name, span, query, calc_totals = false, is_cohort = false)
     # run the query
     results = execute(db, span, query)
 
     # this form expects to see multiple result rows
+    total = 0
     results.each do |r|
+      cohort = is_cohort ? r[0] : -1
       suffix = r[0].to_s
       v = r[1]
 
-      suffix = "NULL" if suffix.nil? || suffix.empty?
+      suffix = 'NULL' if suffix.nil? || suffix.empty?
       name = "#{base_name}.#{suffix}"
       full_name = make_full_name(name, span)
 
       # get the result object
-      roll_result = RollupResult.create_result(full_name, span)
-
+      roll_result = RollupResult.create_result(full_name, span, cohort)
       roll_result.sum_value = v
+      total += v
+      roll_result.save()
+    end
+
+    if calc_totals
+      # get the result object
+      full_name = "#{base_name}.all"
+      roll_result = RollupResult.create_result(full_name, span)
+      roll_result.sum_value = total
       roll_result.save()
     end
 

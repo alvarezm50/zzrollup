@@ -1,15 +1,17 @@
 require 'zip/zip'
 
 class RollupTasks
+  TIME_ZONE = "Tijuana"
   # report intervals are in minutes
-  DAILY_REPORT_INTERVAL = 1440
-  HOURLY_REPORT_INTERVAL = 60
   QUARTER_HOURLY_REPORT_INTERVAL = 15
+  HOURLY_REPORT_INTERVAL = 60
+  DAILY_REPORT_INTERVAL = 1440
+  MONTHLY_REPORT_INTERVAL = 1440 * 30
 
   # the now times are here so we get
   # consistent times for our queries
   def self.set_now
-    @@now = DateTime.now
+    @@now = DateTime.now.in_time_zone(TIME_ZONE)
   end
 
   def self.now
@@ -17,7 +19,7 @@ class RollupTasks
   end
 
   def self.pretty_time
-    return DateTime.now.strftime("%Y-%m-%d %I:%M:%S %p")
+    return now.strftime("%Y-%m-%d %I:%M:%S %p")
   end
 
   # gather everything into an array of arrays
@@ -35,31 +37,35 @@ class RollupTasks
       # we use this to ensure the data always lines up even
       # when we have missing results
       db.execute("DELETE FROM name_and_time")
-      db.execute("INSERT INTO name_and_time(reported_at, query_name) select reported_at, query_name FROM " +
-                 "(SELECT DISTINCT reported_at FROM rollup_results WHERE span=#{span}) as t, (SELECT DISTINCT query_name FROM rollup_results WHERE span=#{span}) as q")
+      db.execute("
+INSERT INTO name_and_time(reported_at, query_name) select reported_at, query_name FROM
+(SELECT DISTINCT reported_at FROM rollup_results WHERE span=#{span}) as t, (SELECT DISTINCT query_name FROM rollup_results WHERE span=#{span}) as q
+      ")
 
       # output the headers which are the ordered query names
-      headers = db.execute("SELECT distinct query_name FROM rollup_results ORDER BY query_name")
+      headers = db.execute("SELECT distinct query_name FROM rollup_results WHERE span=#{span} ORDER BY query_name")
       return rollup_data if headers.count == 0
       out_row = ["Date"]
       headers.each do |header|
-        out_row << header[0]
+        name = header[0]
+        out_row << name
       end
       rollup_data << out_row
 
       results_per_row = headers.count
 
-      # now fetch the proper results for each data - basically expects the number of results
+      # now fetch the proper results for each date - basically expects the number of results
       # to match the number of headers for each date
-      rows = db.execute("SELECT n.reported_at, n.query_name, r.sum_value, r.span from rollup_results r " +
-                        "RIGHT OUTER JOIN name_and_time n ON r.query_name = n.query_name AND r.reported_at = n.reported_at AND r.span=#{span} " +
-                        "ORDER BY n.reported_at, n.query_name"
-            )
+      rows = db.execute("
+SELECT n.reported_at, n.query_name, r.sum_value, r.span from rollup_results r
+RIGHT OUTER JOIN name_and_time n ON r.query_name = n.query_name AND r.reported_at = n.reported_at AND r.span=#{span}
+ORDER BY n.reported_at, n.query_name
+      ")
       row_count = 0
       out_row = []
       rows.each do |row|
         # first of new row get the date
-        out_row << "#{row[0].in_time_zone("Tijuana").strftime("%Y-%m-%d %I:%M %p")}" if row_count % results_per_row == 0
+        out_row << "#{row[0].in_time_zone(TIME_ZONE).strftime("%Y-%m-%d %I:%M %p")}" if row_count % results_per_row == 0
         ct = row[2].to_s
         out_row << ct   # can be a nil value if missing
         row_count += 1
@@ -118,6 +124,7 @@ class RollupTasks
     AlbumSweep.full(span)
     PhotoSweep.full(span)
     EvtSweep.full(span)
+    CohortSweep.rolling(span)
   end
 
   # sweeps the final set for the sweep span
@@ -137,9 +144,24 @@ class RollupTasks
     EvtSweep.minimal(span)
   end
 
+  def self.monthly_sweep
+    set_now
+    span = MONTHLY_REPORT_INTERVAL
+    CohortSweep.monthly(span)
+  end
+
+  # call this manually to generate monthly
+  # numbers for April
+#  def self.monthly_fixup
+#    # fake the date
+#    @@now = DateTime.civil(2011, 5, 1, 6, 35).in_time_zone(TIME_ZONE)
+#    span = MONTHLY_REPORT_INTERVAL
+#    CohortSweep.monthly(span)
+#  end
 
   def self.kind(span)
     case span
+      when MONTHLY_REPORT_INTERVAL: "monthly"
       when 1440: "daily"
       when 60: "hourly"
       when 30: "half-hourly"

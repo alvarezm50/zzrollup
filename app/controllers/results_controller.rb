@@ -17,7 +17,8 @@ class ResultsController < ApplicationController
   end
 
   def daily_report_table
-    span = RollupTasks::DAILY_REPORT_INTERVAL
+    span = params[:span]
+    span = span.nil? ? RollupTasks::DAILY_REPORT_INTERVAL : span.to_i
 
     @rollup_data = RollupTasks.rollup_raw_data(span)
 

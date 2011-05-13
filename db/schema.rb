@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110426205004) do
+ActiveRecord::Schema.define(:version => 20110513015731) do
 
   create_table "name_and_time", :id => false, :force => true do |t|
     t.datetime "reported_at", :null => false
@@ -24,8 +24,10 @@ ActiveRecord::Schema.define(:version => 20110426205004) do
     t.string   "query_name",  :null => false
     t.integer  "sum_value"
     t.integer  "span"
+    t.integer  "cohort"
   end
 
+  add_index "rollup_results", ["cohort"], :name => "index_rollup_results_on_cohort"
   add_index "rollup_results", ["query_name"], :name => "index_rollup_results_on_query_name"
   add_index "rollup_results", ["reported_at", "query_name"], :name => "index_rollup_results_on_reported_at_and_query_name", :unique => true
   add_index "rollup_results", ["reported_at"], :name => "index_rollup_results_on_reported_at"

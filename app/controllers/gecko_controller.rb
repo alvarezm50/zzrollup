@@ -16,10 +16,19 @@ class GeckoController < ApplicationController
   def before_after
     stat = params[:stat]
     interval = params[:interval]
+    cohort = params[:cohort]
     if stat.nil? || interval.nil?
       render :text => "Missing stat and/or interval.", :status=>500 and return
     end
     interval = interval.to_i
+
+    # if a value is passed for cohort, it is tacked onto the stat name
+    # we have a special case for a value of 'current' where we use the
+    # current cohort and add that
+    if !cohort.nil?
+      cohort = cohort == 'current' ? CohortManager.cohort_current : cohort.to_i
+      stat = "#{stat}.#{cohort}"
+    end
 
     # first find the latest matching stat
     latest = RollupResult.where("query_name = ?", stat).order("reported_at").last
@@ -34,8 +43,8 @@ class GeckoController < ApplicationController
     # now build the json result by first placing in a hash
     gecko_result = {
         :item => [
-            {:text => latest.reported_at.in_time_zone("Tijuana").strftime("%Y-%m-%d %I:%M %p"), :value => latest.sum_value},
-            {:text => previous.reported_at.in_time_zone("Tijuana").strftime("%Y-%m-%d %I:%M %p"), :value => previous.sum_value}
+            {:text => latest.reported_at.in_time_zone(RollupTasks::TIME_ZONE).strftime("%Y-%m-%d %I:%M %p"), :value => latest.sum_value},
+            {:text => previous.reported_at.in_time_zone(RollupTasks::TIME_ZONE).strftime("%Y-%m-%d %I:%M %p"), :value => previous.sum_value}
         ]
     }
     json_str = JSON.fast_generate(gecko_result)
