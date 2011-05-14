@@ -33,5 +33,4 @@ do_cmd "rake db:migrate"
 do_cmd "run_unicorn.rb"
 
 # update any cron job changes
-do_cmd "RAILS_ENV=production whenever --update-crontab"
-
+do_cmd "bash -c 'RAILS_ENV=production whenever --update-crontab'"
