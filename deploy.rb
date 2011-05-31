@@ -26,6 +26,9 @@ confirm_continue
 # pull the latest code
 do_cmd "git pull"
 
+# install any new gems
+do_cmd "bundle install"
+
 # pull the latest code
 do_cmd "rake db:migrate"
 
