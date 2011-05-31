@@ -31,6 +31,25 @@ class BaseSweep
     return results
   end
 
+  # saves the results given into the
+  # rollup table
+  #
+  # expects results to be passed in the form
+  #
+  # [['name', value], ...]
+  #
+  def self.save_results(results, span)
+    results.each do |result|
+      full_name = result[0]
+      value = result[1]
+      roll_result = RollupResult.create_result(full_name, span)
+
+      roll_result.sum_value = value
+      roll_result.save()
+    end
+  end
+
+
   # use this for dealing with simple count queries
   # does the query and handles storing the result
   def self.full_query(db, name, span, query)
@@ -60,7 +79,7 @@ class BaseSweep
       v = r[1]
 
       suffix = 'NULL' if suffix.nil? || suffix.empty?
-      name = "#{base_name}.#{suffix}"
+      name = base_name.empty? ? suffix : "#{base_name}.#{suffix}"
       full_name = make_full_name(name, span)
 
       # get the result object

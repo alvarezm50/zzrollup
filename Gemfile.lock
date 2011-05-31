@@ -31,8 +31,12 @@ GEM
     activesupport (3.0.3)
     arel (2.0.9)
     builder (2.1.2)
+    crack (0.1.8)
     erubis (2.6.6)
       abstract (>= 1.0.0)
+    garb (0.9.1)
+      activesupport (>= 2.2.0)
+      crack (>= 0.1.6)
     i18n (0.5.0)
     json (1.5.1)
     kgio (2.1.1)
@@ -79,6 +83,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  garb
   json
   mysql2
   rails (= 3.0.3)

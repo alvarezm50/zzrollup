@@ -88,6 +88,36 @@ ORDER BY n.reported_at, n.query_name
     end
   end
 
+  # return a small back trace limited to
+  # limit specified or 5 lines by default
+  # also adds exception message at top
+  def self.small_back_trace(ex, lines = 5)
+    result = ex.message + "\n"
+    bt = ex.backtrace
+    lines_left = lines
+    bt.each do |line|
+      if (lines_left > 0)
+        result << line + "\n"
+      end
+      lines_left -= 1
+    end
+
+    return result
+  end
+
+  # run the sweep block specified
+  # but log and eat any exception
+  # so we continue on
+  def self.protected_run
+    begin
+      yield
+    rescue Exception => ex
+      msg = small_back_trace(ex)
+      puts msg
+      Rails.logger.error(msg)
+    end
+  end
+
   def self.dump_file(path)
     Rails.logger.info("Dumping file:")
     f = File.open(path, "rb")
@@ -101,7 +131,7 @@ ORDER BY n.reported_at, n.query_name
   # and store in a temp csv file or optionally
   # into a zip file
   def self.create_csv(span, zip_it, base_file_name)
-    t = Tempfile.new("knuckknuck-#{Time.now.to_i}")
+    t = Tempfile.new("ruzippy-#{Time.now.to_i}")
     if zip_it
       # want the result zipped
       Zip::ZipOutputStream.open(t.path) do |zos|
@@ -120,11 +150,12 @@ ORDER BY n.reported_at, n.query_name
 
   def self.full_report_sweep(span)
     puts "#{pretty_time}: Cron job report sweep"
-    UserSweep.full(span)
-    AlbumSweep.full(span)
-    PhotoSweep.full(span)
-    EvtSweep.full(span)
-    CohortSweep.rolling(span)
+    protected_run { UserSweep.full(span) }
+    protected_run { AlbumSweep.full(span) }
+    protected_run { PhotoSweep.full(span) }
+    protected_run { EvtSweep.full(span) }
+    protected_run { CohortSweep.full(span) }
+    protected_run { GASweep.full(span) }
   end
 
   # sweeps the final set for the sweep span
@@ -138,16 +169,18 @@ ORDER BY n.reported_at, n.query_name
   def self.minimal_sweep
     set_now
     span = QUARTER_HOURLY_REPORT_INTERVAL
-    UserSweep.minimal(span)
-    AlbumSweep.minimal(span)
-    PhotoSweep.minimal(span)
-    EvtSweep.minimal(span)
+    protected_run { UserSweep.minimal(span) }
+    protected_run { AlbumSweep.minimal(span) }
+    protected_run { PhotoSweep.minimal(span) }
+    protected_run { EvtSweep.minimal(span) }
+    protected_run { CohortSweep.minimal(span) }
+    protected_run { GASweep.minimal(span) }
   end
 
   def self.monthly_sweep
     set_now
     span = MONTHLY_REPORT_INTERVAL
-    CohortSweep.monthly(span)
+    protected_run { CohortSweep.monthly(span) }
   end
 
   # call this manually to generate monthly

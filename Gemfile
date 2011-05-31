@@ -10,6 +10,8 @@ gem "json"
 gem "whenever"
 gem "unicorn"
 gem "rubyzip"
+gem "garb"
+
 
 # Use unicorn as the web server
 # gem 'unicorn'

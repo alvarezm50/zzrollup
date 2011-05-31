@@ -85,20 +85,23 @@ GROUP BY ru.cohort
 
   def self.monthly(span)
     last = RollupTasks.now
-    temp = last.gmtime
-    # back up to beginning of month
-    first = DateTime.civil(temp.year, temp.month - 1, 1, temp.hour, temp.min, temp.sec)
+    # back up to beginning of the month we are in
+    first = DateTime.civil(last.year, last.month, 1, 0, 0, 0)
     active_users(span, first, last)
     total_users(span, first, last)
   end
 
   # this is the rollup for the previous 30 days
-  def self.rolling(span)
+  def self.full(span)
     last = RollupTasks.now
     first = last - 30.days
+    minimal(span)
     active_users(span, first, last)
     total_users(span, first, last)
   end
 
+  def self.minimal(span)
+
+  end
 end
 
