@@ -148,6 +148,13 @@ ORDER BY n.reported_at, n.query_name
     return t
   end
 
+  # useful for sanity check on deployed server
+  # check with span of 11111
+  def self.test_run()
+    set_now
+    full_report_sweep(11111)
+  end
+
   def self.full_report_sweep(span)
     puts "#{pretty_time}: Cron job report sweep"
     protected_run { UserSweep.full(span) }
