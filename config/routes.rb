@@ -4,4 +4,10 @@ Rollup::Application.routes.draw do
 
   # geckoboard
   get    '/gecko_before_after'            => 'gecko#before_after',              :as => :gecko_before_after
+
+  #charts
+  get    '/chart/:action'                 => 'highcharts'
+
+
+  root   :to => 'highcharts#dashboard'
 end

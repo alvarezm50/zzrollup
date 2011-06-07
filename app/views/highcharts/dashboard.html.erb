@@ -1,0 +1,29 @@
+<%=  javascript_include_tag 'highcharts' %>
+
+<div id="active-users-by-cohort" style="width: 800px; height: 400px; margin: 0 auto" />
+
+<script>
+
+  var all_charts = {
+    active_users_by_cohort: null
+  };
+
+  $(document).ready(function(){
+    $.each(all_charts, function(chart_type, obj){
+      $.ajax({
+        url: '/chart/'+chart_type,
+        success: onChartDataRetrieved,
+        error: function(response){
+          alert(response.statusText);
+        }
+      });
+    });
+  });
+
+  function onChartDataRetrieved(chart_data){
+    all_charts[chart_data.type] = new Highcharts.Chart(chart_data.config);
+  }
+
+
+</script>
+
