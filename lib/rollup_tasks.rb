@@ -4,9 +4,11 @@ class RollupTasks
   TIME_ZONE = "Tijuana"
   # report intervals are in minutes
   QUARTER_HOURLY_REPORT_INTERVAL = 15
+  HALF_HOURLY_REPORT_INTERVAL = 30
   HOURLY_REPORT_INTERVAL = 60
-  DAILY_REPORT_INTERVAL = 1440
-  MONTHLY_REPORT_INTERVAL = 1440 * 30
+  DAILY_REPORT_INTERVAL = HOURLY_REPORT_INTERVAL * 24
+  WEEKLY_REPORT_INTERVAL = DAILY_REPORT_INTERVAL * 7
+  MONTHLY_REPORT_INTERVAL = DAILY_REPORT_INTERVAL * 30
 
   # the now times are here so we get
   # consistent times for our queries
@@ -202,10 +204,11 @@ ORDER BY n.reported_at, n.query_name
   def self.kind(span)
     case span
       when MONTHLY_REPORT_INTERVAL: "monthly"
-      when 1440: "daily"
-      when 60: "hourly"
-      when 30: "half-hourly"
-      when 15: "quarter-hourly"
+      when WEEKLY_REPORT_INTERVAL: "weekly"
+      when DAILY_REPORT_INTERVAL: "daily"
+      when HOURLY_REPORT_INTERVAL: "hourly"
+      when HALF_HOURLY_REPORT_INTERVAL: "half-hourly"
+      when QUARTER_HOURLY_REPORT_INTERVAL: "quarter-hourly"
       else span.to_s
     end
   end
