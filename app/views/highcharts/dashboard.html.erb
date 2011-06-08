@@ -1,11 +1,22 @@
 <%=  javascript_include_tag 'highcharts' %>
 
-<div id="active-users-by-cohort" style="width: 800px; height: 400px; margin: 0 auto" />
+<div>
+  <div id="active-users-by-cohort" style="width: 800px; height: 400px; margin: 0 auto" />
+</div>
+
+<hr/>
+
+<%#= link_to_function 'hehe', 'stuff()' %>
+<div>
+  <div id="active-users-percent-by-cohort" style="width: 800px; height: 400px; margin: 0 auto" />
+</div>
+
 
 <script type="text/javascript">
 
   var all_charts = {
-    active_users_by_cohort: null
+    active_users_by_cohort: null,
+    active_users_percent_by_cohort: null
   };
 
   $(document).ready(function(){
@@ -13,15 +24,35 @@
       $.ajax({
         url: '/chart/'+chart_type,
         success: onChartDataRetrieved,
-        error: function(response){
-          alert(response.statusText);
+        error: function(){
+          alert('Error loading '+chart_type+' chart');
         }
       });
     });
   });
 
-  function onChartDataRetrieved(chart_data){
-    all_charts[chart_data.type] = new Highcharts.Chart(chart_data.config);
+  function onChartDataRetrieved(chart_config){
+    var chart_type = this.url.split('/').pop();
+    chart_config.chart.renderTo = chart_type.replace(/_/g, '-');
+    all_charts[chart_type] = new Highcharts.Chart(addInteraction(chart_type, chart_config));
+  }
+
+  function addInteraction(chart_type, cfg_obj){
+    switch(chart_type){
+      case 'active_users_percent_by_cohort':
+          cfg_obj.yAxis.labels.formatter = function(){
+            return (this.value*100)+'%';
+          }
+          cfg_obj.tooltip.formatter = function(){
+            return this.x + '<br/>' + '<span style="color: ' + this.series.color+'">' + this.series.name+'</span> : <b>' +  Math.round(this.y*10000)/100 + '%</b>';
+          }
+          break;
+    }
+    return cfg_obj;
+  }
+
+  function stuff(){
+    alert('breakpoint here');
   }
 
 
