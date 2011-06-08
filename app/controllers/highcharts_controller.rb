@@ -62,7 +62,7 @@ class HighchartsController < ApplicationController
     data.each do |row|
       unless series[row.cohort]
         series[row.cohort] = categories.inject({}) do |hsh, cat|
-          hsh[cat] = 0
+          hsh[cat] = nil
           hsh
         end
       end
@@ -75,7 +75,7 @@ class HighchartsController < ApplicationController
         :name => cohort_beginning_of_month_date.strftime("Cohort %b '%y"),
         :data => categories.map{|cat| values[cat].to_i } #This should keep the order
       }
-    end
+    end.reverse
 
     render :json => {
       :type => params[:action],
