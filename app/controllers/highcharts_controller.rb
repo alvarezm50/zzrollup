@@ -4,7 +4,7 @@ class HighchartsController < ApplicationController
     span = params[:span] || 1440 #43200 1440
     span_code = RollupTasks.kind(span)
 
-    f_chart_cfg = {
+    chart_cfg = {
       :chart => {
         :renderTo => params[:action].gsub('_', '-'),
         :defaultSeriesType => 'area'
@@ -17,6 +17,9 @@ class HighchartsController < ApplicationController
       },
       :subtitle => {
         :text => span_code.humanize
+      },
+      :legend => {
+        :layout => 'vertical'
       },
       :xAxis => {
         :tickmarkPlacement => 'on',
@@ -53,7 +56,14 @@ class HighchartsController < ApplicationController
       when 'daily' then '%m/%d/%y'
       else '%m/%d/%y %H:%i'
     end
-    period = (60.days.ago..Time.now)
+    period = case span_code
+      when 'monthly' then (6.months.ago..Time.now)
+      when 'daily' then (60.days.ago..Time.now)
+      when 'hourly' then (4.days.ago..Time.now)
+      when 'half-hourly' then (2.days.ago..Time.now)
+      when 'quarter-hourly' then (1.day.ago..Time.now)
+      else (30.days.ago..Time.now)
+    end
 
     data = RollupResult.select("DATE_FORMAT(reported_at, '#{x_ticks_format}') AS report_date, cohort, SUM(sum_value) AS value").group(:report_date).group(:cohort).where(:reported_at => period).where('cohort > 0 AND span = ? AND query_name LIKE "Cohort.photos_10%"', span).order(:report_date)
     
@@ -68,8 +78,8 @@ class HighchartsController < ApplicationController
       end
       series[row.cohort][row.report_date] = row.value
     end
-    f_chart_cfg[:xAxis][:categories] = categories
-    f_chart_cfg[:series] = series.map do |cohort, values|
+    chart_cfg[:xAxis][:categories] = categories
+    chart_cfg[:series] = series.map do |cohort, values|
       cohort_beginning_of_month_date = CohortManager.cohort_base + (cohort - 1).months
       {
         :name => cohort_beginning_of_month_date.strftime("Cohort %b '%y"),
@@ -79,7 +89,7 @@ class HighchartsController < ApplicationController
 
     render :json => {
       :type => params[:action],
-      :config => f_chart_cfg
+      :config => chart_cfg
     }
 
   end
