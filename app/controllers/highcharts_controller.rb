@@ -65,7 +65,7 @@ class HighchartsController < ApplicationController
       else (30.days.ago..Time.now)
     end
 
-    data = RollupResult.select("DATE_FORMAT(reported_at, '#{x_ticks_format}') AS report_date, cohort, SUM(sum_value) AS value").group(:report_date).group(:cohort).where(:reported_at => period).where('cohort > 0 AND span = ? AND query_name LIKE "Cohort.photos_10%"', span).order(:report_date)
+    data = RollupResult.select("DATE_FORMAT(reported_at, '#{x_ticks_format}') AS report_date, cohort, MAX(sum_value) AS value").group(:report_date).group(:cohort).where(:reported_at => period).where('cohort > 0 AND span = ? AND query_name LIKE "Cohort.photos_10.%"', span).order(:report_date)
     
     categories = data.map(&:report_date).uniq
     series = {}
