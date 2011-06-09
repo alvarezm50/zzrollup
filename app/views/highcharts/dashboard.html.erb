@@ -1,28 +1,34 @@
 <%=  javascript_include_tag 'highcharts' %>
 
 <div>
-  <div id="active-users-by-cohort" style="width: 800px; height: 400px; margin: 0 auto" />
+  <div id="active_users_by_cohort_daily" style="width: 800px; height: 400px; margin: 0 auto" />
 </div>
 
 <hr/>
 
-<%#= link_to_function 'hehe', 'stuff()' %>
 <div>
-  <div id="active-users-percent-by-cohort" style="width: 800px; height: 400px; margin: 0 auto" />
+  <div id="active_users_percent_by_cohort_daily" style="width: 800px; height: 400px; margin: 0 auto" />
 </div>
 
 
 <script type="text/javascript">
 
   var all_charts = {
-    active_users_by_cohort: null,
-    active_users_percent_by_cohort: null
+    active_users_by_cohort_daily: {
+      chart: null,
+      url: '/chart/active_users_by_cohort?span=1440'
+    },
+    active_users_percent_by_cohort_daily: {
+      chart: null,
+      url: '/chart/active_users_percent_by_cohort?span=1440'
+    }
   };
 
   $(document).ready(function(){
-    $.each(all_charts, function(chart_type, obj){
+    $.each(all_charts, function(chart_div, cfg){
       $.ajax({
-        url: '/chart/'+chart_type,
+        url: cfg.url,
+        container: chart_div,
         success: onChartDataRetrieved,
         error: function(){
           alert('Error loading '+chart_type+' chart');
@@ -32,14 +38,14 @@
   });
 
   function onChartDataRetrieved(chart_config){
-    var chart_type = this.url.split('/').pop();
-    chart_config.chart.renderTo = chart_type.replace(/_/g, '-');
-    all_charts[chart_type] = new Highcharts.Chart(addInteraction(chart_type, chart_config));
+    var chart_type = this.container;
+    chart_config.chart.renderTo = chart_type;
+    all_charts[chart_type].chart = new Highcharts.Chart(addInteraction(chart_type, chart_config));
   }
 
   function addInteraction(chart_type, cfg_obj){
     switch(chart_type){
-      case 'active_users_percent_by_cohort':
+      case 'active_users_percent_by_cohort_daily':
           cfg_obj.yAxis.labels.formatter = function(){
             return (this.value*100)+'%';
           }
@@ -50,11 +56,6 @@
     }
     return cfg_obj;
   }
-
-  function stuff(){
-    alert('breakpoint here');
-  }
-
 
 </script>
 
