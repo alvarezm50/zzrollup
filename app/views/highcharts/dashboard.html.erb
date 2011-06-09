@@ -59,7 +59,8 @@
 
   function addInteraction(chart_type, cfg_obj){
     switch(chart_type){
-      case 'active_users_percent_by_cohort_daily', 'active_users_percent_by_cohort_monthly':
+      case 'active_users_percent_by_cohort_daily':
+      case 'active_users_percent_by_cohort_monthly':
           cfg_obj.yAxis.labels.formatter = function(){
             return (this.value*100)+'%';
           }
