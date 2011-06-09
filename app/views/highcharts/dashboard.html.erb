@@ -16,10 +16,18 @@
   <div id="active_users_percent_by_cohort_monthly" style="width: 800px; height: 400px; margin: 0 auto" />
 </div>
 
+<hr/>
+
+<div>
+  <div id="daily_cumulative_registered_users_by_cohort" style="width: 800px; height: 400px; margin: 0 auto" />
+</div>
+
+
 
 <script type="text/javascript">
 
   var all_charts = {
+    //Group 1
     active_users_by_cohort_daily: {
       chart: null,
       url: '/chart/active_users_by_cohort?span=1440'
@@ -28,6 +36,7 @@
       chart: null,
       url: '/chart/active_users_by_cohort?span=43200'
     },
+    //Group 2
     active_users_percent_by_cohort_daily: {
       chart: null,
       url: '/chart/active_users_percent_by_cohort?span=1440'
@@ -35,6 +44,11 @@
     active_users_percent_by_cohort_monthly: {
       chart: null,
       url: '/chart/active_users_percent_by_cohort?span=43200'
+    },
+    //Group 3
+    daily_cumulative_registered_users_by_cohort: {
+      chart: null,
+      url: '/chart/daily_cumulative_registered_users_by_cohort'
     }
   };
 
