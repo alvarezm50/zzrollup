@@ -116,7 +116,7 @@ class HighchartsController < ApplicationController
 protected
 
   def setup_parameters
-    @span = params[:@span] || 1440 #43200 1440
+    @span = (params[:span] || 1440).to_i
     @span_code = RollupTasks.kind(@span)
 
     @x_ticks_format = case @span_code
