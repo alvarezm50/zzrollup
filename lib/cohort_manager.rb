@@ -23,6 +23,11 @@ class CohortManager
     cohort = (f_y - b_y) * 12 + (f_m - b_m)
     return cohort < 1 ? 1 : cohort
   end
+  
+  # return cohort beginning date from cohort number (reverse of cohort_from_date)
+  def self.cohort_beginning_date(cohort)
+    cohort_base + (cohort - 1).months
+  end
 
   # return the cohort based on the current date
   def self.cohort_current
