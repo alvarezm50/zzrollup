@@ -115,7 +115,7 @@ class HighchartsController < ApplicationController
     render :json => chart_cfg
   end
 
-  def daily_cumulative_registered_users_by_cohort #Charts 3
+  def cumulative_registered_users_by_cohort #Charts 3
     chart_cfg = {
       :chart => {
         :renderTo => '',
@@ -128,7 +128,7 @@ class HighchartsController < ApplicationController
         :text => 'Daily Cumulative Registered Users by Cohort'
       },
       :subtitle => {
-        :text => chart_subtitle
+        :text => "First 31 days"
       },
       :legend => {
         :layout => 'vertical'
@@ -148,7 +148,7 @@ class HighchartsController < ApplicationController
       :yAxis => {
         :min => 0,
         :title => {
-          :text => 'Active Users (Add 10+ Photos/month)'
+          :text => 'Registered Users'
         },
       }
     }
@@ -164,6 +164,72 @@ class HighchartsController < ApplicationController
         {
           :name => cohort_beginning_of_month_date.strftime("Cohort %b '%y"),
           :data => categories.map{|cat| values[cat] ? values[cat].to_i : nil }
+        }
+      end
+      series << (cohort_data[:series].first || {:name => cohort_beginning.strftime("Cohort %b '%y"), :data => Array.new(categories.count) })
+    end
+
+    chart_cfg[:xAxis][:categories] = categories
+    chart_cfg[:series] = series
+
+    render :json => chart_cfg
+  end
+
+  def registered_users_by_cohort
+    chart_cfg = {
+      :chart => {
+        :renderTo => '',
+        :defaultSeriesType => 'line'
+      },
+      :credits => {
+        :enabled => false
+      },
+      :title => {
+        :text => 'Daily Registered Users by Cohort'
+      },
+      :subtitle => {
+        :text => "First 31 days"
+      },
+      :legend => {
+        :layout => 'vertical'
+      },
+      :xAxis => {
+        :tickmarkPlacement => 'on',
+        :title => {
+          :enabled => false
+        },
+        :labels => {
+            :rotation => -45,
+            :align => 'right',
+            :y => 7,
+            :x => 5
+        }
+      },
+      :yAxis => {
+        :min => 0,
+        :title => {
+          :text => 'Registered Users'
+        },
+      }
+    }
+
+    categories = (1..31).map{|day| "Day #{day}"}
+    
+    series = []
+    @x_ticks_format = 'Day %e'
+    (1..CohortManager.cohort_current).each do |cohort|
+      cohort_beginning = CohortManager.cohort_beginning_date(cohort)
+      @period = (cohort_beginning..cohort_beginning.end_of_month)
+      cohort_data = fetch_and_prepare("Cohort.users.#{cohort}") do |this_cohort_categories, cohort_beginning_of_month_date, values|
+        data_row = categories.map{|cat| values[cat] ? values[cat].to_i : nil }
+        calculated_row = []
+        data_row.each_index do |i|
+          prev_val = i==0 ? 0 : (data_row[i-1] || 0)
+          calculated_row << (data_row[i].nil? ? nil : (data_row[i] - prev_val))
+        end
+        {
+          :name => cohort_beginning_of_month_date.strftime("Cohort %b '%y"),
+          :data => calculated_row
         }
       end
       series << (cohort_data[:series].first || {:name => cohort_beginning.strftime("Cohort %b '%y"), :data => Array.new(categories.count) })
