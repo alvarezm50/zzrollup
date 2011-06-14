@@ -26,6 +26,14 @@
   <div id="registered_users_by_cohort_daily" style="width: 800px; height: 400px; margin: 0 auto" />
 </div>
 
+<div>
+  <div id="cumulative_active_users_by_cohort_daily" style="width: 800px; height: 400px; margin: 0 auto" />
+</div>
+
+<div>
+  <div id="cumulative_active_users_percent_by_cohort_daily" style="width: 800px; height: 400px; margin: 0 auto" />
+</div>
+
 
 <script type="text/javascript">
 
@@ -56,8 +64,15 @@
     registered_users_by_cohort_daily: {
       chart: null,
       url: '/chart/registered_users_by_cohort'
+    },
+    cumulative_active_users_by_cohort_daily: {
+      chart: null,
+      url: '/chart/cumulative_active_users_by_cohort'
+    },
+    cumulative_active_users_percent_by_cohort_daily: {
+      chart: null,
+      url: '/chart/cumulative_active_users_by_cohort_percent'
     }
-
   };
 
   $(document).ready(function(){
@@ -81,6 +96,7 @@
 
   function addInteraction(chart_type, cfg_obj){
     switch(chart_type){
+      case 'cumulative_active_users_percent_by_cohort_daily':
       case 'active_users_percent_by_cohort_daily':
       case 'active_users_percent_by_cohort_monthly':
           cfg_obj.yAxis.labels.formatter = function(){

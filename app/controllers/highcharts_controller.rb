@@ -27,10 +27,10 @@ class HighchartsController < ApplicationController
           :enabled => false
         },
         :labels => {
-            :rotation => -90,
-            :align => 'right',
-            :y => 3,
-            :x => 4
+          :rotation => -90,
+          :align => 'right',
+          :y => 3,
+          :x => 4
         }
       },
       :yAxis => {
@@ -82,10 +82,10 @@ class HighchartsController < ApplicationController
           :enabled => false
         },
         :labels => {
-            :rotation => -90,
-            :align => 'right',
-            :y => 3,
-            :x => 4
+          :rotation => -90,
+          :align => 'right',
+          :y => 3,
+          :x => 4
         }
       },
       :yAxis => {
@@ -110,7 +110,7 @@ class HighchartsController < ApplicationController
     end
 
     chart_cfg[:xAxis][:categories] = photos10_data[:categories]
-    chart_cfg[:series] = percent_series.reverse
+    chart_cfg[:series] = percent_series
 
     render :json => chart_cfg
   end
@@ -139,10 +139,10 @@ class HighchartsController < ApplicationController
           :enabled => false
         },
         :labels => {
-            :rotation => -45,
-            :align => 'right',
-            :y => 7,
-            :x => 5
+          :rotation => -45,
+          :align => 'right',
+          :y => 7,
+          :x => 5
         }
       },
       :yAxis => {
@@ -199,10 +199,9 @@ class HighchartsController < ApplicationController
           :enabled => false
         },
         :labels => {
-            :rotation => -45,
-            :align => 'right',
-            :y => 7,
-            :x => 5
+          :rotation => -45,
+          :align => 'right',
+          :x => 5
         }
       },
       :yAxis => {
@@ -241,25 +240,178 @@ class HighchartsController < ApplicationController
     render :json => chart_cfg
   end
 
+  def cumulative_active_users_by_cohort
+    chart_cfg = {
+      :chart => {
+        :renderTo => '',
+        :defaultSeriesType => 'line'
+      },
+      :credits => {
+        :enabled => false
+      },
+      :title => {
+        :text => 'Daily Cumulative Active Users (10+ Photos) by Cohort'
+      },
+      :subtitle => {
+        :text => "First 60 days"
+      },
+      :legend => {
+        :layout => 'vertical'
+      },
+      :xAxis => {
+        :tickmarkPlacement => 'on',
+        
+        :title => {
+          :enabled => false
+        },
+        :labels => {
+          :rotation => -45,
+          :align => 'right',
+          :step => 2
+          #:x => 5
+        }
+      },
+      :yAxis => {
+        :min => 0,
+        :title => {
+          :text => 'Active Users'
+        },
+      }
+    }
 
-protected
+    categories = (1..60).map{|day| "Day #{day}"}
+
+    series = []
+    @x_ticks_format = '%Y-%m-%e'
+    (1..CohortManager.cohort_current).each do |cohort|
+      
+      cohort_beginning = CohortManager.cohort_beginning_date(cohort)
+      @period = (cohort_beginning..60.days.since(cohort_beginning))
+      photos10_data = fetch_and_prepare("Cohort.photos_10.#{cohort}") do |this_cohort_categories, cohort_beginning_of_month_date, values|
+        mapping = this_cohort_categories.inject({}) do |hsh, date_str|
+          date = Date.parse(date_str)
+          day = date - cohort_beginning
+          hsh["Day #{day}"] = date_str
+          hsh
+        end
+        categories.map{|cat| values[mapping[cat]] ? values[mapping[cat]].to_i : nil }
+      end
+
+      series << {
+        :name => cohort_beginning.strftime("Cohort %b '%y"),
+        :data => photos10_data[:series].first
+      }
+    end
+
+    chart_cfg[:xAxis][:categories] = categories
+    chart_cfg[:series] = series
+
+    render :json => chart_cfg
+  end
+
+  def cumulative_active_users_by_cohort_percent
+    chart_cfg = {
+      :chart => {
+        :renderTo => '',
+        :defaultSeriesType => 'line'
+      },
+      :credits => {
+        :enabled => false
+      },
+      :title => {
+        :text => 'Daily Cumulative % Active Users (10+ Photos) by Cohort'
+      },
+      :subtitle => {
+        :text => "First 60 days"
+      },
+      :legend => {
+        :layout => 'vertical'
+      },
+      :xAxis => {
+        :tickmarkPlacement => 'on',
+
+        :title => {
+          :enabled => false
+        },
+        :labels => {
+          :rotation => -45,
+          :align => 'right',
+          :step => 2
+          #:x => 5
+        }
+      },
+      :yAxis => {
+        :min => 0,
+        :title => {
+          :text => '% Active Users'
+        },
+        :labels => { :formatter => nil }
+      },
+      :tooltip => { :formatter => nil }
+    }
+
+    categories = (1..60).map{|day| "Day #{day}"}
+
+    series = []
+    @x_ticks_format = '%Y-%m-%e'
+    (1..CohortManager.cohort_current).each do |cohort|
+      cohort_beginning = CohortManager.cohort_beginning_date(cohort)
+      @period = (cohort_beginning..60.days.since(cohort_beginning))
+      users_data = fetch_and_prepare("Cohort.users.#{cohort}") do |this_cohort_categories, cohort_beginning_of_month_date, values|
+        mapping = this_cohort_categories.inject({}) do |hsh, date_str|
+          date = Date.parse(date_str)
+          day = date - cohort_beginning
+          hsh["Day #{day}"] = date_str
+          hsh
+        end
+        categories.map{|cat| values[mapping[cat]] ? values[mapping[cat]].to_i : nil }
+      end
+      photos10_data = fetch_and_prepare("Cohort.photos_10.#{cohort}") do |this_cohort_categories, cohort_beginning_of_month_date, values|
+        mapping = this_cohort_categories.inject({}) do |hsh, date_str|
+          date = Date.parse(date_str)
+          day = date - cohort_beginning
+          hsh["Day #{day}"] = date_str
+          hsh
+        end
+        categories.map{|cat| values[mapping[cat]] ? values[mapping[cat]].to_i : nil }
+      end
+      percent_data = []
+      categories.each_index do |idx|
+        users_val = users_data[:series].first[idx]
+        photos10_val = photos10_data[:series].first[idx]
+        percent_data << ((users_val.nil? || photos10_val.nil?) ? nil : (photos10_val.to_f / users_val.to_f))
+      end
+      series << {
+        :name => cohort_beginning.strftime("Cohort %b '%y"),
+        :data => percent_data
+      }
+    end
+
+    chart_cfg[:xAxis][:categories] = categories
+    chart_cfg[:series] = series
+
+    render :json => chart_cfg
+  end
+
+
+  protected
 
   def setup_parameters
     @span = (params[:span] || 1440).to_i
     @span_code = RollupTasks.kind(@span)
 
     @x_ticks_format = case @span_code
-      when 'monthly' then '%b %Y'
-      when 'daily' then '%m/%d/%y'
-      else '%m/%d/%y %H:%i'
+    when 'monthly' then '%b %Y'
+    when 'daily' then '%m/%d/%y'
+    else '%m/%d/%y %H:%i'
     end
     @period = case @span_code
-      when 'monthly' then (6.months.ago..Time.now)
-      when 'daily' then (60.days.ago..Time.now)
-      when 'hourly' then (4.days.ago..Time.now)
-      when 'half-hourly' then (2.days.ago..Time.now)
-      when 'quarter-hourly' then (1.day.ago..Time.now)
-      else (30.days.ago..Time.now)
+    when 'monthly' then (6.months.ago..Time.now)
+    when 'daily' then (60.days.ago..Time.now)
+    when 'hourly' then (4.days.ago..Time.now)
+    when 'half-hourly' then (2.days.ago..Time.now)
+    when 'quarter-hourly' then (1.day.ago..Time.now)
+    else (30.days.ago..Time.now)
     end
   end
 
