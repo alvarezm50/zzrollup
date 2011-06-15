@@ -1,84 +1,161 @@
 <%=  javascript_include_tag 'highcharts' %>
+<h1>Add Photo Cohorts</h1>
 
 <div>
-  <div id="active_users_by_cohort_daily" style="width: 800px; height: 400px; margin: 0 auto" />
+  <div id="photos10_active_users_by_cohort_daily" style="width: 800px; height: 400px; margin: 0 auto" />
 </div>
 <div>
-  <div id="active_users_by_cohort_monthly" style="width: 800px; height: 400px; margin: 0 auto" />
-</div>
-
-<hr/>
-
-<div>
-  <div id="active_users_percent_by_cohort_daily" style="width: 800px; height: 400px; margin: 0 auto" />
-</div>
-<div>
-  <div id="active_users_percent_by_cohort_monthly" style="width: 800px; height: 400px; margin: 0 auto" />
+  <div id="photos10_active_users_by_cohort_monthly" style="width: 800px; height: 400px; margin: 0 auto" />
 </div>
 
 <hr/>
 
 <div>
-  <div id="cumulative_registered_users_by_cohort_daily" style="width: 800px; height: 400px; margin: 0 auto" />
+  <div id="photos10_active_users_percent_by_cohort_daily" style="width: 800px; height: 400px; margin: 0 auto" />
+</div>
+<div>
+  <div id="photos10_active_users_percent_by_cohort_monthly" style="width: 800px; height: 400px; margin: 0 auto" />
+</div>
+
+<hr/>
+
+<div>
+  <div id="photos10_cumulative_registered_users_by_cohort_daily" style="width: 800px; height: 400px; margin: 0 auto" />
 </div>
 
 <div>
-  <div id="registered_users_by_cohort_daily" style="width: 800px; height: 400px; margin: 0 auto" />
+  <div id="photos10_registered_users_by_cohort_daily" style="width: 800px; height: 400px; margin: 0 auto" />
 </div>
 
 <div>
-  <div id="cumulative_active_users_by_cohort_daily" style="width: 800px; height: 400px; margin: 0 auto" />
+  <div id="photos10_cumulative_active_users_by_cohort_daily" style="width: 800px; height: 400px; margin: 0 auto" />
 </div>
 
 <div>
-  <div id="cumulative_active_users_percent_by_cohort_daily" style="width: 800px; height: 400px; margin: 0 auto" />
+  <div id="photos10_cumulative_active_users_percent_by_cohort_daily" style="width: 800px; height: 400px; margin: 0 auto" />
 </div>
 
+
+<hr/>
+<h1>Share Cohorts</h1>
+
+<div>
+  <div id="shares_active_users_by_cohort_daily" style="width: 800px; height: 400px; margin: 0 auto" />
+</div>
+<div>
+  <div id="shares_active_users_by_cohort_monthly" style="width: 800px; height: 400px; margin: 0 auto" />
+</div>
+
+<hr/>
+
+<div>
+  <div id="shares_active_users_percent_by_cohort_daily" style="width: 800px; height: 400px; margin: 0 auto" />
+</div>
+<div>
+  <div id="shares_active_users_percent_by_cohort_monthly" style="width: 800px; height: 400px; margin: 0 auto" />
+</div>
+
+<hr/>
+
+<div>
+  <div id="shares_cumulative_registered_users_by_cohort_daily" style="width: 800px; height: 400px; margin: 0 auto" />
+</div>
+
+<div>
+  <div id="shares_registered_users_by_cohort_daily" style="width: 800px; height: 400px; margin: 0 auto" />
+</div>
+
+<div>
+  <div id="shares_cumulative_active_users_by_cohort_daily" style="width: 800px; height: 400px; margin: 0 auto" />
+</div>
+
+<div>
+  <div id="shares_cumulative_active_users_percent_by_cohort_daily" style="width: 800px; height: 400px; margin: 0 auto" />
+</div>
 
 <script type="text/javascript">
 
   var all_charts = {
+    //Add Photo Cohorts
     //Group 1
-    active_users_by_cohort_daily: {
+    photos10_active_users_by_cohort_daily: {
       chart: null,
-      url: '/chart/active_users_by_cohort?span=1440'
+      url: 'add_photo_cohorts/active_users_by_cohort?span=1440'
     },
-    active_users_by_cohort_monthly: {
+    photos10_active_users_by_cohort_monthly: {
       chart: null,
-      url: '/chart/active_users_by_cohort?span=43200'
+      url: 'add_photo_cohorts/active_users_by_cohort?span=43200'
     },
     //Group 2
-    active_users_percent_by_cohort_daily: {
+    photos10_active_users_percent_by_cohort_daily: {
       chart: null,
-      url: '/chart/active_users_percent_by_cohort?span=1440'
+      url: 'add_photo_cohorts/active_users_percent_by_cohort?span=1440'
     },
-    active_users_percent_by_cohort_monthly: {
+    photos10_active_users_percent_by_cohort_monthly: {
       chart: null,
-      url: '/chart/active_users_percent_by_cohort?span=43200'
+      url: 'add_photo_cohorts/active_users_percent_by_cohort?span=43200'
     },
     //Group 3
-    cumulative_registered_users_by_cohort_daily: {
+    photos10_cumulative_registered_users_by_cohort_daily: {
       chart: null,
-      url: '/chart/cumulative_registered_users_by_cohort'
+      url: 'add_photo_cohorts/cumulative_registered_users_by_cohort'
     },
-    registered_users_by_cohort_daily: {
+    photos10_registered_users_by_cohort_daily: {
       chart: null,
-      url: '/chart/registered_users_by_cohort'
+      url: 'add_photo_cohorts/registered_users_by_cohort'
     },
-    cumulative_active_users_by_cohort_daily: {
+    photos10_cumulative_active_users_by_cohort_daily: {
       chart: null,
-      url: '/chart/cumulative_active_users_by_cohort'
+      url: 'add_photo_cohorts/cumulative_active_users_by_cohort'
     },
-    cumulative_active_users_percent_by_cohort_daily: {
+    photos10_cumulative_active_users_percent_by_cohort_daily: {
       chart: null,
-      url: '/chart/cumulative_active_users_by_cohort_percent'
+      url: 'add_photo_cohorts/cumulative_active_users_by_cohort_percent'
+    },
+
+    //Share Cohorts
+    //Group 1
+    shares_active_users_by_cohort_daily: {
+      chart: null,
+      url: 'share_cohorts/active_users_by_cohort?span=1440'
+    },
+    shares_active_users_by_cohort_monthly: {
+      chart: null,
+      url: 'share_cohorts/active_users_by_cohort?span=43200'
+    },
+    //Group 2
+    shares_active_users_percent_by_cohort_daily: {
+      chart: null,
+      url: 'share_cohorts/active_users_percent_by_cohort?span=1440'
+    },
+    shares_active_users_percent_by_cohort_monthly: {
+      chart: null,
+      url: 'share_cohorts/active_users_percent_by_cohort?span=43200'
+    },
+    //Group 3
+    shares_cumulative_registered_users_by_cohort_daily: {
+      chart: null,
+      url: 'add_photo_cohorts/cumulative_registered_users_by_cohort'
+    },
+    shares_registered_users_by_cohort_daily: {
+      chart: null,
+      url: 'add_photo_cohorts/registered_users_by_cohort'
+    },
+    shares_cumulative_active_users_by_cohort_daily: {
+      chart: null,
+      url: 'share_cohorts/cumulative_active_users_by_cohort'
+    },
+    shares_cumulative_active_users_percent_by_cohort_daily: {
+      chart: null,
+      url: 'share_cohorts/cumulative_active_users_by_cohort_percent'
     }
+
   };
 
   $(document).ready(function(){
     $.each(all_charts, function(chart_div, cfg){
       $.ajax({
-        url: cfg.url,
+        url: '/chart/'+cfg.url,
         container: chart_div,
         success: onChartDataRetrieved,
         error: function(){
@@ -95,17 +172,13 @@
   }
 
   function addInteraction(chart_type, cfg_obj){
-    switch(chart_type){
-      case 'cumulative_active_users_percent_by_cohort_daily':
-      case 'active_users_percent_by_cohort_daily':
-      case 'active_users_percent_by_cohort_monthly':
+    if(chart_type.match(/_percent_/)){
           cfg_obj.yAxis.labels.formatter = function(){
             return (this.value*100)+'%';
           }
           cfg_obj.tooltip.formatter = function(){
             return this.x + '<br/>' + '<span style="color: ' + this.series.color+'">' + this.series.name+'</span> : <b>' +  Math.round(this.y*10000)/100 + '%</b>';
           }
-          break;
     }
     return cfg_obj;
   }
