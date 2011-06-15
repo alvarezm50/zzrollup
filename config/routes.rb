@@ -6,7 +6,7 @@ Rollup::Application.routes.draw do
   get    '/gecko_before_after'            => 'gecko#before_after',              :as => :gecko_before_after
 
   #charts
-  get    '/chart/:action'                 => 'highcharts'
+  match    '/:controller/:action', :controller => /chart\/[^\/]+/
 
 
   root   :to => 'highcharts#dashboard'

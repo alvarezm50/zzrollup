@@ -1,0 +1,2 @@
+module Chart::ShareCohortsHelper
+end
