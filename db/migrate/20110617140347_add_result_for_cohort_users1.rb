@@ -5,14 +5,14 @@ class AddResultForCohortUsers1 < ActiveRecord::Migration
     # For "Daily Cumulative Registered Users by Cohort" chart, hardcode the value 2,212 for Days 30 and 31 for the April Cohort.
 
     RollupResult.create(
-      :reported_at => '2011-04-30 06:30:00',
+      :reported_at => DateTime.parse('2011-04-30 06:55:04 +0000'),
       :span => RollupTasks::DAILY_REPORT_INTERVAL,
       :query_name => 'Cohort.users.1',
       :cohort => 1,
       :sum_value => 2212
     )
     RollupResult.create(
-      :reported_at => '2011-05-01 06:30:00',
+      :reported_at => DateTime.parse('2011-05-01 06:55:04 +0000'),
       :span => RollupTasks::DAILY_REPORT_INTERVAL,
       :query_name => 'Cohort.users.1',
       :cohort => 1,
