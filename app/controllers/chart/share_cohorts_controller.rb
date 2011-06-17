@@ -96,12 +96,12 @@ class Chart::ShareCohortsController < HighchartsController
     }
 
     users_data = fetch_and_prepare('Cohort.users.%')
-    share1_data = fetch_and_prepare('Cohort.shares.%')
+    share1_data = fetch_and_prepare('Cohort.shares.%', users_data[:categories])
 
     percent_series = share1_data[:series].enum_with_index.map do |serie, cohort|
       percent_serie_data = serie[:data].enum_with_index.map do |val, idx|
-        val = val.to_f / users_data[:series][cohort][:data][idx]
-        val.nan? ? nil : val
+        perc_val = val.nil? ? nil : (val.to_f / users_data[:series][cohort][:data][idx])
+        (perc_val.nil? || perc_val.nan? || perc_val.infinite? ) ? nil : perc_val
       end
       {:name => serie[:name], :data => percent_serie_data}
     end
@@ -155,7 +155,7 @@ class Chart::ShareCohortsController < HighchartsController
     categories = (1..60).map{|day| "Day #{day}"}
 
     series = []
-    @x_ticks_format = '%Y-%m-%e'
+    @x_ticks_format = '%Y-%m-%d'
     (1..CohortManager.cohort_current).each do |cohort|
 
       cohort_beginning = CohortManager.cohort_beginning_date(cohort)
@@ -226,7 +226,7 @@ class Chart::ShareCohortsController < HighchartsController
     categories = (1..60).map{|day| "Day #{day}"}
 
     series = []
-    @x_ticks_format = '%Y-%m-%e'
+    @x_ticks_format = '%Y-%m-%d'
     (1..CohortManager.cohort_current).each do |cohort|
       cohort_beginning = CohortManager.cohort_beginning_date(cohort)
       @period = (cohort_beginning..60.days.since(cohort_beginning))

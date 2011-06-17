@@ -96,12 +96,12 @@ class Chart::AddPhotoCohortsController < HighchartsController
     }
 
     users_data = fetch_and_prepare('Cohort.users.%')
-    photos10_data = fetch_and_prepare('Cohort.photos_10.%')
+    photos10_data = fetch_and_prepare('Cohort.photos_10.%', users_data[:categories])
 
     percent_series = photos10_data[:series].enum_with_index.map do |serie, cohort|
       percent_serie_data = serie[:data].enum_with_index.map do |val, idx|
-        val = val.to_f / users_data[:series][cohort][:data][idx]
-        val.nan? ? nil : val
+        perc_val = val.nil? ? nil : (val.to_f / users_data[:series][cohort][:data][idx])
+        (perc_val.nil? || perc_val.nan? || perc_val.infinite? ) ? nil : perc_val
       end
       {:name => serie[:name], :data => percent_serie_data}
     end
@@ -153,14 +153,20 @@ class Chart::AddPhotoCohortsController < HighchartsController
     categories = (1..31).map{|day| "Day #{day}"}
 
     series = []
-    @x_ticks_format = 'Day %e'
+    @x_ticks_format = '%Y-%m-%d'
     (1..CohortManager.cohort_current).each do |cohort|
       cohort_beginning = CohortManager.cohort_beginning_date(cohort)
-      @period = (cohort_beginning..cohort_beginning.end_of_month)
+      @period = (cohort_beginning..31.days.since(cohort_beginning))
       cohort_data = fetch_and_prepare("Cohort.users.#{cohort}") do |this_cohort_categories, cohort_beginning_of_month_date, values|
+        mapping = this_cohort_categories.inject({}) do |hsh, date_str|
+          date = Date.parse(date_str)
+          day = date - cohort_beginning
+          hsh["Day #{day}"] = date_str
+          hsh
+        end
         {
           :name => cohort_beginning_of_month_date.strftime("Cohort %b '%y"),
-          :data => categories.map{|cat| values[cat] ? values[cat].to_i : nil }
+          :data => categories.map{|cat| values[mapping[cat]] ? values[mapping[cat]].to_i : nil }
         }
       end
       series << cohort_data[:series].first if cohort_data[:series].first
@@ -212,12 +218,18 @@ class Chart::AddPhotoCohortsController < HighchartsController
     categories = (1..31).map{|day| "Day #{day}"}
 
     series = []
-    @x_ticks_format = 'Day %e'
+    @x_ticks_format = '%Y-%m-%d'
     (1..CohortManager.cohort_current).each do |cohort|
       cohort_beginning = CohortManager.cohort_beginning_date(cohort)
-      @period = (cohort_beginning..cohort_beginning.end_of_month)
+      @period = (cohort_beginning..31.days.since(cohort_beginning))
       cohort_data = fetch_and_prepare("Cohort.users.#{cohort}") do |this_cohort_categories, cohort_beginning_of_month_date, values|
-        data_row = categories.map{|cat| values[cat] ? values[cat].to_i : nil }
+        mapping = this_cohort_categories.inject({}) do |hsh, date_str|
+          date = Date.parse(date_str)
+          day = date - cohort_beginning
+          hsh["Day #{day}"] = date_str
+          hsh
+        end
+        data_row = categories.map{|cat| values[mapping[cat]] ? values[mapping[cat]].to_i : nil }
         calculated_row = []
         data_row.each_index do |i|
           prev_val = i==0 ? 0 : (data_row[i-1] || 0)
@@ -279,7 +291,7 @@ class Chart::AddPhotoCohortsController < HighchartsController
     categories = (1..60).map{|day| "Day #{day}"}
 
     series = []
-    @x_ticks_format = '%Y-%m-%e'
+    @x_ticks_format = '%Y-%m-%d'
     (1..CohortManager.cohort_current).each do |cohort|
 
       cohort_beginning = CohortManager.cohort_beginning_date(cohort)
@@ -350,7 +362,7 @@ class Chart::AddPhotoCohortsController < HighchartsController
     categories = (1..60).map{|day| "Day #{day}"}
 
     series = []
-    @x_ticks_format = '%Y-%m-%e'
+    @x_ticks_format = '%Y-%m-%d'
     (1..CohortManager.cohort_current).each do |cohort|
       cohort_beginning = CohortManager.cohort_beginning_date(cohort)
       @period = (cohort_beginning..60.days.since(cohort_beginning))
