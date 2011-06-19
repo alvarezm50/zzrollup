@@ -1,4 +1,4 @@
-class Chart::AddPhotoCohortsController < ApplicationController
+class Chart::AddPhotoCohortsController < HighchartsController
 
   def active_users_by_cohort #Charts 1
     data_src = HighchartsDatasource.new(
@@ -121,23 +121,16 @@ class Chart::AddPhotoCohortsController < ApplicationController
   end
 
   def cumulative_registered_users_by_cohort #Charts 3
-    @days_count = 31
     cohort_src = HighchartsDatasource.new(:span => params[:span] || 1440)
-    cohort_src.categories = (1..@days_count).map{|day| "Day #{day}"}
-    cohort_src.category_formatter = Proc.new do |cohort_num, original_category|
-        cohort_beginning = CohortManager.cohort_beginning_date(cohort_num)
-        date = Date.parse(original_category)
-        day = date - cohort_beginning
-        "Day #{day}"
-    end
+    set_cohort_intersection_params(cohort_src, {:days_count => 31, :weeks_count => 5})
     
     series = []
-    (1..CohortManager.cohort_current).each do |cohort|
+    (1..CohortManager.cohort_current).to_a.each do |cohort|
       cohort_beginning = CohortManager.cohort_beginning_date(cohort)
-      cohort_src.period = (cohort_beginning..@days_count.days.since(cohort_beginning))
+      cohort_src.period = (cohort_beginning..@distance.since(cohort_beginning))
       cohort_src.query_name_mask = "Cohort.users.#{cohort}"
       cohort_src.calculate_chart
-      series << cohort_src.chart_series.first if cohort_src.chart_series
+      series << cohort_src.chart_series.first if cohort_src.chart_series.first
     end
 
     render :json => {
@@ -150,10 +143,10 @@ class Chart::AddPhotoCohortsController < ApplicationController
         :enabled => false
       },
       :title => {
-        :text => 'Daily Cumulative Registered Users by Cohort'
+        :text => 'Cumulative Registered Users by Cohort'
       },
       :subtitle => {
-        :text => "First #{@days_count} days"
+        :text => "#{cohort_src.span_code.humanize}#{cohort_src.weekly_mode? ? ' average' : ''}, First #{@ticks_count} #{@tick_name.downcase}s"
       },
       :legend => {
         :layout => 'vertical'
@@ -181,23 +174,16 @@ class Chart::AddPhotoCohortsController < ApplicationController
   end
 
   def registered_users_by_cohort
-    @days_count = 31
     cohort_src = HighchartsDatasource.new(:span => params[:span] || 1440)
-    cohort_src.categories = (1..@days_count).map{|day| "Day #{day}"}
-    cohort_src.category_formatter = Proc.new do |cohort_num, original_category|
-        cohort_beginning = CohortManager.cohort_beginning_date(cohort_num)
-        date = Date.parse(original_category)
-        day = date - cohort_beginning
-        "Day #{day}"
-    end
+    set_cohort_intersection_params(cohort_src, {:days_count => 31, :weeks_count => 5})
     
     series = []
     (1..CohortManager.cohort_current).each do |cohort|
       cohort_beginning = CohortManager.cohort_beginning_date(cohort)
-      cohort_src.period = (cohort_beginning..@days_count.days.since(cohort_beginning))
+      cohort_src.period = (cohort_beginning..@ticks_count.days.since(cohort_beginning))
       cohort_src.query_name_mask = "Cohort.users.#{cohort}"
       cohort_src.calculate_chart
-      series << cohort_src.chart_series.first if cohort_src.chart_series
+      series << cohort_src.chart_series.first if cohort_src.chart_series.first
     end
     
     series.each do |serie|
@@ -220,10 +206,10 @@ class Chart::AddPhotoCohortsController < ApplicationController
         :enabled => false
       },
       :title => {
-        :text => 'Daily Registered Users by Cohort'
+        :text => 'Registered Users by Cohort'
       },
       :subtitle => {
-        :text => "First #{@days_count} days"
+        :text => "#{cohort_src.span_code.humanize}#{cohort_src.weekly_mode? ? ' average' : ''}, First #{@ticks_count} #{@tick_name.downcase}s"
       },
       :legend => {
         :layout => 'vertical'
@@ -250,23 +236,16 @@ class Chart::AddPhotoCohortsController < ApplicationController
   end
 
   def cumulative_active_users_by_cohort
-    @days_count = 60
     cohort_src = HighchartsDatasource.new(:span => params[:span] || 1440)
-    cohort_src.categories = (1..@days_count).map{|day| "Day #{day}"}
-    cohort_src.category_formatter = Proc.new do |cohort_num, original_category|
-        cohort_beginning = CohortManager.cohort_beginning_date(cohort_num)
-        date = Date.parse(original_category)
-        day = date - cohort_beginning
-        "Day #{day}"
-    end
+    set_cohort_intersection_params(cohort_src, {:days_count => 60, :weeks_count => 10})
 
     series = []
     (1..CohortManager.cohort_current).each do |cohort|
       cohort_beginning = CohortManager.cohort_beginning_date(cohort)
-      cohort_src.period = (cohort_beginning..@days_count.days.since(cohort_beginning))
+      cohort_src.period = (cohort_beginning..@distance.since(cohort_beginning))
       cohort_src.query_name_mask = "Cohort.photos_10.#{cohort}"
       cohort_src.calculate_chart
-      series << cohort_src.chart_series.first if cohort_src.chart_series
+      series << cohort_src.chart_series.first if cohort_src.chart_series.first
     end
 
     render :json => {
@@ -279,10 +258,10 @@ class Chart::AddPhotoCohortsController < ApplicationController
         :enabled => false
       },
       :title => {
-        :text => 'Daily Cumulative Active Users (10+ Photos) by Cohort'
+        :text => 'Cumulative Active Users (10+ Photos) by Cohort'
       },
       :subtitle => {
-        :text => "First #{@days_count} days"
+        :text => "#{cohort_src.span_code.humanize}#{cohort_src.weekly_mode? ? ' average' : ''}, First #{@ticks_count} #{@tick_name.downcase}s"
       },
       :legend => {
         :layout => 'vertical'
@@ -296,7 +275,7 @@ class Chart::AddPhotoCohortsController < ApplicationController
         :labels => {
           :rotation => -45,
           :align => 'right',
-          :step => 2
+          :step => (cohort_src.categories.size/20.0).ceil
         }
       },
       :yAxis => {
@@ -309,29 +288,22 @@ class Chart::AddPhotoCohortsController < ApplicationController
   end
 
   def cumulative_active_users_by_cohort_percent
-    @days_count = 60
     data_src = HighchartsDatasource.new(:span => params[:span] || 1440)
-    data_src.categories = (1..@days_count).map{|day| "Day #{day}"}
-    data_src.category_formatter = Proc.new do |cohort_num, original_category|
-        cohort_beginning = CohortManager.cohort_beginning_date(cohort_num)
-        date = Date.parse(original_category)
-        day = date - cohort_beginning
-        "Day #{day}"
-    end
+    set_cohort_intersection_params(data_src, {:days_count => 60, :weeks_count => 10})
 
     users_series = []
     photos10_series = []
     (1..CohortManager.cohort_current).each do |cohort|
       cohort_beginning = CohortManager.cohort_beginning_date(cohort)
-      data_src.period = (cohort_beginning..@days_count.days.since(cohort_beginning))
+      data_src.period = (cohort_beginning..@distance.since(cohort_beginning))
 
       data_src.query_name_mask = "Cohort.users.#{cohort}"
       data_src.calculate_chart
-      users_series << data_src.chart_series.first if data_src.chart_series
+      users_series << data_src.chart_series.first if data_src.chart_series.first
       
       data_src.query_name_mask = "Cohort.photos_10.#{cohort}"
       data_src.calculate_chart
-      photos10_series << data_src.chart_series.first if data_src.chart_series
+      photos10_series << data_src.chart_series.first if data_src.chart_series.first
     end
 
 
@@ -353,10 +325,10 @@ class Chart::AddPhotoCohortsController < ApplicationController
         :enabled => false
       },
       :title => {
-        :text => 'Daily Cumulative % Active Users (10+ Photos) by Cohort'
+        :text => 'Cumulative % Active Users (10+ Photos) by Cohort'
       },
       :subtitle => {
-        :text => "First #{@days_count} days"
+        :text => "#{data_src.span_code.humanize}#{data_src.weekly_mode? ? ' average' : ''}, First #{@ticks_count} #{@tick_name.downcase}s"
       },
       :legend => {
         :layout => 'vertical'

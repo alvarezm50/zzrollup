@@ -2,7 +2,7 @@ class HighchartsDatasource
   include ActionView::Helpers::DateHelper
 
   attr_accessor :query_name_mask, :period, :categories, :category_formatter
-  attr_reader :span, :span_code, :chart_series, :weekly_mode
+  attr_reader :span, :span_code, :chart_series
 
   def initialize(opts = {})
     calc_now = opts.delete(:calculate_now) || false
@@ -16,10 +16,14 @@ class HighchartsDatasource
 
     @x_labels_format = case @span_code
       when 'monthly' then '%b %Y'
-      when 'daily', 'weekly' then '%m/%d/%Y'
-      else '%m/%d/%Y %H:%i'
+      when 'daily', 'weekly' then '%Y-%m-%d'
+      else '%Y-%m-%d %H:%i'
     end
     @weekly_mode = (@span_code=='weekly')
+  end
+
+  def weekly_mode?
+    @weekly_mode
   end
 
   def chart_subtitle
@@ -101,7 +105,7 @@ protected
       values.each do |row_cat, val| #This should keep the order
         dest_cat = @category_formatter.call(cohort, row_cat)
         if idx = @categories.index(dest_cat)
-          data_row[idx] = val
+          data_row[idx] = val.to_i
         end
       end
       cohort_beginning_date = CohortManager.cohort_beginning_date(cohort)

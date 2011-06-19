@@ -1,4 +1,4 @@
-class Chart::ShareCohortsController < ApplicationController
+class Chart::ShareCohortsController < HighchartsController
 
   def active_users_by_cohort #Charts 1
     data_src = HighchartsDatasource.new(
@@ -121,9 +121,9 @@ class Chart::ShareCohortsController < ApplicationController
   end
 
   def cumulative_active_users_by_cohort
-    @days_count = 60
+    @ticks_count = 60
     cohort_src = HighchartsDatasource.new(:span => params[:span] || 1440)
-    cohort_src.categories = (1..@days_count).map{|day| "Day #{day}"}
+    cohort_src.categories = (1..@ticks_count).map{|day| "Day #{day}"}
     cohort_src.category_formatter = Proc.new do |cohort_num, original_category|
         cohort_beginning = CohortManager.cohort_beginning_date(cohort_num)
         date = Date.parse(original_category)
@@ -134,7 +134,7 @@ class Chart::ShareCohortsController < ApplicationController
     series = []
     (1..CohortManager.cohort_current).each do |cohort|
       cohort_beginning = CohortManager.cohort_beginning_date(cohort)
-      cohort_src.period = (cohort_beginning..@days_count.days.since(cohort_beginning))
+      cohort_src.period = (cohort_beginning..@ticks_count.days.since(cohort_beginning))
       cohort_src.query_name_mask = "Cohort.shares.#{cohort}"
       cohort_src.calculate_chart
       series << cohort_src.chart_series.first if cohort_src.chart_series
@@ -153,7 +153,7 @@ class Chart::ShareCohortsController < ApplicationController
         :text => 'Daily Cumulative Users that Share (1 Share) by Cohort'
       },
       :subtitle => {
-        :text => "First #{@days_count} days"
+        :text => "First #{@ticks_count} days"
       },
       :legend => {
         :layout => 'vertical'
@@ -180,9 +180,9 @@ class Chart::ShareCohortsController < ApplicationController
   end
 
   def cumulative_active_users_by_cohort_percent
-    @days_count = 60
+    @ticks_count = 60
     data_src = HighchartsDatasource.new(:span => params[:span] || 1440)
-    data_src.categories = (1..@days_count).map{|day| "Day #{day}"}
+    data_src.categories = (1..@ticks_count).map{|day| "Day #{day}"}
     data_src.category_formatter = Proc.new do |cohort_num, original_category|
         cohort_beginning = CohortManager.cohort_beginning_date(cohort_num)
         date = Date.parse(original_category)
@@ -194,7 +194,7 @@ class Chart::ShareCohortsController < ApplicationController
     shares_series = []
     (1..CohortManager.cohort_current).each do |cohort|
       cohort_beginning = CohortManager.cohort_beginning_date(cohort)
-      data_src.period = (cohort_beginning..@days_count.days.since(cohort_beginning))
+      data_src.period = (cohort_beginning..@ticks_count.days.since(cohort_beginning))
 
       data_src.query_name_mask = "Cohort.users.#{cohort}"
       data_src.calculate_chart
@@ -227,7 +227,7 @@ class Chart::ShareCohortsController < ApplicationController
         :text => 'Daily Cumulative % of Users that Share (1 Share) by Cohort'
       },
       :subtitle => {
-        :text => "First #{@days_count} days"
+        :text => "First #{@ticks_count} days"
       },
       :legend => {
         :layout => 'vertical'
