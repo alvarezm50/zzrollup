@@ -1,7 +1,14 @@
-class Chart::ShareCohortsController < HighchartsController
+class Chart::ShareCohortsController < ApplicationController
 
   def active_users_by_cohort #Charts 1
-    chart_cfg = {
+    data_src = HighchartsDatasource.new(
+      :query_name_mask => 'Cohort.shares.%',
+      :span => params[:span] || 1440,
+      :calculate_now => true
+    )
+
+    render :json => {
+      :series => data_src.chart_series.reverse,
       :chart => {
         :renderTo => '',
         :defaultSeriesType => 'area'
@@ -13,12 +20,13 @@ class Chart::ShareCohortsController < HighchartsController
         :text => 'Cumulative Users that Share (1 Share) by Cohort'
       },
       :subtitle => {
-        :text => chart_subtitle
+        :text => data_src.chart_subtitle
       },
       :legend => {
         :layout => 'vertical'
       },
       :xAxis => {
+        :categories => data_src.categories,
         :tickmarkPlacement => 'on',
         :title => {
           :enabled => false
@@ -32,7 +40,7 @@ class Chart::ShareCohortsController < HighchartsController
       },
       :yAxis => {
         :title => {
-          :text => 'Users that Share (1 Share/month)'
+          :text => 'Users that Share (Add 1 Share/month)'
         },
       },
       :plotOptions => {
@@ -47,16 +55,31 @@ class Chart::ShareCohortsController < HighchartsController
         }
       }
     }
-
-    data = fetch_and_prepare('Cohort.shares.%')
-    chart_cfg[:xAxis][:categories] = data[:categories]
-    chart_cfg[:series] = data[:series].reverse
-
-    render :json => chart_cfg
   end
 
   def active_users_percent_by_cohort #Charts 2
-    chart_cfg = {
+    users_src = HighchartsDatasource.new(
+      :query_name_mask => 'Cohort.users.%',
+      :span => params[:span] || 1440,
+      :calculate_now => true
+    )
+    shares_src = HighchartsDatasource.new(
+      :query_name_mask => 'Cohort.shares.%',
+      :span => params[:span] || 1440,
+      :categories => users_src.categories,
+      :calculate_now => true
+    )
+
+    percent_series = shares_src.chart_series.enum_with_index.map do |serie, cohort|
+      percent_serie_data = serie[:data].enum_with_index.map do |val, idx|
+        perc_val = (val.to_f / users_src.chart_series[cohort][:data][idx]) rescue nil
+        (perc_val.nil? || perc_val.nan? || perc_val.infinite?) ? nil : perc_val
+      end
+      {:name => serie[:name], :data => percent_serie_data}
+    end
+
+    render :json => {
+      :series => percent_series,
       :chart => {
         :renderTo => '',
         :defaultSeriesType => 'line'
@@ -65,15 +88,16 @@ class Chart::ShareCohortsController < HighchartsController
         :enabled => false
       },
       :title => {
-        :text => 'Cumulative % Users that Share (1 Share) by Cohort'
+        :text => 'Cumulative % of Users that Share (1 Share) by Cohort'
       },
       :subtitle => {
-        :text => chart_subtitle
+        :text => users_src.chart_subtitle
       },
       :legend => {
         :layout => 'vertical'
       },
       :xAxis => {
+        :categories => users_src.categories,
         :tickmarkPlacement => 'on',
         :title => {
           :enabled => false
@@ -87,34 +111,37 @@ class Chart::ShareCohortsController < HighchartsController
       },
       :yAxis => {
         :title => {
-          :text => '% of Users that Share (1 Share/month)'
+          :text => '% of Users that Share (Add 1 Share/month)'
         },
         :min => 0,
         :labels => { :formatter => nil }
       },
       :tooltip => { :formatter => nil }
     }
-
-    users_data = fetch_and_prepare('Cohort.users.%')
-    share1_data = fetch_and_prepare('Cohort.shares.%', users_data[:categories])
-
-    percent_series = share1_data[:series].enum_with_index.map do |serie, cohort|
-      percent_serie_data = serie[:data].enum_with_index.map do |val, idx|
-        perc_val = val.nil? ? nil : (val.to_f / users_data[:series][cohort][:data][idx])
-        (perc_val.nil? || perc_val.nan? || perc_val.infinite? ) ? nil : perc_val
-      end
-      {:name => serie[:name], :data => percent_serie_data}
-    end
-
-    chart_cfg[:xAxis][:categories] = share1_data[:categories]
-    chart_cfg[:series] = percent_series
-
-    render :json => chart_cfg
   end
 
-
   def cumulative_active_users_by_cohort
-    chart_cfg = {
+    @days_count = 60
+    cohort_src = HighchartsDatasource.new(:span => params[:span] || 1440)
+    cohort_src.categories = (1..@days_count).map{|day| "Day #{day}"}
+    cohort_src.category_formatter = Proc.new do |cohort_num, original_category|
+        cohort_beginning = CohortManager.cohort_beginning_date(cohort_num)
+        date = Date.parse(original_category)
+        day = date - cohort_beginning
+        "Day #{day}"
+    end
+
+    series = []
+    (1..CohortManager.cohort_current).each do |cohort|
+      cohort_beginning = CohortManager.cohort_beginning_date(cohort)
+      cohort_src.period = (cohort_beginning..@days_count.days.since(cohort_beginning))
+      cohort_src.query_name_mask = "Cohort.shares.#{cohort}"
+      cohort_src.calculate_chart
+      series << cohort_src.chart_series.first if cohort_src.chart_series
+    end
+
+    render :json => {
+      :series => series,
       :chart => {
         :renderTo => '',
         :defaultSeriesType => 'line'
@@ -126,14 +153,14 @@ class Chart::ShareCohortsController < HighchartsController
         :text => 'Daily Cumulative Users that Share (1 Share) by Cohort'
       },
       :subtitle => {
-        :text => "First 60 days"
+        :text => "First #{@days_count} days"
       },
       :legend => {
         :layout => 'vertical'
       },
       :xAxis => {
+        :categories => cohort_src.categories,
         :tickmarkPlacement => 'on',
-
         :title => {
           :enabled => false
         },
@@ -141,7 +168,6 @@ class Chart::ShareCohortsController < HighchartsController
           :rotation => -45,
           :align => 'right',
           :step => 2
-          #:x => 5
         }
       },
       :yAxis => {
@@ -151,39 +177,45 @@ class Chart::ShareCohortsController < HighchartsController
         },
       }
     }
-
-    categories = (1..60).map{|day| "Day #{day}"}
-
-    series = []
-    @x_ticks_format = '%Y-%m-%d'
-    (1..CohortManager.cohort_current).each do |cohort|
-
-      cohort_beginning = CohortManager.cohort_beginning_date(cohort)
-      @period = (cohort_beginning..60.days.since(cohort_beginning))
-      share1_data = fetch_and_prepare("Cohort.shares.#{cohort}") do |this_cohort_categories, cohort_beginning_of_month_date, values|
-        mapping = this_cohort_categories.inject({}) do |hsh, date_str|
-          date = Date.parse(date_str)
-          day = date - cohort_beginning
-          hsh["Day #{day}"] = date_str
-          hsh
-        end
-        categories.map{|cat| values[mapping[cat]] ? values[mapping[cat]].to_i : nil }
-      end
-
-      series << {
-        :name => cohort_beginning.strftime("Cohort %b '%y"),
-        :data => share1_data[:series].first
-      }
-    end
-
-    chart_cfg[:xAxis][:categories] = categories
-    chart_cfg[:series] = series
-
-    render :json => chart_cfg
   end
 
   def cumulative_active_users_by_cohort_percent
-    chart_cfg = {
+    @days_count = 60
+    data_src = HighchartsDatasource.new(:span => params[:span] || 1440)
+    data_src.categories = (1..@days_count).map{|day| "Day #{day}"}
+    data_src.category_formatter = Proc.new do |cohort_num, original_category|
+        cohort_beginning = CohortManager.cohort_beginning_date(cohort_num)
+        date = Date.parse(original_category)
+        day = date - cohort_beginning
+        "Day #{day}"
+    end
+
+    users_series = []
+    shares_series = []
+    (1..CohortManager.cohort_current).each do |cohort|
+      cohort_beginning = CohortManager.cohort_beginning_date(cohort)
+      data_src.period = (cohort_beginning..@days_count.days.since(cohort_beginning))
+
+      data_src.query_name_mask = "Cohort.users.#{cohort}"
+      data_src.calculate_chart
+      users_series << data_src.chart_series.first if data_src.chart_series
+
+      data_src.query_name_mask = "Cohort.shares.#{cohort}"
+      data_src.calculate_chart
+      shares_series << data_src.chart_series.first if data_src.chart_series
+    end
+
+
+    percent_series = shares_series.enum_with_index.map do |serie, cohort|
+      percent_serie_data = serie[:data].enum_with_index.map do |val, idx|
+        perc_val = (val.to_f / users_series[cohort][:data][idx]) rescue nil
+        (perc_val.nil? || perc_val.nan? || perc_val.infinite?) ? nil : perc_val
+      end
+      {:name => serie[:name], :data => percent_serie_data}
+    end
+
+    render :json => {
+      :series => percent_series,
       :chart => {
         :renderTo => '',
         :defaultSeriesType => 'line'
@@ -192,17 +224,17 @@ class Chart::ShareCohortsController < HighchartsController
         :enabled => false
       },
       :title => {
-        :text => 'Daily Cumulative % Users that Share (1 Share) by Cohort'
+        :text => 'Daily Cumulative % of Users that Share (1 Share) by Cohort'
       },
       :subtitle => {
-        :text => "First 60 days"
+        :text => "First #{@days_count} days"
       },
       :legend => {
         :layout => 'vertical'
       },
       :xAxis => {
+        :categories => data_src.categories,
         :tickmarkPlacement => 'on',
-
         :title => {
           :enabled => false
         },
@@ -222,48 +254,6 @@ class Chart::ShareCohortsController < HighchartsController
       },
       :tooltip => { :formatter => nil }
     }
-
-    categories = (1..60).map{|day| "Day #{day}"}
-
-    series = []
-    @x_ticks_format = '%Y-%m-%d'
-    (1..CohortManager.cohort_current).each do |cohort|
-      cohort_beginning = CohortManager.cohort_beginning_date(cohort)
-      @period = (cohort_beginning..60.days.since(cohort_beginning))
-      users_data = fetch_and_prepare("Cohort.users.#{cohort}") do |this_cohort_categories, cohort_beginning_of_month_date, values|
-        mapping = this_cohort_categories.inject({}) do |hsh, date_str|
-          date = Date.parse(date_str)
-          day = date - cohort_beginning
-          hsh["Day #{day}"] = date_str
-          hsh
-        end
-        categories.map{|cat| values[mapping[cat]] ? values[mapping[cat]].to_i : nil }
-      end
-      share1_data = fetch_and_prepare("Cohort.shares.#{cohort}") do |this_cohort_categories, cohort_beginning_of_month_date, values|
-        mapping = this_cohort_categories.inject({}) do |hsh, date_str|
-          date = Date.parse(date_str)
-          day = date - cohort_beginning
-          hsh["Day #{day}"] = date_str
-          hsh
-        end
-        categories.map{|cat| values[mapping[cat]] ? values[mapping[cat]].to_i : nil }
-      end
-      percent_data = []
-      categories.each_index do |idx|
-        users_val = users_data[:series].first[idx]
-        share1_val = share1_data[:series].first[idx]
-        percent_data << ((users_val.nil? || share1_val.nil?) ? nil : (share1_val.to_f / users_val.to_f))
-      end
-      series << {
-        :name => cohort_beginning.strftime("Cohort %b '%y"),
-        :data => percent_data
-      }
-    end
-
-    chart_cfg[:xAxis][:categories] = categories
-    chart_cfg[:series] = series
-
-    render :json => chart_cfg
   end
 
 end

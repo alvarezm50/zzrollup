@@ -8,7 +8,7 @@ protected
     @span = (params[:span] || 1440).to_i
     @span_code = RollupTasks.kind(@span)
 
-    @x_ticks_format = case @span_code
+    @x_labels_format = case @span_code
       when 'monthly' then '%b %Y'
       when 'daily', 'weekly' then '%m/%d/%y'
       else '%m/%d/%y %H:%i'
@@ -26,20 +26,22 @@ protected
   end
 
   def chart_subtitle
-    "#{@span_code.humanize}, #{distance_of_time_in_words(@period.first, @period.last)}"
+    "#{@span_code == 'weekly' ? 'Weekly average' : @span_code.humanize}, #{distance_of_time_in_words(@period.first, @period.last)}"
   end
 
   def fetch_and_prepare(query_name_mask, known_categories = nil, &block)
     fields_to_select = [
-      "DATE_FORMAT(reported_at, '#{@x_ticks_format}') AS report_date",
       "cohort"
     ]
-    fields_to_select << if @span_code == 'weekly'
-      "ROUND(AVG(sum_value)) AS value"
+    if @span_code == 'weekly'
+      fields_to_select << "DATE_FORMAT(SUBDATE(reported_at, INTERVAL weekday(reported_at) DAY), '#{@x_labels_format}') AS report_date"
+      fields_to_select << "ROUND(AVG(sum_value)) AS value"
+      fields_to_select << "DATE_FORMAT(reported_at, '%v %x') AS weekyear"
     else
-      "MAX(sum_value) AS value"
+      fields_to_select << "DATE_FORMAT(reported_at, '#{@x_labels_format}') AS report_date"
+      fields_to_select << "MAX(sum_value) AS value"
     end
-    rollup_data_rows = RollupResult.select(fields_to_select.join(',')).group(:report_date).group(:cohort).where(:reported_at => @period).where("cohort > 0 AND span = ? AND query_name LIKE '#{query_name_mask}'", @span).order(:report_date)
+    rollup_data_rows = RollupResult.select(fields_to_select.join(',')).group(@span_code!='weekly' ? :report_date : :weekyear).group(:cohort).where(:reported_at => @period).where("cohort > 0 AND span = ? AND query_name LIKE '#{query_name_mask}'", @span_code!='weekly' ? @span : RollupTasks::DAILY_REPORT_INTERVAL).order(:report_date)
 
     categories = known_categories || rollup_data_rows.map(&:report_date).uniq
     series = {}

@@ -9,5 +9,9 @@ class RollupResult < RollupDB
     result = RollupResult.new(:query_name => name, :sum_value => 0, :span => span, :cohort => cohort, :reported_at => RollupTasks.now)
     return result
   end
+
+  def self.public_sanitize_sql(*args)
+    sanitize_sql(*args)
+  end
 end
 

@@ -1,7 +1,14 @@
-class Chart::AddPhotoCohortsController < HighchartsController
+class Chart::AddPhotoCohortsController < ApplicationController
 
   def active_users_by_cohort #Charts 1
-    chart_cfg = {
+    data_src = HighchartsDatasource.new(
+      :query_name_mask => 'Cohort.photos_10.%',
+      :span => params[:span] || 1440,
+      :calculate_now => true
+    )
+
+    render :json => {
+      :series => data_src.chart_series.reverse,
       :chart => {
         :renderTo => '',
         :defaultSeriesType => 'area'
@@ -13,12 +20,13 @@ class Chart::AddPhotoCohortsController < HighchartsController
         :text => 'Cumulative Active Users (10+ Photos) by Cohort'
       },
       :subtitle => {
-        :text => chart_subtitle
+        :text => data_src.chart_subtitle
       },
       :legend => {
         :layout => 'vertical'
       },
       :xAxis => {
+        :categories => data_src.categories,
         :tickmarkPlacement => 'on',
         :title => {
           :enabled => false
@@ -47,16 +55,31 @@ class Chart::AddPhotoCohortsController < HighchartsController
         }
       }
     }
-
-    data = fetch_and_prepare('Cohort.photos_10.%')
-    chart_cfg[:xAxis][:categories] = data[:categories]
-    chart_cfg[:series] = data[:series].reverse
-
-    render :json => chart_cfg
   end
 
   def active_users_percent_by_cohort #Charts 2
-    chart_cfg = {
+    users_src = HighchartsDatasource.new(
+      :query_name_mask => 'Cohort.users.%',
+      :span => params[:span] || 1440,
+      :calculate_now => true
+    )
+    photos10_src = HighchartsDatasource.new(
+      :query_name_mask => 'Cohort.photos_10.%',
+      :span => params[:span] || 1440,
+      :categories => users_src.categories,
+      :calculate_now => true
+    )
+
+    percent_series = photos10_src.chart_series.enum_with_index.map do |serie, cohort|
+      percent_serie_data = serie[:data].enum_with_index.map do |val, idx|
+        perc_val = (val.to_f / users_src.chart_series[cohort][:data][idx]) rescue nil
+        (perc_val.nil? || perc_val.nan? || perc_val.infinite?) ? nil : perc_val
+      end
+      {:name => serie[:name], :data => percent_serie_data}
+    end
+
+    render :json => {
+      :series => percent_series,
       :chart => {
         :renderTo => '',
         :defaultSeriesType => 'line'
@@ -68,12 +91,13 @@ class Chart::AddPhotoCohortsController < HighchartsController
         :text => 'Cumulative % Active Users (10+ Photos) by Cohort'
       },
       :subtitle => {
-        :text => chart_subtitle
+        :text => users_src.chart_subtitle
       },
       :legend => {
         :layout => 'vertical'
       },
       :xAxis => {
+        :categories => users_src.categories,
         :tickmarkPlacement => 'on',
         :title => {
           :enabled => false
@@ -94,26 +118,30 @@ class Chart::AddPhotoCohortsController < HighchartsController
       },
       :tooltip => { :formatter => nil }
     }
-
-    users_data = fetch_and_prepare('Cohort.users.%')
-    photos10_data = fetch_and_prepare('Cohort.photos_10.%', users_data[:categories])
-
-    percent_series = photos10_data[:series].enum_with_index.map do |serie, cohort|
-      percent_serie_data = serie[:data].enum_with_index.map do |val, idx|
-        perc_val = val.nil? ? nil : (val.to_f / users_data[:series][cohort][:data][idx])
-        (perc_val.nil? || perc_val.nan? || perc_val.infinite? ) ? nil : perc_val
-      end
-      {:name => serie[:name], :data => percent_serie_data}
-    end
-
-    chart_cfg[:xAxis][:categories] = photos10_data[:categories]
-    chart_cfg[:series] = percent_series
-
-    render :json => chart_cfg
   end
 
   def cumulative_registered_users_by_cohort #Charts 3
-    chart_cfg = {
+    @days_count = 31
+    cohort_src = HighchartsDatasource.new(:span => params[:span] || 1440)
+    cohort_src.categories = (1..@days_count).map{|day| "Day #{day}"}
+    cohort_src.category_formatter = Proc.new do |cohort_num, original_category|
+        cohort_beginning = CohortManager.cohort_beginning_date(cohort_num)
+        date = Date.parse(original_category)
+        day = date - cohort_beginning
+        "Day #{day}"
+    end
+    
+    series = []
+    (1..CohortManager.cohort_current).each do |cohort|
+      cohort_beginning = CohortManager.cohort_beginning_date(cohort)
+      cohort_src.period = (cohort_beginning..@days_count.days.since(cohort_beginning))
+      cohort_src.query_name_mask = "Cohort.users.#{cohort}"
+      cohort_src.calculate_chart
+      series << cohort_src.chart_series.first if cohort_src.chart_series
+    end
+
+    render :json => {
+      :series => series,
       :chart => {
         :renderTo => '',
         :defaultSeriesType => 'line'
@@ -125,12 +153,13 @@ class Chart::AddPhotoCohortsController < HighchartsController
         :text => 'Daily Cumulative Registered Users by Cohort'
       },
       :subtitle => {
-        :text => "First 31 days"
+        :text => "First #{@days_count} days"
       },
       :legend => {
         :layout => 'vertical'
       },
       :xAxis => {
+        :categories => cohort_src.categories,
         :tickmarkPlacement => 'on',
         :title => {
           :enabled => false
@@ -149,37 +178,40 @@ class Chart::AddPhotoCohortsController < HighchartsController
         },
       }
     }
-
-    categories = (1..31).map{|day| "Day #{day}"}
-
-    series = []
-    @x_ticks_format = '%Y-%m-%d'
-    (1..CohortManager.cohort_current).each do |cohort|
-      cohort_beginning = CohortManager.cohort_beginning_date(cohort)
-      @period = (cohort_beginning..31.days.since(cohort_beginning))
-      cohort_data = fetch_and_prepare("Cohort.users.#{cohort}") do |this_cohort_categories, cohort_beginning_of_month_date, values|
-        mapping = this_cohort_categories.inject({}) do |hsh, date_str|
-          date = Date.parse(date_str)
-          day = date - cohort_beginning
-          hsh["Day #{day}"] = date_str
-          hsh
-        end
-        {
-          :name => cohort_beginning_of_month_date.strftime("Cohort %b '%y"),
-          :data => categories.map{|cat| values[mapping[cat]] ? values[mapping[cat]].to_i : nil }
-        }
-      end
-      series << cohort_data[:series].first if cohort_data[:series].first
-    end
-
-    chart_cfg[:xAxis][:categories] = categories
-    chart_cfg[:series] = series
-
-    render :json => chart_cfg
   end
 
   def registered_users_by_cohort
-    chart_cfg = {
+    @days_count = 31
+    cohort_src = HighchartsDatasource.new(:span => params[:span] || 1440)
+    cohort_src.categories = (1..@days_count).map{|day| "Day #{day}"}
+    cohort_src.category_formatter = Proc.new do |cohort_num, original_category|
+        cohort_beginning = CohortManager.cohort_beginning_date(cohort_num)
+        date = Date.parse(original_category)
+        day = date - cohort_beginning
+        "Day #{day}"
+    end
+    
+    series = []
+    (1..CohortManager.cohort_current).each do |cohort|
+      cohort_beginning = CohortManager.cohort_beginning_date(cohort)
+      cohort_src.period = (cohort_beginning..@days_count.days.since(cohort_beginning))
+      cohort_src.query_name_mask = "Cohort.users.#{cohort}"
+      cohort_src.calculate_chart
+      series << cohort_src.chart_series.first if cohort_src.chart_series
+    end
+    
+    series.each do |serie|
+      data_row = serie[:data]
+      calculated_row = []
+      data_row.each_index do |i|
+        prev_val = i==0 ? 0 : (data_row[i-1] || 0)
+        calculated_row << (data_row[i].nil? ? nil : (data_row[i] - prev_val))
+      end
+      serie[:data] = calculated_row
+    end
+
+    render :json => {
+      :series => series,
       :chart => {
         :renderTo => '',
         :defaultSeriesType => 'line'
@@ -191,12 +223,13 @@ class Chart::AddPhotoCohortsController < HighchartsController
         :text => 'Daily Registered Users by Cohort'
       },
       :subtitle => {
-        :text => "First 31 days"
+        :text => "First #{@days_count} days"
       },
       :legend => {
         :layout => 'vertical'
       },
       :xAxis => {
+        :categories => cohort_src.categories,
         :tickmarkPlacement => 'on',
         :title => {
           :enabled => false
@@ -214,43 +247,30 @@ class Chart::AddPhotoCohortsController < HighchartsController
         },
       }
     }
-
-    categories = (1..31).map{|day| "Day #{day}"}
-
-    series = []
-    @x_ticks_format = '%Y-%m-%d'
-    (1..CohortManager.cohort_current).each do |cohort|
-      cohort_beginning = CohortManager.cohort_beginning_date(cohort)
-      @period = (cohort_beginning..31.days.since(cohort_beginning))
-      cohort_data = fetch_and_prepare("Cohort.users.#{cohort}") do |this_cohort_categories, cohort_beginning_of_month_date, values|
-        mapping = this_cohort_categories.inject({}) do |hsh, date_str|
-          date = Date.parse(date_str)
-          day = date - cohort_beginning
-          hsh["Day #{day}"] = date_str
-          hsh
-        end
-        data_row = categories.map{|cat| values[mapping[cat]] ? values[mapping[cat]].to_i : nil }
-        calculated_row = []
-        data_row.each_index do |i|
-          prev_val = i==0 ? 0 : (data_row[i-1] || 0)
-          calculated_row << (data_row[i].nil? ? nil : (data_row[i] - prev_val))
-        end
-        {
-          :name => cohort_beginning_of_month_date.strftime("Cohort %b '%y"),
-          :data => calculated_row
-        }
-      end
-      series << cohort_data[:series].first if cohort_data[:series].first
-    end
-
-    chart_cfg[:xAxis][:categories] = categories
-    chart_cfg[:series] = series
-
-    render :json => chart_cfg
   end
 
   def cumulative_active_users_by_cohort
-    chart_cfg = {
+    @days_count = 60
+    cohort_src = HighchartsDatasource.new(:span => params[:span] || 1440)
+    cohort_src.categories = (1..@days_count).map{|day| "Day #{day}"}
+    cohort_src.category_formatter = Proc.new do |cohort_num, original_category|
+        cohort_beginning = CohortManager.cohort_beginning_date(cohort_num)
+        date = Date.parse(original_category)
+        day = date - cohort_beginning
+        "Day #{day}"
+    end
+
+    series = []
+    (1..CohortManager.cohort_current).each do |cohort|
+      cohort_beginning = CohortManager.cohort_beginning_date(cohort)
+      cohort_src.period = (cohort_beginning..@days_count.days.since(cohort_beginning))
+      cohort_src.query_name_mask = "Cohort.photos_10.#{cohort}"
+      cohort_src.calculate_chart
+      series << cohort_src.chart_series.first if cohort_src.chart_series
+    end
+
+    render :json => {
+      :series => series,
       :chart => {
         :renderTo => '',
         :defaultSeriesType => 'line'
@@ -262,14 +282,14 @@ class Chart::AddPhotoCohortsController < HighchartsController
         :text => 'Daily Cumulative Active Users (10+ Photos) by Cohort'
       },
       :subtitle => {
-        :text => "First 60 days"
+        :text => "First #{@days_count} days"
       },
       :legend => {
         :layout => 'vertical'
       },
       :xAxis => {
+        :categories => cohort_src.categories,
         :tickmarkPlacement => 'on',
-
         :title => {
           :enabled => false
         },
@@ -277,7 +297,6 @@ class Chart::AddPhotoCohortsController < HighchartsController
           :rotation => -45,
           :align => 'right',
           :step => 2
-          #:x => 5
         }
       },
       :yAxis => {
@@ -287,39 +306,45 @@ class Chart::AddPhotoCohortsController < HighchartsController
         },
       }
     }
-
-    categories = (1..60).map{|day| "Day #{day}"}
-
-    series = []
-    @x_ticks_format = '%Y-%m-%d'
-    (1..CohortManager.cohort_current).each do |cohort|
-
-      cohort_beginning = CohortManager.cohort_beginning_date(cohort)
-      @period = (cohort_beginning..60.days.since(cohort_beginning))
-      photos10_data = fetch_and_prepare("Cohort.photos_10.#{cohort}") do |this_cohort_categories, cohort_beginning_of_month_date, values|
-        mapping = this_cohort_categories.inject({}) do |hsh, date_str|
-          date = Date.parse(date_str)
-          day = date - cohort_beginning
-          hsh["Day #{day}"] = date_str
-          hsh
-        end
-        categories.map{|cat| values[mapping[cat]] ? values[mapping[cat]].to_i : nil }
-      end
-
-      series << {
-        :name => cohort_beginning.strftime("Cohort %b '%y"),
-        :data => photos10_data[:series].first
-      }
-    end
-
-    chart_cfg[:xAxis][:categories] = categories
-    chart_cfg[:series] = series
-
-    render :json => chart_cfg
   end
 
   def cumulative_active_users_by_cohort_percent
-    chart_cfg = {
+    @days_count = 60
+    data_src = HighchartsDatasource.new(:span => params[:span] || 1440)
+    data_src.categories = (1..@days_count).map{|day| "Day #{day}"}
+    data_src.category_formatter = Proc.new do |cohort_num, original_category|
+        cohort_beginning = CohortManager.cohort_beginning_date(cohort_num)
+        date = Date.parse(original_category)
+        day = date - cohort_beginning
+        "Day #{day}"
+    end
+
+    users_series = []
+    photos10_series = []
+    (1..CohortManager.cohort_current).each do |cohort|
+      cohort_beginning = CohortManager.cohort_beginning_date(cohort)
+      data_src.period = (cohort_beginning..@days_count.days.since(cohort_beginning))
+
+      data_src.query_name_mask = "Cohort.users.#{cohort}"
+      data_src.calculate_chart
+      users_series << data_src.chart_series.first if data_src.chart_series
+      
+      data_src.query_name_mask = "Cohort.photos_10.#{cohort}"
+      data_src.calculate_chart
+      photos10_series << data_src.chart_series.first if data_src.chart_series
+    end
+
+
+    percent_series = photos10_series.enum_with_index.map do |serie, cohort|
+      percent_serie_data = serie[:data].enum_with_index.map do |val, idx|
+        perc_val = (val.to_f / users_series[cohort][:data][idx]) rescue nil
+        (perc_val.nil? || perc_val.nan? || perc_val.infinite?) ? nil : perc_val
+      end
+      {:name => serie[:name], :data => percent_serie_data}
+    end
+
+    render :json => {
+      :series => percent_series,
       :chart => {
         :renderTo => '',
         :defaultSeriesType => 'line'
@@ -331,14 +356,14 @@ class Chart::AddPhotoCohortsController < HighchartsController
         :text => 'Daily Cumulative % Active Users (10+ Photos) by Cohort'
       },
       :subtitle => {
-        :text => "First 60 days"
+        :text => "First #{@days_count} days"
       },
       :legend => {
         :layout => 'vertical'
       },
       :xAxis => {
+        :categories => data_src.categories,
         :tickmarkPlacement => 'on',
-
         :title => {
           :enabled => false
         },
@@ -358,48 +383,6 @@ class Chart::AddPhotoCohortsController < HighchartsController
       },
       :tooltip => { :formatter => nil }
     }
-
-    categories = (1..60).map{|day| "Day #{day}"}
-
-    series = []
-    @x_ticks_format = '%Y-%m-%d'
-    (1..CohortManager.cohort_current).each do |cohort|
-      cohort_beginning = CohortManager.cohort_beginning_date(cohort)
-      @period = (cohort_beginning..60.days.since(cohort_beginning))
-      users_data = fetch_and_prepare("Cohort.users.#{cohort}") do |this_cohort_categories, cohort_beginning_of_month_date, values|
-        mapping = this_cohort_categories.inject({}) do |hsh, date_str|
-          date = Date.parse(date_str)
-          day = date - cohort_beginning
-          hsh["Day #{day}"] = date_str
-          hsh
-        end
-        categories.map{|cat| values[mapping[cat]] ? values[mapping[cat]].to_i : nil }
-      end
-      photos10_data = fetch_and_prepare("Cohort.photos_10.#{cohort}") do |this_cohort_categories, cohort_beginning_of_month_date, values|
-        mapping = this_cohort_categories.inject({}) do |hsh, date_str|
-          date = Date.parse(date_str)
-          day = date - cohort_beginning
-          hsh["Day #{day}"] = date_str
-          hsh
-        end
-        categories.map{|cat| values[mapping[cat]] ? values[mapping[cat]].to_i : nil }
-      end
-      percent_data = []
-      categories.each_index do |idx|
-        users_val = users_data[:series].first[idx]
-        photos10_val = photos10_data[:series].first[idx]
-        percent_data << ((users_val.nil? || photos10_val.nil?) ? nil : (photos10_val.to_f / users_val.to_f))
-      end
-      series << {
-        :name => cohort_beginning.strftime("Cohort %b '%y"),
-        :data => percent_data
-      }
-    end
-
-    chart_cfg[:xAxis][:categories] = categories
-    chart_cfg[:series] = series
-
-    render :json => chart_cfg
   end
 
 
