@@ -54,7 +54,10 @@
 <div>
   <div id="shares_active_users_by_cohort_daily" style="width: 800px; height: 400px; margin: 0 auto" />
 </div>
-<div>
+  <div>
+    <div id="shares_active_users_by_cohort_weekly" style="width: 800px; height: 400px; margin: 0 auto" />
+  </div>
+  <div>
   <div id="shares_active_users_by_cohort_monthly" style="width: 800px; height: 400px; margin: 0 auto" />
 </div>
 
@@ -62,6 +65,9 @@
 
 <div>
   <div id="shares_active_users_percent_by_cohort_daily" style="width: 800px; height: 400px; margin: 0 auto" />
+</div>
+<div>
+  <div id="shares_active_users_percent_by_cohort_weekly" style="width: 800px; height: 400px; margin: 0 auto" />
 </div>
 <div>
   <div id="shares_active_users_percent_by_cohort_monthly" style="width: 800px; height: 400px; margin: 0 auto" />
@@ -72,17 +78,23 @@
 <div>
   <div id="shares_cumulative_registered_users_by_cohort_daily" style="width: 800px; height: 400px; margin: 0 auto" />
 </div>
-
 <div>
   <div id="shares_registered_users_by_cohort_daily" style="width: 800px; height: 400px; margin: 0 auto" />
 </div>
-
 <div>
   <div id="shares_cumulative_active_users_by_cohort_daily" style="width: 800px; height: 400px; margin: 0 auto" />
 </div>
-
 <div>
   <div id="shares_cumulative_active_users_percent_by_cohort_daily" style="width: 800px; height: 400px; margin: 0 auto" />
+</div>
+<div>
+  <div id="shares_cumulative_registered_users_by_cohort_weekly" style="width: 800px; height: 400px; margin: 0 auto" />
+</div>
+<div>
+  <div id="shares_cumulative_active_users_by_cohort_weekly" style="width: 800px; height: 400px; margin: 0 auto" />
+</div>
+<div>
+  <div id="shares_cumulative_active_users_percent_by_cohort_weekly" style="width: 800px; height: 400px; margin: 0 auto" />
 </div>
 
 <script type="text/javascript">
@@ -152,6 +164,10 @@
       chart: null,
       url: 'share_cohorts/active_users_by_cohort?span=1440'
     },
+    shares_active_users_by_cohort_weekly: {
+      chart: null,
+      url: 'share_cohorts/active_users_by_cohort?span=10080'
+    },
     shares_active_users_by_cohort_monthly: {
       chart: null,
       url: 'share_cohorts/active_users_by_cohort?span=43200'
@@ -160,6 +176,10 @@
     shares_active_users_percent_by_cohort_daily: {
       chart: null,
       url: 'share_cohorts/active_users_percent_by_cohort?span=1440'
+    },
+    shares_active_users_percent_by_cohort_weekly: {
+      chart: null,
+      url: 'share_cohorts/active_users_percent_by_cohort?span=10080'
     },
     shares_active_users_percent_by_cohort_monthly: {
       chart: null,
@@ -181,8 +201,19 @@
     shares_cumulative_active_users_percent_by_cohort_daily: {
       chart: null,
       url: 'share_cohorts/cumulative_active_users_by_cohort_percent'
+    },
+    shares_cumulative_registered_users_by_cohort_weekly: {
+      chart: null,
+      url: 'add_photo_cohorts/cumulative_registered_users_by_cohort?span=10080'
+    },
+    shares_cumulative_active_users_by_cohort_weekly: {
+      chart: null,
+      url: 'share_cohorts/cumulative_active_users_by_cohort?span=10080'
+    },
+    shares_cumulative_active_users_percent_by_cohort_weekly: {
+      chart: null,
+      url: 'share_cohorts/cumulative_active_users_by_cohort_percent?span=10080'
     }
-
   };
 
   $(document).ready(function(){

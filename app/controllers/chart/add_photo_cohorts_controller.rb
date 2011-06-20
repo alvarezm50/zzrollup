@@ -122,7 +122,7 @@ class Chart::AddPhotoCohortsController < HighchartsController
 
   def cumulative_registered_users_by_cohort #Charts 3
     cohort_src = HighchartsDatasource.new(:span => params[:span] || 1440)
-    set_cohort_intersection_params(cohort_src, {:days_count => 31, :weeks_count => 5})
+    set_cohort_intersection_params(cohort_src, {:days_count => 31, :weeks_count => 6})
     
     series = []
     (1..CohortManager.cohort_current).to_a.each do |cohort|
@@ -175,7 +175,7 @@ class Chart::AddPhotoCohortsController < HighchartsController
 
   def registered_users_by_cohort
     cohort_src = HighchartsDatasource.new(:span => params[:span] || 1440)
-    set_cohort_intersection_params(cohort_src, {:days_count => 31, :weeks_count => 5})
+    set_cohort_intersection_params(cohort_src, {:days_count => 31, :weeks_count => 6})
     
     series = []
     (1..CohortManager.cohort_current).each do |cohort|
@@ -275,7 +275,7 @@ class Chart::AddPhotoCohortsController < HighchartsController
         :labels => {
           :rotation => -45,
           :align => 'right',
-          :step => (cohort_src.categories.size/20.0).ceil
+          :step => (cohort_src.categories.size/30.0).ceil
         }
       },
       :yAxis => {
@@ -342,8 +342,7 @@ class Chart::AddPhotoCohortsController < HighchartsController
         :labels => {
           :rotation => -45,
           :align => 'right',
-          :step => 2
-          #:x => 5
+          :step => (data_src.categories.size/30.0).ceil
         }
       },
       :yAxis => {

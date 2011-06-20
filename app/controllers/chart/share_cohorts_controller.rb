@@ -121,23 +121,16 @@ class Chart::ShareCohortsController < HighchartsController
   end
 
   def cumulative_active_users_by_cohort
-    @ticks_count = 60
     cohort_src = HighchartsDatasource.new(:span => params[:span] || 1440)
-    cohort_src.categories = (1..@ticks_count).map{|day| "Day #{day}"}
-    cohort_src.category_formatter = Proc.new do |cohort_num, original_category|
-        cohort_beginning = CohortManager.cohort_beginning_date(cohort_num)
-        date = Date.parse(original_category)
-        day = date - cohort_beginning
-        "Day #{day}"
-    end
+    set_cohort_intersection_params(cohort_src, {:days_count => 60, :weeks_count => 10})
 
     series = []
     (1..CohortManager.cohort_current).each do |cohort|
       cohort_beginning = CohortManager.cohort_beginning_date(cohort)
-      cohort_src.period = (cohort_beginning..@ticks_count.days.since(cohort_beginning))
+      cohort_src.period = (cohort_beginning..@distance.since(cohort_beginning))
       cohort_src.query_name_mask = "Cohort.shares.#{cohort}"
       cohort_src.calculate_chart
-      series << cohort_src.chart_series.first if cohort_src.chart_series
+      series << cohort_src.chart_series.first if cohort_src.chart_series.first
     end
 
     render :json => {
@@ -153,7 +146,7 @@ class Chart::ShareCohortsController < HighchartsController
         :text => 'Daily Cumulative Users that Share (1 Share) by Cohort'
       },
       :subtitle => {
-        :text => "First #{@ticks_count} days"
+        :text => "#{cohort_src.span_code.humanize}#{cohort_src.weekly_mode? ? ' average' : ''}, First #{@ticks_count} #{@tick_name.downcase}s"
       },
       :legend => {
         :layout => 'vertical'
@@ -167,7 +160,7 @@ class Chart::ShareCohortsController < HighchartsController
         :labels => {
           :rotation => -45,
           :align => 'right',
-          :step => 2
+          :step => (cohort_src.categories.size/30.0).ceil
         }
       },
       :yAxis => {
@@ -180,39 +173,32 @@ class Chart::ShareCohortsController < HighchartsController
   end
 
   def cumulative_active_users_by_cohort_percent
-    @ticks_count = 60
     data_src = HighchartsDatasource.new(:span => params[:span] || 1440)
-    data_src.categories = (1..@ticks_count).map{|day| "Day #{day}"}
-    data_src.category_formatter = Proc.new do |cohort_num, original_category|
-        cohort_beginning = CohortManager.cohort_beginning_date(cohort_num)
-        date = Date.parse(original_category)
-        day = date - cohort_beginning
-        "Day #{day}"
-    end
+    set_cohort_intersection_params(data_src, {:days_count => 60, :weeks_count => 10})
 
     users_series = []
-    shares_series = []
+    photos10_series = []
     (1..CohortManager.cohort_current).each do |cohort|
       cohort_beginning = CohortManager.cohort_beginning_date(cohort)
-      data_src.period = (cohort_beginning..@ticks_count.days.since(cohort_beginning))
+      data_src.period = (cohort_beginning..@distance.since(cohort_beginning))
 
       data_src.query_name_mask = "Cohort.users.#{cohort}"
       data_src.calculate_chart
-      users_series << data_src.chart_series.first if data_src.chart_series
+      users_series << data_src.chart_series.first if data_src.chart_series.first
 
       data_src.query_name_mask = "Cohort.shares.#{cohort}"
       data_src.calculate_chart
-      shares_series << data_src.chart_series.first if data_src.chart_series
+      photos10_series << data_src.chart_series.first if data_src.chart_series.first
     end
 
-
-    percent_series = shares_series.enum_with_index.map do |serie, cohort|
+    percent_series = photos10_series.enum_with_index.map do |serie, cohort|
       percent_serie_data = serie[:data].enum_with_index.map do |val, idx|
         perc_val = (val.to_f / users_series[cohort][:data][idx]) rescue nil
         (perc_val.nil? || perc_val.nan? || perc_val.infinite?) ? nil : perc_val
       end
       {:name => serie[:name], :data => percent_serie_data}
     end
+
 
     render :json => {
       :series => percent_series,
@@ -227,7 +213,7 @@ class Chart::ShareCohortsController < HighchartsController
         :text => 'Daily Cumulative % of Users that Share (1 Share) by Cohort'
       },
       :subtitle => {
-        :text => "First #{@ticks_count} days"
+        :text => "#{data_src.span_code.humanize}#{data_src.weekly_mode? ? ' average' : ''}, First #{@ticks_count} #{@tick_name.downcase}s"
       },
       :legend => {
         :layout => 'vertical'
@@ -241,8 +227,7 @@ class Chart::ShareCohortsController < HighchartsController
         :labels => {
           :rotation => -45,
           :align => 'right',
-          :step => 2
-          #:x => 5
+          :step => (data_src.categories.size/30.0).ceil
         }
       },
       :yAxis => {
