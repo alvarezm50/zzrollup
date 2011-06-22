@@ -7,19 +7,19 @@
   <div id="registered-users-group" class="chart-group">
     <h2>Registered Users</h2>
     <div>
-      <div id="regusers_registered_daily" class="normal-chart-container"/>
-    </div>
-    <div>
-      <div id="regusers_registered_weekly" class="normal-chart-container"/>
-    </div>
-    <div>
       <div id="regusers_cum_registered_daily" class="normal-chart-container"/>
+    </div>
+    <div>
+      <div id="regusers_cum_registered_weekly" class="normal-chart-container"/>
+    </div>
+    <div>
+      <div id="regusers_daily_cum_registered" class="normal-chart-container"/>
     </div>
     <div>
       <div id="regusers_daily_registered_users" class="normal-chart-container"/>
     </div>
     <div>
-      <div id="regusers_registered_monthly" class="normal-chart-container"/>
+      <div id="regusers_cum_registered_monthly" class="normal-chart-container"/>
     </div>
   </div>
   </td>
@@ -92,15 +92,15 @@
 
   var all_charts = {
     //Registered Users
-    regusers_registered_daily: {
-      chart: null,
-      url: 'registered_users/'
-    },
-    regusers_registered_weekly: {
-      chart: null,
-      url: 'registered_users/registered_users_by_cohort?span=10080'
-    },
     regusers_cum_registered_daily: {
+      chart: null,
+      url: 'registered_users/registered_users_cumulative'
+    },
+    regusers_cum_registered_weekly: {
+      chart: null,
+      url: 'registered_users/registered_users_cumulative?span=10080'
+    },
+    regusers_daily_cum_registered: {
       chart: null,
       url: 'registered_users/cumulative_registered_users_by_cohort'
     },
@@ -108,9 +108,9 @@
       chart: null,
       url: 'registered_users/registered_users_by_cohort'
     },
-    regusers_registered_monthly: {
+    regusers_cum_registered_monthly: {
       chart: null,
-      url: 'registered_users/'
+      url: 'registered_users/registered_users_cumulative?span=43200'
     },
 
 

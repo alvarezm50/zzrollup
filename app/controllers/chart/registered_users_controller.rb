@@ -1,4 +1,63 @@
 class Chart::RegisteredUsersController < HighchartsController
+  
+  def registered_users_cumulative
+    data_src = HighchartsDatasource.new(
+      :query_name_mask => 'Cohort.users.%',
+      :span => params[:span] || 1440,
+      :calculate_now => true
+    )
+    
+
+    render :json => {
+      :series => data_src.chart_series.reverse,
+      :chart => {
+        :renderTo => '',
+        :defaultSeriesType => 'area'
+      },
+      :credits => {
+        :enabled => false
+      },
+      :title => {
+        :text => 'Cumulative Registered Users'
+      },
+      :subtitle => {
+        :text => data_src.chart_subtitle
+      },
+      :legend => {
+        :layout => 'vertical'
+      },
+      :xAxis => {
+        :categories => data_src.categories,
+        :tickmarkPlacement => 'on',
+        :title => {
+          :enabled => false
+        },
+        :labels => {
+          :rotation => -90,
+          :align => 'right',
+          :y => 3,
+          :x => 4
+        }
+      },
+      :yAxis => {
+        :title => {
+          :text => 'Registered Users'
+        },
+      },
+      :plotOptions => {
+        :area => {
+          :stacking => 'normal',
+          :lineColor => '#666666',
+          :lineWidth => 1,
+          :marker => {
+            :lineWidth => 1,
+            :lineColor => '#666666'
+          }
+        }
+      }
+    }
+  end
+
 
   def cumulative_registered_users_by_cohort #Charts 3
     cohort_src = HighchartsDatasource.new(:span => params[:span] || 1440)

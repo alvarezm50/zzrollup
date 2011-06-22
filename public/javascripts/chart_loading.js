@@ -18,7 +18,7 @@
   }
 
   function addInteraction(chart_type, cfg_obj){
-    if(chart_type.match(/_percent_/)){
+    if(chart_type.match(/_perc(ent)?_/)){
           cfg_obj.yAxis.labels.formatter = function(){
             return (this.value*100)+'%';
           }
