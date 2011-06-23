@@ -85,6 +85,54 @@ class Chart::PrivacySettingsController < HighchartsController
 
 
   def monthly_privacy_allocation
+    group_albums = fetch_query('Albums.type.GroupAlbum', true)
+    public_albums = fetch_query('Albums.GroupAlbum.privacy.public', true)
+    hidden_albums = fetch_query('Albums.GroupAlbum.privacy.hidden', true)
+    password_albums = fetch_query('Albums.GroupAlbum.privacy.password', true)
+
+    categories = group_albums.keys.uniq
+
+    series = [
+      {
+        :name => 'Public albums',
+        :data => categories.map { |cat| public_albums[cat].to_f / group_albums[cat] }
+      },
+      {
+        :name => 'Hidden albums',
+        :data => categories.map { |cat| hidden_albums[cat].to_f / group_albums[cat] }
+      },
+      {
+        :name => 'Password albums',
+        :data => categories.map { |cat| password_albums[cat].to_f / group_albums[cat] }
+      }
+    ]
+
+    render :json => {
+      :series => series,
+      :chart => {
+        :renderTo => '',
+        :defaultSeriesType => 'column'
+      },
+      :xAxis => {
+        :categories => categories
+      },
+      :yAxis => {
+        :labels => { :formatter => nil },
+        :title => {
+          :text => nil
+        },
+      },
+      :credits => {
+        :enabled => false
+      },
+      :title => {
+        :text => 'Monthly Avg % Allocation of Privacy Settings'
+      },
+      :subtitle => {
+        :text => "(excludes Profile Albums)"
+      },
+      :tooltip => { :formatter => nil }
+    }
   end
 
 protected
@@ -92,18 +140,16 @@ protected
     arr.inject(0.0) { |sum, el| sum + el } / arr.size
   end
 
-  def fetch_query(query_name)
+  def fetch_query(query_name, monthly = false)
     sql = <<-SQL
-      SELECT DATE_FORMAT(reported_at, '%Y-%m-%d') AS report_date, MAX(sum_value) AS value
-        FROM rollup_results WHERE query_name = '#{query_name}' GROUP BY report_date;
+      SELECT DATE_FORMAT(reported_at, '#{monthly ? '%b %Y' : '%Y-%m-%d'}') AS report_date, MAX(sum_value) AS value
+        FROM rollup_results WHERE query_name = '#{query_name}' AND span=#{RollupTasks::DAILY_REPORT_INTERVAL} GROUP BY report_date ORDER BY reported_at
     SQL
     dataset = RollupResult.connection.select_all(sql)
-
-    result = {}
-    dataset.each do |row|
-      result[row['report_date']] = row['value'].to_i
+    dataset.inject(ActiveSupport::OrderedHash.new) do |hsh, row|
+      hsh[row['report_date']] = row['value'].to_i
+      hsh
     end
-    result
   end
 
 end
