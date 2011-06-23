@@ -90,6 +90,8 @@ class Chart::PrivacySettingsController < HighchartsController
     hidden_albums = fetch_query('Albums.GroupAlbum.privacy.hidden', true)
     password_albums = fetch_query('Albums.GroupAlbum.privacy.password', true)
 
+    group_albums.reject!{ |k,v| !(public_albums.has_key?(k) && hidden_albums.has_key?(k) && password_albums.has_key?(k)) }
+
     categories = group_albums.keys.uniq
 
     series = [
