@@ -1,0 +1,14 @@
+.chart-group {
+    display: inline;
+    float: left;
+}
+
+.chart-group h2 {
+    text-align: center;
+}
+
+.normal-chart-container {
+     width: 600px;
+     height: 400px;
+     margin: 0 auto;
+}
