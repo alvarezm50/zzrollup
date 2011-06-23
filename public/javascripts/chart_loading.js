@@ -26,5 +26,13 @@
             return this.x + '<br/>' + '<span style="color: ' + this.series.color+'">' + this.series.name+'</span> : <b>' +  Math.round(this.y*10000)/100 + '%</b>';
           }
     }
+    else if(chart_type.match(/^pie_/)){
+          cfg_obj.tooltip.formatter = function(){
+            return this.point.name+' : <b>' +  Math.round(this.y*10000)/100 + '%</b>';
+          }
+          cfg_obj.plotOptions.pie.dataLabels.formatter = function(){
+              return Math.round(this.y*10000)/100 + '%';
+          }
+    }
     return cfg_obj;
   }

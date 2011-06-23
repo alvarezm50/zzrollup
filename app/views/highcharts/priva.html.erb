@@ -1,0 +1,36 @@
+<%=  javascript_include_tag 'highcharts', 'chart_loading' %>
+
+<table>
+  <tr valign="top">
+
+  <td>
+  <div id="privcy-settings-group" class="chart-group">
+    <h2>Privacy Settings</h2>
+    <div>
+      <div id="pie_group_albums_privacy_allocation" class="normal-chart-container"/>
+    </div>
+    <div>
+      <div id="pie_all_albums_privacy_allocation" class="normal-chart-container"/>
+    </div>
+  </div>
+  </td>
+
+  </tr>
+</table>
+
+
+<script type="text/javascript">
+
+  var all_charts = {
+    pie_group_albums_privacy_allocation: {
+      chart: null,
+      url: 'privacy_settings/group_albums_privacy_allocation'
+    },
+    pie_all_albums_privacy_allocation: {
+      chart: null,
+      url: 'privacy_settings/all_albums_privacy_allocation'
+    }
+  };
+
+</script>
+
