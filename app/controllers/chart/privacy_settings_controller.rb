@@ -5,17 +5,13 @@ class Chart::PrivacySettingsController < HighchartsController
     hidden_albums = fetch_query('Albums.GroupAlbum.privacy.hidden')
     password_albums = fetch_query('Albums.GroupAlbum.privacy.password')
 
-    public_perc = public_albums.map { |date, val| val.to_f / group_albums[date] }
-    hidden_perc = hidden_albums.map { |date, val| val.to_f / group_albums[date] }
-    password_perc = password_albums.map { |date, val| val.to_f / group_albums[date] }
-
     render :json => {
       :series => [{
         :type => 'pie',
         :data => [
-          ['Public albums', average(public_perc)],
-          ['Hidden albums', average(hidden_perc)],
-          ['Password albums', average(password_perc)],
+          ['Public albums', public_albums.values.first.to_f / group_albums.values.first ],
+          ['Hidden albums', hidden_albums.values.first.to_f / group_albums.values.first],
+          ['Password albums', password_albums.values.first.to_f / group_albums.values.first],
         ]
       }],
       :chart => {
@@ -49,15 +45,12 @@ class Chart::PrivacySettingsController < HighchartsController
     group_albums = fetch_query('Albums.type.GroupAlbum')
     profile_albums = fetch_query('Albums.type.ProfileAlbum')
 
-    group_perc = group_albums.map { |date, val| val.to_f / all_albums[date] }
-    profile_perc = profile_albums.map { |date, val| val.to_f / all_albums[date] }
-
     render :json => {
       :series => [{
         :type => 'pie',
         :data => [
-          ['Group albums', average(group_perc)],
-          ['Profile albums', average(profile_perc)]
+          ['Group albums', group_albums.values.first.to_f / all_albums.values.first],
+          ['Profile albums', profile_albums.values.first.to_f / all_albums.values.first]
         ]
       }],
       :chart => {
@@ -138,18 +131,21 @@ class Chart::PrivacySettingsController < HighchartsController
   end
 
 protected
-  def average(arr)
-    arr.inject(0.0) { |sum, el| sum + el } / arr.size
-  end
-
   def fetch_query(query_name, monthly = false)
-    sql = <<-SQL
-      SELECT DATE_FORMAT(reported_at, '#{monthly ? '%b %Y' : '%Y-%m-%d'}') AS report_date, MAX(sum_value) AS value
-        FROM rollup_results WHERE query_name = '#{query_name}' AND span=#{RollupTasks::DAILY_REPORT_INTERVAL} GROUP BY report_date ORDER BY reported_at
-    SQL
+    if monthly
+      sql = <<-SQL
+       SELECT DATE_FORMAT(reported_at, '%b %Y') AS report_date, MAX(sum_value) AS sum_value
+          FROM rollup_results WHERE query_name = '#{query_name}' AND span=#{RollupTasks::DAILY_REPORT_INTERVAL} GROUP BY report_date ORDER BY reported_at
+      SQL
+    else  
+      sql = <<-SQL
+        SELECT DATE_FORMAT(reported_at, '%Y-%m-%d') AS report_date, sum_value
+          FROM rollup_results WHERE query_name = '#{query_name}' AND span=#{RollupTasks::DAILY_REPORT_INTERVAL} ORDER BY reported_at DESC LIMIT 1
+      SQL
+    end
     dataset = RollupResult.connection.select_all(sql)
     dataset.inject(ActiveSupport::OrderedHash.new) do |hsh, row|
-      hsh[row['report_date']] = row['value'].to_i
+      hsh[row['report_date']] = row['sum_value'].to_i
       hsh
     end
   end
