@@ -110,11 +110,35 @@ protected
       end
       cohort_beginning_date = CohortManager.cohort_beginning_date(cohort)
       {
+        :beginning_date => cohort_beginning_date,
         :name => cohort_beginning_date.strftime("Cohort %b '%y"),
+        :color => self.class.cohort_web_color(cohort_beginning_date),
         :data => data_row
       }
     end
     @chart_series
+  end
+
+  def self.cohort_web_color(cohort_beginning_date)
+    base_table = [
+      [255, 0, 0],
+      [255, 0, 255],
+      [255, 255, 0],
+      [0, 255, 0],
+      [0, 0, 255],
+      [255, 128, 128],
+      [128, 128, 255],
+      [255, 128, 255],
+      [128, 255, 0],
+      [120, 0, 255],
+      [128, 0, 128],
+      [255, 128, 0]
+    ]
+
+    r,g,b = base_table[cohort_beginning_date.month-1]
+    #TODO Still need to solve colors for next years
+    shift = (cohort_beginning_date.year-2000)*2
+    "#%02x%02x%02x" % [r, g, b].map{|c| (c+shift)>255 ? c-shift : c+shift }
   end
 
 

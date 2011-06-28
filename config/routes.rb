@@ -7,7 +7,7 @@ Rollup::Application.routes.draw do
 
   #charts
   match    '/:controller/:action', :controller => /chart\/[^\/]+/
+  get '/dashboard_:action' => 'highcharts', :as => :dashboard
 
-
-  root   :to => 'highcharts#dashboard'
+  root   :to => 'highcharts#cohorts'
 end
