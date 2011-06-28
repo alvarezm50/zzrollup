@@ -75,7 +75,7 @@ class Chart::AddPhotoCohortsController < HighchartsController
         perc_val = (val.to_f / users_src.chart_series[cohort][:data][idx]) rescue nil
         (perc_val.nil? || perc_val.nan? || perc_val.infinite?) ? nil : perc_val
       end
-      {:name => serie[:name], :data => percent_serie_data}
+      {:name => serie[:name], :data => percent_serie_data, :color => HighchartsDatasource.cohort_web_color(serie[:beginning_date])}
     end
 
     render :json => {
@@ -197,7 +197,7 @@ class Chart::AddPhotoCohortsController < HighchartsController
         perc_val = (val.to_f / users_series[cohort][:data][idx]) rescue nil
         (perc_val.nil? || perc_val.nan? || perc_val.infinite?) ? nil : perc_val
       end
-      {:name => serie[:name], :data => percent_serie_data}
+      { :name => serie[:name], :data => percent_serie_data, :color => HighchartsDatasource.cohort_web_color(serie[:beginning_date]) }
     end
 
     render :json => {
