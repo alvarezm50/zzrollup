@@ -137,8 +137,9 @@ protected
 
     r,g,b = base_table[cohort_beginning_date.month-1]
     #TODO Still need to solve colors for next years
-    shift = (cohort_beginning_date.year-2000)*2
-    "#%02x%02x%02x" % [r, g, b].map{|c| (c+shift)>255 ? c-shift : c+shift }
+#    shift = (cohort_beginning_date.year-2000)*2
+#    "#%02x%02x%02x" % [r, g, b].map{|c| (c+shift)>255 ? c-shift : c+shift }
+    "#%02x%02x%02x" % [r, g, b]
   end
 
 
