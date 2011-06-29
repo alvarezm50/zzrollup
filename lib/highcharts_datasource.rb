@@ -120,6 +120,7 @@ protected
   end
 
   def self.cohort_web_color(cohort_beginning_date)
+=begin
     base_table = [
       [69, 114, 167],
       [170, 70, 67],
@@ -140,6 +141,11 @@ protected
 #    shift = (cohort_beginning_date.year-2000)*2
 #    "#%02x%02x%02x" % [r, g, b].map{|c| (c+shift)>255 ? c-shift : c+shift }
     "#%02x%02x%02x" % [r, g, b]
+=end
+
+    months_colors = ["#4572A7", "#AA4643", "#89A54E", "#800000", "#006400", "#191970", "#8080FF", "#FF80FF", "#80FF00", "#7800FF", "#800080", "#FF8000"]
+    months_colors[cohort_beginning_date.month-1]
+
   end
 
 
