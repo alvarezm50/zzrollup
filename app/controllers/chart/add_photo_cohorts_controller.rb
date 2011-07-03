@@ -2,7 +2,7 @@ class Chart::AddPhotoCohortsController < HighchartsController
 
   def active_users_by_cohort #Charts 1
     data_src = HighchartsDatasource.new(
-      :query_name_mask => 'Cohort.photos_10.%',
+      :query_name_mask => 'Cohort.photos_10._',
       :span => params[:span] || 1440,
       :calculate_now => true
     )
@@ -59,12 +59,12 @@ class Chart::AddPhotoCohortsController < HighchartsController
 
   def active_users_percent_by_cohort #Charts 2
     users_src = HighchartsDatasource.new(
-      :query_name_mask => 'Cohort.users.%',
+      :query_name_mask => 'Cohort.users._',
       :span => params[:span] || 1440,
       :calculate_now => true
     )
     photos10_src = HighchartsDatasource.new(
-      :query_name_mask => 'Cohort.photos_10.%',
+      :query_name_mask => 'Cohort.photos_10._',
       :span => params[:span] || 1440,
       :categories => users_src.categories,
       :calculate_now => true

@@ -2,7 +2,7 @@ class Chart::RegisteredUsersController < HighchartsController
   
   def registered_users_cumulative
     data_src = HighchartsDatasource.new(
-      :query_name_mask => 'Cohort.users.%',
+      :query_name_mask => 'Cohort.users._',
       :span => params[:span] || 1440,
       :calculate_now => true
     )
