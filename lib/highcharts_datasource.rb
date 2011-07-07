@@ -15,7 +15,7 @@ class HighchartsDatasource
     @span_code = RollupTasks.kind(@span)
 
     @x_labels_format = case @span_code
-      when 'monthly' then '%b %Y'
+      when 'monthly' then '%b 1, %Y'
       when 'daily', 'weekly' then '%Y-%m-%d'
       else '%Y-%m-%d %H:%i'
     end
@@ -63,6 +63,7 @@ protected
       fields_to_select << "ROUND(AVG(sum_value)) AS value"
       fields_to_select << "DATE_FORMAT(reported_at, '%v %x') AS weekyear"
       group_by << 'weekyear'
+      conditions << RollupResult.public_sanitize_sql('sum_value > 0')
     else
       fields_to_select << "DATE_FORMAT(reported_at, '#{@x_labels_format}') AS report_date"
       fields_to_select << "MAX(sum_value) AS value"
@@ -94,9 +95,7 @@ protected
   end
   
   def make_chart_series!
-    @category_formatter ||= Proc.new do |cohort, original_category|
-      original_category
-    end
+    @category_formatter ||= Proc.new {|cohort, original_category| original_category }
     
     @categories ||= @rollup_data_rows.map{|row| row['report_date']}.uniq
 
