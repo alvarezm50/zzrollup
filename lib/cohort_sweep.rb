@@ -15,7 +15,7 @@ class CohortSweep < BaseSweep
     mgr.add_users_query(ZZADB.connection,
                lambda {|begin_date, end_date| "
 SELECT DISTINCT user FROM evts
-WHERE (event LIKE 'photo.share.%' OR event LIKE 'album.share.%' OR event LIKE 'user.share.%') AND (stimestamp  >= #{begin_date} AND stimestamp < #{end_date}) AND user_type = 1
+WHERE (event LIKE 'photo.share.%' OR event LIKE 'album.share.%' OR event LIKE 'album.stream.%' OR event LIKE 'user.share.%') AND (stimestamp  >= #{begin_date} AND stimestamp < #{end_date}) AND user_type = 1
                "})
 
 #    # now collect the cohorts within the range
