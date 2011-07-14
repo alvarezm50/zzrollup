@@ -1,5 +1,10 @@
  $(document).ready(function(){
     $.each(all_charts, function(chart_div, cfg){
+      var button = $('<div><a href="/chart/'+ cfg.url.replace('.json', '.xls') +'"><img src="/images/blue-document-excel-table.png" title="Download XLS"/></a><div>');
+      var container = $('#'+chart_div);
+      var pos = container.offset();
+      button.css( {"position": 'absolute', "zIndex": 5000, "left": (pos.left+50) + "px", "top": (pos.top+10) + "px" } );
+      container.before(button);
       $.ajax({
         url: '/chart/'+cfg.url,
         container: chart_div,

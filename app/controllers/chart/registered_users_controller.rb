@@ -7,55 +7,61 @@ class Chart::RegisteredUsersController < HighchartsController
       :calculate_now => true
     )
     
-
-    render :json => {
-      :series => data_src.chart_series.reverse,
-      :chart => {
-        :renderTo => '',
-        :defaultSeriesType => 'area'
-      },
-      :credits => {
-        :enabled => false
-      },
-      :title => {
-        :text => 'Cumulative Registered Users'
-      },
-      :subtitle => {
-        :text => data_src.chart_subtitle
-      },
-      :legend => {
-        :layout => 'vertical'
-      },
-      :xAxis => {
-        :categories => data_src.categories,
-        :tickmarkPlacement => 'on',
-        :title => {
-          :enabled => false
-        },
-        :labels => {
-          :rotation => -90,
-          :align => 'right',
-          :y => 3,
-          :x => 4
-        }
-      },
-      :yAxis => {
-        :title => {
-          :text => 'Registered Users'
-        },
-      },
-      :plotOptions => {
-        :area => {
-          :stacking => 'normal',
-          :lineColor => '#666666',
-          :lineWidth => 1,
-          :marker => {
-            :lineWidth => 1,
-            :lineColor => '#666666'
+    respond_to do |wants|
+      wants.xls do
+        send_xls(data_src)
+      end
+      wants.json do
+        render :json => {
+          :series => data_src.chart_series.reverse,
+          :chart => {
+            :renderTo => '',
+            :defaultSeriesType => 'area'
+          },
+          :credits => {
+            :enabled => false
+          },
+          :title => {
+            :text => 'Cumulative Registered Users'
+          },
+          :subtitle => {
+            :text => data_src.chart_subtitle
+          },
+          :legend => {
+            :layout => 'vertical'
+          },
+          :xAxis => {
+            :categories => data_src.categories,
+            :tickmarkPlacement => 'on',
+            :title => {
+              :enabled => false
+            },
+            :labels => {
+              :rotation => -90,
+              :align => 'right',
+              :y => 3,
+              :x => 4
+            }
+          },
+          :yAxis => {
+            :title => {
+              :text => 'Registered Users'
+            },
+          },
+          :plotOptions => {
+            :area => {
+              :stacking => 'normal',
+              :lineColor => '#666666',
+              :lineWidth => 1,
+              :marker => {
+                :lineWidth => 1,
+                :lineColor => '#666666'
+              }
+            }
           }
         }
-      }
-    }
+      end
+    end
   end
 
 
@@ -72,44 +78,51 @@ class Chart::RegisteredUsersController < HighchartsController
       series << cohort_src.chart_series.first if cohort_src.chart_series.first
     end
 
-    render :json => {
-      :series => series,
-      :chart => {
-        :renderTo => '',
-        :defaultSeriesType => 'line'
-      },
-      :credits => {
-        :enabled => false
-      },
-      :title => {
-        :text => 'Cumulative Registered Users by Cohort'
-      },
-      :subtitle => {
-        :text => "#{cohort_src.span_code.humanize}#{cohort_src.weekly_mode? ? ' average' : ''}, First #{@ticks_count} #{@tick_name.downcase}s"
-      },
-      :legend => {
-        :layout => 'vertical'
-      },
-      :xAxis => {
-        :categories => cohort_src.categories,
-        :tickmarkPlacement => 'on',
-        :title => {
-          :enabled => false
-        },
-        :labels => {
-          :rotation => -45,
-          :align => 'right',
-          :y => 7,
-          :x => 5
+    respond_to do |wants|
+      wants.xls do
+        send_xls(cohort_src, series)
+      end
+      wants.json do
+        render :json => {
+          :series => series,
+          :chart => {
+            :renderTo => '',
+            :defaultSeriesType => 'line'
+          },
+          :credits => {
+            :enabled => false
+          },
+          :title => {
+            :text => 'Cumulative Registered Users by Cohort'
+          },
+          :subtitle => {
+            :text => "#{cohort_src.span_code.humanize}#{cohort_src.weekly_mode? ? ' average' : ''}, First #{@ticks_count} #{@tick_name.downcase}s"
+          },
+          :legend => {
+            :layout => 'vertical'
+          },
+          :xAxis => {
+            :categories => cohort_src.categories,
+            :tickmarkPlacement => 'on',
+            :title => {
+              :enabled => false
+            },
+            :labels => {
+              :rotation => -45,
+              :align => 'right',
+              :y => 7,
+              :x => 5
+            }
+          },
+          :yAxis => {
+            :min => 0,
+            :title => {
+              :text => 'Registered Users'
+            },
+          }
         }
-      },
-      :yAxis => {
-        :min => 0,
-        :title => {
-          :text => 'Registered Users'
-        },
-      }
-    }
+      end
+    end
   end
 
   def registered_users_by_cohort
@@ -135,43 +148,50 @@ class Chart::RegisteredUsersController < HighchartsController
       serie[:data] = calculated_row
     end
 
-    render :json => {
-      :series => series,
-      :chart => {
-        :renderTo => '',
-        :defaultSeriesType => 'line'
-      },
-      :credits => {
-        :enabled => false
-      },
-      :title => {
-        :text => 'Registered Users by Cohort'
-      },
-      :subtitle => {
-        :text => "#{cohort_src.span_code.humanize}#{cohort_src.weekly_mode? ? ' average' : ''}, First #{@ticks_count} #{@tick_name.downcase}s"
-      },
-      :legend => {
-        :layout => 'vertical'
-      },
-      :xAxis => {
-        :categories => cohort_src.categories,
-        :tickmarkPlacement => 'on',
-        :title => {
-          :enabled => false
-        },
-        :labels => {
-          :rotation => -45,
-          :align => 'right',
-          :x => 5
+    respond_to do |wants|
+      wants.xls do
+        send_xls(cohort_src, series)
+      end
+      wants.json do
+        render :json => {
+          :series => series,
+          :chart => {
+            :renderTo => '',
+            :defaultSeriesType => 'line'
+          },
+          :credits => {
+            :enabled => false
+          },
+          :title => {
+            :text => 'Registered Users by Cohort'
+          },
+          :subtitle => {
+            :text => "#{cohort_src.span_code.humanize}#{cohort_src.weekly_mode? ? ' average' : ''}, First #{@ticks_count} #{@tick_name.downcase}s"
+          },
+          :legend => {
+            :layout => 'vertical'
+          },
+          :xAxis => {
+            :categories => cohort_src.categories,
+            :tickmarkPlacement => 'on',
+            :title => {
+              :enabled => false
+            },
+            :labels => {
+              :rotation => -45,
+              :align => 'right',
+              :x => 5
+            }
+          },
+          :yAxis => {
+            :min => 0,
+            :title => {
+              :text => 'Registered Users'
+            },
+          }
         }
-      },
-      :yAxis => {
-        :min => 0,
-        :title => {
-          :text => 'Registered Users'
-        },
-      }
-    }
+      end
+    end
   end
 
 

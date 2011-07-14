@@ -7,54 +7,62 @@ class Chart::AddPhotoCohortsController < HighchartsController
       :calculate_now => true
     )
 
-    render :json => {
-      :series => data_src.chart_series.reverse,
-      :chart => {
-        :renderTo => '',
-        :defaultSeriesType => 'area'
-      },
-      :credits => {
-        :enabled => false
-      },
-      :title => {
-        :text => 'Cumulative Active Users (10+ Photos) by Cohort'
-      },
-      :subtitle => {
-        :text => data_src.chart_subtitle
-      },
-      :legend => {
-        :layout => 'vertical'
-      },
-      :xAxis => {
-        :categories => data_src.categories,
-        :tickmarkPlacement => 'on',
-        :title => {
-          :enabled => false
-        },
-        :labels => {
-          :rotation => -90,
-          :align => 'right',
-          :y => 3,
-          :x => 4
-        }
-      },
-      :yAxis => {
-        :title => {
-          :text => 'Active Users (Add 10+ Photos/month)'
-        },
-      },
-      :plotOptions => {
-        :area => {
-          :stacking => 'normal',
-          :lineColor => '#666666',
-          :lineWidth => 1,
-          :marker => {
-            :lineWidth => 1,
-            :lineColor => '#666666'
+    respond_to do |wants|
+      wants.xls do
+        send_xls(data_src)
+      end
+      wants.json do
+        render :json => {
+          :series => data_src.chart_series.reverse,
+          :chart => {
+            :renderTo => '',
+            :defaultSeriesType => 'area'
+          },
+          :credits => {
+            :enabled => false
+          },
+          :title => {
+            :text => 'Cumulative Active Users (10+ Photos) by Cohort'
+          },
+          :subtitle => {
+            :text => data_src.chart_subtitle
+          },
+          :legend => {
+            :layout => 'vertical'
+          },
+          :xAxis => {
+            :categories => data_src.categories,
+            :tickmarkPlacement => 'on',
+            :title => {
+              :enabled => false
+            },
+            :labels => {
+              :rotation => -90,
+              :align => 'right',
+              :y => 3,
+              :x => 4
+            }
+          },
+          :yAxis => {
+            :title => {
+              :text => 'Active Users (Add 10+ Photos/month)'
+            },
+          },
+          :plotOptions => {
+            :area => {
+              :stacking => 'normal',
+              :lineColor => '#666666',
+              :lineWidth => 1,
+              :marker => {
+                :lineWidth => 1,
+                :lineColor => '#666666'
+              }
+            }
           }
         }
-      }
-    }
+      end
+    end
+
   end
 
   def active_users_percent_by_cohort #Charts 2
@@ -78,46 +86,53 @@ class Chart::AddPhotoCohortsController < HighchartsController
       {:name => serie[:name], :data => percent_serie_data, :color => HighchartsDatasource.cohort_web_color(serie[:beginning_date])}
     end
 
-    render :json => {
-      :series => percent_series,
-      :chart => {
-        :renderTo => '',
-        :defaultSeriesType => 'line'
-      },
-      :credits => {
-        :enabled => false
-      },
-      :title => {
-        :text => 'Cumulative % Active Users (10+ Photos) by Cohort'
-      },
-      :subtitle => {
-        :text => users_src.chart_subtitle
-      },
-      :legend => {
-        :layout => 'vertical'
-      },
-      :xAxis => {
-        :categories => users_src.categories,
-        :tickmarkPlacement => 'on',
-        :title => {
-          :enabled => false
-        },
-        :labels => {
-          :rotation => -90,
-          :align => 'right',
-          :y => 3,
-          :x => 4
+    respond_to do |wants|
+      wants.xls do
+        send_xls(users_src, percent_series)
+      end
+      wants.json do
+        render :json => {
+          :series => percent_series,
+          :chart => {
+            :renderTo => '',
+            :defaultSeriesType => 'line'
+          },
+          :credits => {
+            :enabled => false
+          },
+          :title => {
+            :text => 'Cumulative % Active Users (10+ Photos) by Cohort'
+          },
+          :subtitle => {
+            :text => users_src.chart_subtitle
+          },
+          :legend => {
+            :layout => 'vertical'
+          },
+          :xAxis => {
+            :categories => users_src.categories,
+            :tickmarkPlacement => 'on',
+            :title => {
+              :enabled => false
+            },
+            :labels => {
+              :rotation => -90,
+              :align => 'right',
+              :y => 3,
+              :x => 4
+            }
+          },
+          :yAxis => {
+            :title => {
+              :text => '% Active Users (Add 10+ Photos/month)'
+            },
+            :min => 0,
+            :labels => { :formatter => nil }
+          },
+          :tooltip => { :formatter => nil }
         }
-      },
-      :yAxis => {
-        :title => {
-          :text => '% Active Users (Add 10+ Photos/month)'
-        },
-        :min => 0,
-        :labels => { :formatter => nil }
-      },
-      :tooltip => { :formatter => nil }
-    }
+      end
+    end
   end
 
   def cumulative_active_users_by_cohort
@@ -133,43 +148,50 @@ class Chart::AddPhotoCohortsController < HighchartsController
       series << cohort_src.chart_series.first if cohort_src.chart_series.first
     end
 
-    render :json => {
-      :series => series,
-      :chart => {
-        :renderTo => '',
-        :defaultSeriesType => 'line'
-      },
-      :credits => {
-        :enabled => false
-      },
-      :title => {
-        :text => 'Cumulative Active Users (10+ Photos) by Cohort'
-      },
-      :subtitle => {
-        :text => "#{cohort_src.span_code.humanize}#{cohort_src.weekly_mode? ? ' average' : ''}, First #{@ticks_count} #{@tick_name.downcase}s"
-      },
-      :legend => {
-        :layout => 'vertical'
-      },
-      :xAxis => {
-        :categories => cohort_src.categories,
-        :tickmarkPlacement => 'on',
-        :title => {
-          :enabled => false
-        },
-        :labels => {
-          :rotation => -45,
-          :align => 'right',
-          :step => (cohort_src.categories.size/30.0).ceil
+    respond_to do |wants|
+      wants.xls do
+        send_xls(cohort_src, series)
+      end
+      wants.json do
+        render :json => {
+          :series => series,
+          :chart => {
+            :renderTo => '',
+            :defaultSeriesType => 'line'
+          },
+          :credits => {
+            :enabled => false
+          },
+          :title => {
+            :text => 'Cumulative Active Users (10+ Photos) by Cohort'
+          },
+          :subtitle => {
+            :text => "#{cohort_src.span_code.humanize}#{cohort_src.weekly_mode? ? ' average' : ''}, First #{@ticks_count} #{@tick_name.downcase}s"
+          },
+          :legend => {
+            :layout => 'vertical'
+          },
+          :xAxis => {
+            :categories => cohort_src.categories,
+            :tickmarkPlacement => 'on',
+            :title => {
+              :enabled => false
+            },
+            :labels => {
+              :rotation => -45,
+              :align => 'right',
+              :step => (cohort_src.categories.size/30.0).ceil
+            }
+          },
+          :yAxis => {
+            :min => 0,
+            :title => {
+              :text => 'Active Users'
+            },
+          }
         }
-      },
-      :yAxis => {
-        :min => 0,
-        :title => {
-          :text => 'Active Users'
-        },
-      }
-    }
+      end
+    end
   end
 
   def cumulative_active_users_by_cohort_percent
@@ -200,45 +222,52 @@ class Chart::AddPhotoCohortsController < HighchartsController
       { :name => serie[:name], :data => percent_serie_data, :color => HighchartsDatasource.cohort_web_color(serie[:beginning_date]) }
     end
 
-    render :json => {
-      :series => percent_series,
-      :chart => {
-        :renderTo => '',
-        :defaultSeriesType => 'line'
-      },
-      :credits => {
-        :enabled => false
-      },
-      :title => {
-        :text => 'Cumulative % Active Users (10+ Photos) by Cohort'
-      },
-      :subtitle => {
-        :text => "#{data_src.span_code.humanize}#{data_src.weekly_mode? ? ' average' : ''}, First #{@ticks_count} #{@tick_name.downcase}s"
-      },
-      :legend => {
-        :layout => 'vertical'
-      },
-      :xAxis => {
-        :categories => data_src.categories,
-        :tickmarkPlacement => 'on',
-        :title => {
-          :enabled => false
-        },
-        :labels => {
-          :rotation => -45,
-          :align => 'right',
-          :step => (data_src.categories.size/30.0).ceil
+    respond_to do |wants|
+      wants.xls do
+        send_xls(data_src, percent_series)
+      end
+      wants.json do
+        render :json => {
+          :series => percent_series,
+          :chart => {
+            :renderTo => '',
+            :defaultSeriesType => 'line'
+          },
+          :credits => {
+            :enabled => false
+          },
+          :title => {
+            :text => 'Cumulative % Active Users (10+ Photos) by Cohort'
+          },
+          :subtitle => {
+            :text => "#{data_src.span_code.humanize}#{data_src.weekly_mode? ? ' average' : ''}, First #{@ticks_count} #{@tick_name.downcase}s"
+          },
+          :legend => {
+            :layout => 'vertical'
+          },
+          :xAxis => {
+            :categories => data_src.categories,
+            :tickmarkPlacement => 'on',
+            :title => {
+              :enabled => false
+            },
+            :labels => {
+              :rotation => -45,
+              :align => 'right',
+              :step => (data_src.categories.size/30.0).ceil
+            }
+          },
+          :yAxis => {
+            :min => 0,
+            :title => {
+              :text => '% Active Users'
+            },
+            :labels => { :formatter => nil }
+          },
+          :tooltip => { :formatter => nil }
         }
-      },
-      :yAxis => {
-        :min => 0,
-        :title => {
-          :text => '% Active Users'
-        },
-        :labels => { :formatter => nil }
-      },
-      :tooltip => { :formatter => nil }
-    }
+      end
+    end
   end
 
 

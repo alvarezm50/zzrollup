@@ -10,6 +10,7 @@ gem "json"
 gem "whenever"
 gem "unicorn"
 gem "rubyzip"
+gem "spreadsheet"
 gem "garb"
 
 
