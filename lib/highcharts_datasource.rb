@@ -48,6 +48,10 @@ class HighchartsDatasource
     )
   }
 
+  XLS_CELL_TYPE = {
+    :float => Spreadsheet::Format.new( :number_format => '0.00' ),
+    :percent => Spreadsheet::Format.new( :number_format => '0.00%' ),
+  }
 
   def produce_xls(custom_series = nil)
     workbook = Spreadsheet::Workbook.new
