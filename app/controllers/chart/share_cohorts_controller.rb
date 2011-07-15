@@ -68,13 +68,13 @@ class Chart::ShareCohortsController < HighchartsController
     users_src = HighchartsDatasource.new(
       :query_name_mask => 'Cohort.users._',
       :span => params[:span] || 1440,
-      :calculate_now => true
+      :calculate_now => true, :percent_view => true
     )
     shares_src = HighchartsDatasource.new(
       :query_name_mask => 'Cohort.shares._',
       :span => params[:span] || 1440,
       :categories => users_src.categories,
-      :calculate_now => true
+      :calculate_now => true, :percent_view => true
     )
 
     percent_series = shares_src.chart_series.enum_with_index.map do |serie, cohort|
@@ -194,7 +194,7 @@ class Chart::ShareCohortsController < HighchartsController
   end
 
   def cumulative_active_users_by_cohort_percent
-    data_src = HighchartsDatasource.new(:span => params[:span] || 1440)
+    data_src = HighchartsDatasource.new(:span => params[:span] || 1440, :percent_view => true)
     set_cohort_intersection_params(data_src, {:days_count => 60, :weeks_count => 10})
 
     users_series = []

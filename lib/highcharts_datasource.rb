@@ -1,7 +1,7 @@
 class HighchartsDatasource
   include ActionView::Helpers::DateHelper
 
-  attr_accessor :query_name_mask, :period, :categories, :category_formatter
+  attr_accessor :query_name_mask, :period, :categories, :category_formatter, :percent_view
   attr_reader :span, :span_code, :chart_series
 
   def initialize(opts = {})
@@ -69,6 +69,7 @@ class HighchartsDatasource
       worksheet.row(1+cat_idx)[0] = cat
       series.each_with_index do |serie, serie_idx|
         worksheet.row(1+cat_idx)[1+serie_idx] = serie[:data][cat_idx]
+        worksheet.row(1+cat_idx).set_format(1+serie_idx, XLS_CELL_TYPE[:percent]) if @percent_view
       end
     end
 
