@@ -36,12 +36,15 @@ before_fork do |server, worker|
   # we send it a QUIT.
   #
   # Using this method we get 0 downtime deploys.
-  old_pid = "#{server.config[:pid]}.oldbin"
+  old_pid = File.read("#{server.config[:pid]}.oldbin").to_i rescue 0
+  server_pid = File.read("#{server.config[:pid]}").to_i rescue 0
+  puts "In Before fork, old_pid: #{old_pid}, server_pid: #{server_pid}"
 
-  if File.exists?(old_pid) && server.pid != old_pid
+  if old_pid != 0 && server_pid != old_pid
     begin
       sig = (worker.nr + 1) >= server.worker_processes ? :TERM : :TTOU
-      Process.kill(sig, File.read(old_pid).to_i)
+      puts "Sending to old: #{old_pid}: #{sig}, worker.nr: #{worker.nr}, server.worker_processes: #{server.worker_processes}"
+      Process.kill(sig, old_pid)
     rescue Errno::ENOENT, Errno::ESRCH
       # someone else did our job for us
     end
@@ -51,6 +54,7 @@ end
 
 after_fork do |server, worker|
   worker_pid = File.join(File.dirname(server.config[:pid]), "unicorn_worker_rollup_#{worker.nr}.pid")
+  puts "In After fork: #{worker_pid}"
   File.open(worker_pid, "w") { |f| f.puts Process.pid }
   if defined?(ActiveRecord::Base)
     ActiveRecord::Base.establish_connection
