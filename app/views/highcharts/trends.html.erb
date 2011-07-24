@@ -11,8 +11,26 @@
     <div>
       <div id="daily_growth" class="normal-chart-container"/>
     </div>
+    <div>
+      <div id="photos_per_album" class="normal-chart-container"/>
+    </div>
+    <div>
+      <div id="cum_photos_per_day_monthly" class="normal-chart-container"/>
+    </div>
   </div>
   </td>
+
+  <td>
+  <div id="trends-2" class="chart-group">
+    <div>
+      <div id="total_albums" class="normal-chart-container"/>
+    </div>
+    <div>
+      <div id="total_photos" class="normal-chart-container"/>
+    </div>
+  </div>
+  </td>
+
 
   </tr>
 </table>
@@ -24,8 +42,24 @@
     daily_growth: {
       chart: null,
       url: 'trends/daily_growth.json'
+    },
+    photos_per_album: {
+      chart: null,
+      url: 'trends/photos_per_album_avg.json'
+    },
+    total_albums: {
+      chart: null,
+      url: 'trends/total_albums.json'
+    },
+    total_photos: {
+      chart: null,
+      url: 'trends/total_photos.json'
+    },
+    cum_photos_per_day_monthly: {
+      chart: null,
+      url: 'trends/photos_per_day_monthly.json'
     }
-  };
+};
 
 </script>
 
