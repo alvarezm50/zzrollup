@@ -181,8 +181,8 @@ protected
     workbook = Spreadsheet::Workbook.new
     worksheet = workbook.create_worksheet(:name => 'Chart data')
     0.upto(pie_mode ? 1 : categories.size) { |i| worksheet.column(i).width = 20 }
-    worksheet.row(0).default_format = HighchartsDatasource::XLS_FORMAT[:series_names]
-    worksheet.column(0).default_format = HighchartsDatasource::XLS_FORMAT[:categories]
+    worksheet.row(0).default_format = CohortsDatasource::XLS_FORMAT[:series_names]
+    worksheet.column(0).default_format = CohortsDatasource::XLS_FORMAT[:categories]
     worksheet.row(0).set_format(0, worksheet.default_format)
 
     data = !pie_mode ? series : [{ :name => 'Value', :data => series.first[:data].map {|pie_serie| pie_serie.last } }]
@@ -194,7 +194,7 @@ protected
       worksheet.row(1+cat_idx)[0] = cat
       data.each_with_index do |serie, serie_idx|
         worksheet.row(1+cat_idx)[1+serie_idx] = serie[:data][cat_idx]
-        worksheet.row(1+cat_idx).set_format(1+serie_idx, HighchartsDatasource::XLS_CELL_TYPE[:percent])
+        worksheet.row(1+cat_idx).set_format(1+serie_idx, CohortsDatasource::XLS_CELL_TYPE[:percent])
       end
     end
 

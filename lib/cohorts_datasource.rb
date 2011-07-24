@@ -1,4 +1,4 @@
-class HighchartsDatasource
+class CohortsDatasource
   include ActionView::Helpers::DateHelper
 
   attr_accessor :query_name_mask, :period, :categories, :category_formatter, :percent_view

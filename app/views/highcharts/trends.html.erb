@@ -1,0 +1,32 @@
+<%=  javascript_include_tag 'highcharts', 'chart_loading' %>
+
+<p><%= link_to 'Cohorts charts', dashboard_path(:cohorts) %></p>
+<p><%= link_to 'Privacy Settings charts', dashboard_path(:privacy) %></p>
+
+<table>
+  <tr valign="top">
+
+  <td>
+  <div id="trends-1" class="chart-group">
+    <h2>Privacy Settings</h2>
+    <div>
+      <div id="daily_growth" class="normal-chart-container"/>
+    </div>
+  </div>
+  </td>
+
+  </tr>
+</table>
+
+
+<script type="text/javascript">
+
+  var all_charts = {
+    daily_growth: {
+      chart: null,
+      url: 'trends/daily_growth.json'
+    }
+  };
+
+</script>
+
