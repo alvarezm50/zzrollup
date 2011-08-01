@@ -240,14 +240,15 @@ class Chart::TrendsController < HighchartsController
 
 
   def photos_per_day_monthly
-    data_src = DailyGrowthDatasource.new(:query_name_mask => 'Photos.all', :calculate_now => true)
+    data_src = DailyGrowthDatasource.new(:query_name_mask => 'Photos.all', :period => (1.year.ago..DateTime.now), :calculate_now => true)
 
     categories = []
     values = []
     
     data_src.chart_series.reverse.each do |serie|
       categories << serie[:name]
-      values << serie[:data].compact.inject(0){|s,e| s+e }
+      res_val = serie[:data].compact.inject(0){|s,e| s+e }.to_f / serie[:data].compact.size
+      values << (res_val*100).round/100.0
     end
     data_src.categories = categories
     series = [{:name => 'Number', :data => values}]
