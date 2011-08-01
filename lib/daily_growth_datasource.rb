@@ -21,7 +21,7 @@ protected
     
     sql = <<-SQL
       SELECT #{fields_to_select.join(',')} FROM `rollup_results` 
-      WHERE (#{conditions.join(') AND (')}) GROUP BY #{group_by.join(',')} ORDER BY `report_date`
+      WHERE (#{conditions.join(') AND (')}) GROUP BY #{group_by.join(',')} ORDER BY `reported_at` ASC
     SQL
     @rollup_data_rows = RollupResult.connection.select_all(sql)
   end
@@ -37,7 +37,7 @@ protected
 
     data = {}
     source_data.each do |date, val|
-      serie_name = Date.parse(date).strftime('%B')
+      serie_name = Date.parse(date).strftime('%B %Y')
       category = Date.parse(date).strftime('Day %d')
       data[serie_name] ||= {:name => serie_name, :data => Array.new(@categories.size)}
       data[serie_name][:data][category.scan(/\d+/).first.to_i - 1] = val

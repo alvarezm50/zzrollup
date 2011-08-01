@@ -123,7 +123,7 @@ protected
     #rollup_data_rows = RollupResult.select(fields_to_select.join(',')).group(!@weekly_mode ? :report_date : :weekyear).group(:cohort).where(:reported_at => @period).where("cohort > 0 AND span = ? AND query_name LIKE '#{query_name_mask}'", !@weekly_mode ? @span : RollupTasks::DAILY_REPORT_INTERVAL).order(:report_date)
     sql = <<-SQL
       SELECT #{fields_to_select.join(',')} FROM `rollup_results` 
-      WHERE (#{conditions.join(') AND (')}) GROUP BY #{group_by.join(',')} ORDER BY `report_date`
+      WHERE (#{conditions.join(') AND (')}) GROUP BY #{group_by.join(',')} ORDER BY `reported_at` ASC
     SQL
     @rollup_data_rows = RollupResult.connection.select_all(sql)
   end

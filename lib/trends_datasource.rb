@@ -34,7 +34,7 @@ protected
 
     sql = <<-SQL
       SELECT #{fields_to_select.join(',')} FROM `rollup_results` 
-      WHERE (#{conditions.join(') AND (')}) GROUP BY #{group_by.join(',')} ORDER BY `report_date`
+      WHERE (#{conditions.join(') AND (')}) GROUP BY #{group_by.join(',')} ORDER BY `reported_at` ASC
     SQL
     @rollup_data_rows = RollupResult.connection.select_all(sql)
   end
