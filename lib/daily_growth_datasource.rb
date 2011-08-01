@@ -39,10 +39,11 @@ protected
     source_data.each do |date, val|
       serie_name = Date.parse(date).strftime('%B %Y')
       category = Date.parse(date).strftime('Day %d')
-      data[serie_name] ||= {:name => serie_name, :data => Array.new(@categories.size)}
-      data[serie_name][:data][category.scan(/\d+/).first.to_i - 1] = val
+      order_key = Date.parse(date).strftime('%y%m').to_i
+      data[order_key] ||= {:name => serie_name, :data => Array.new(@categories.size)}
+      data[order_key][:data][category.scan(/\d+/).first.to_i - 1] = val
     end
-    @chart_series = data.values
+    @chart_series = data.sort{|a,b| b<=>a }.map{|e| e.last}
   end
 
 
