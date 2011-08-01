@@ -130,7 +130,7 @@ class Chart::RegisteredUsersController < HighchartsController
     set_cohort_intersection_params(cohort_src, {:days_count => 31, :weeks_count => 6})
 
     series = []
-    (1..CohortManager.cohort_current).each do |cohort|
+    (2..CohortManager.cohort_current).each do |cohort| # starting from 2 fixes ticket #2516
       cohort_beginning = CohortManager.cohort_beginning_date(cohort)
       cohort_src.period = (cohort_beginning..@ticks_count.days.since(cohort_beginning))
       cohort_src.query_name_mask = "Cohort.users.#{cohort}"
