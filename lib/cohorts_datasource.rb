@@ -141,7 +141,7 @@ protected
     
     @categories ||= @rollup_data_rows.map{|row| row['report_date']}.uniq
 
-    @chart_series = @formed_data.map do |cohort, values|
+    @chart_series = @formed_data.sort.map do |cohort, values|
       data_row = Array.new(@categories.size)
       values.each do |row_cat, val| #This should keep the order
         dest_cat = @category_formatter.call(cohort, row_cat)
