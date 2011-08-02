@@ -240,7 +240,7 @@ class Chart::TrendsController < HighchartsController
 
 
   def photos_per_day_monthly
-    data_src = DailyGrowthDatasource.new(:query_name_mask => 'Photos.all', :period => (1.year.ago..DateTime.now), :calculate_now => true)
+    data_src = DailyGrowthDatasource.new(:query_name_mask => 'Photos.all', :calculate_now => true)
 
     categories = []
     values = []

@@ -1,6 +1,10 @@
 class DailyGrowthDatasource < TrendsDatasource
 
 protected
+  def default_period
+    (1.year.ago..DateTime.now)
+  end
+
   def fetch_data!
     @period ||= default_period
     @x_labels_format = '%Y-%m-%d'
