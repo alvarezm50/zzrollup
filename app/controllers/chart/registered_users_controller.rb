@@ -13,7 +13,7 @@ class Chart::RegisteredUsersController < HighchartsController
       end
       wants.json do
         render :json => {
-          :series => data_src.chart_series.reverse,
+          :series => data_src.chart_series,
           :chart => {
             :renderTo => '',
             :defaultSeriesType => 'area'
