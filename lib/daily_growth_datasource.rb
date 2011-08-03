@@ -35,8 +35,8 @@ protected
 
     source_data = {}
     @rollup_data_rows.each_index do |i|
-      next if i==0
-      source_data[@rollup_data_rows[i-1]['report_date']] = @rollup_data_rows[i]['value'] - @rollup_data_rows[i-1]['value']
+      next if i==0 || i==1
+      source_data[@rollup_data_rows[i-2]['report_date']] = @rollup_data_rows[i]['value'] - @rollup_data_rows[i-1]['value']
     end
 
     data = {}
