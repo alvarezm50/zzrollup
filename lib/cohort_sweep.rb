@@ -74,6 +74,53 @@ SELECT ru.cohort, count(ru.cohort) FROM
 GROUP BY ru.cohort
     "})
 
+    mgr = CohortManager.new("dummy", span, first, last)
+    # first find the users that have likes within the range
+    mgr.add_users_query(ZZADB.connection,
+               lambda {|begin_date, end_date| "
+SELECT DISTINCT user FROM evts
+WHERE (event LIKE 'like.user.%' OR event LIKE 'like.album.%' OR event LIKE 'like.photo.%') AND (stimestamp  >= #{begin_date} AND stimestamp < #{end_date}) AND user_type = 1
+               "})
+
+    # 8+ follows
+    mgr.name = "Cohort.follow_8"
+    sums = mgr.cohorts_query_in(PhotoDB.connection,
+               lambda {|begin_date, end_date, in_set| "
+SELECT ru.cohort, count(ru.cohort) FROM
+  (SELECT u.id, cohort, count(l.id) as likes_count FROM users as u, likes as l
+  WHERE u.id = l.subject_id AND l.subject_type = 'U' AND
+  u.id IN #{in_set}
+  GROUP BY u.id
+  HAVING likes_count >= 8) as ru
+GROUP BY ru.cohort
+    "})
+
+    # 5+ photo likes
+    mgr.name = "Cohort.photo_like_5"
+    sums = mgr.cohorts_query_in(PhotoDB.connection,
+               lambda {|begin_date, end_date, in_set| "
+SELECT ru.cohort, count(ru.cohort) FROM
+  (SELECT p.id, cohort, count(l.id) as likes_count FROM photos as p, likes as l, users AS u
+  WHERE p.id = l.subject_id AND l.subject_type = 'P' AND p.user_id = u.id AND
+  p.user_id IN #{in_set}
+  GROUP BY p.user_id
+  HAVING likes_count >= 5) as ru
+GROUP BY ru.cohort
+    "})
+
+    # 1 album like
+    mgr.name = "Cohort.album_like_1"
+    sums = mgr.cohorts_query_in(PhotoDB.connection,
+               lambda {|begin_date, end_date, in_set|  "
+SELECT ru.cohort, count(ru.cohort) FROM
+  (SELECT a.id, cohort, count(l.id) as likes_count FROM albums as a, likes as l, users AS u
+  WHERE a.id = l.subject_id AND l.subject_type = 'A' AND a.user_id = u.id AND
+  a.user_id IN #{in_set}
+  GROUP BY a.user_id
+  HAVING likes_count >= 1) as ru
+GROUP BY ru.cohort
+    "})
+
   end
 
   # Get the total users per cohort and a sum of all
