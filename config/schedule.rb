@@ -15,6 +15,8 @@ env :TZ, 'US/Pacific'
 
 set :output, "#{Dir.pwd}/log/cron.log"
 set :environment, safe_rails_env
+job_type :runner, "cd :path && bundle exec script/rails runner -e :environment ':task' :output"
+
 #
 
 # even though TZ is set, time still appear to be in UTC
