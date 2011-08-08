@@ -24,16 +24,16 @@ puts "Deploy the rollup server with the latest code from git."
 confirm_continue
 
 # pull the latest code
-do_cmd "git pull"
+do_cmd "git fetch && git checkout -f master"
 
 # install any new gems
-do_cmd "bundle install"
+do_cmd "bundle install --path ../vendor/bundle --deployment"
 
 # pull the latest code
-do_cmd "rake db:migrate"
+do_cmd "bundle exec rake db:migrate"
 
 # hot restart or first time start unicorn
 do_cmd "run_unicorn.rb"
 
 # update any cron job changes
-do_cmd "bash -c 'RAILS_ENV=production whenever --update-crontab'"
+do_cmd "bash -c 'RAILS_ENV=production bundle exec whenever --update-crontab'"
