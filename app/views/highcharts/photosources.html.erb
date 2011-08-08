@@ -1,0 +1,56 @@
+<%=  javascript_include_tag 'highcharts', 'chart_loading' %>
+
+<%= render :partial => 'nav' %>
+
+<table>
+  <tr valign="top">
+
+  <td>
+  <div id="catz1" class="chart-group">
+    <div>
+      <div id="pie_overall_categories" class="normal-chart-container"/>
+    </div>
+    <div>
+      <div id="pie_specific_categories" class="normal-chart-container"/>
+    </div>
+  </div>
+  </td>
+
+  <td>
+  <div id="catz2" class="chart-group">
+    <div>
+      <div id="uploader_agent_trend" class="normal-chart-container"/>
+    </div>
+    <div>
+      <div id="uploader_agent_percent_trend" class="normal-chart-container"/>
+    </div>
+  </div>
+  </td>
+
+  </tr>
+</table>
+
+
+<script type="text/javascript">
+
+  var all_charts = {
+    pie_overall_categories: {
+      chart: null,
+      url: 'photo_sources/overall_categories.json'
+    },
+    pie_specific_categories: {
+      chart: null,
+      url: 'photo_sources/specific_categories.json'
+    },
+    uploader_agent_trend: {
+      chart: null,
+      url: 'photo_sources/uploader_agent_trend.json'
+    },
+    uploader_agent_percent_trend: {
+      chart: null,
+      url: 'photo_sources/uploader_agent_percent.json'
+    }
+  };
+
+</script>
+

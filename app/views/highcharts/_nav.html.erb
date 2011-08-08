@@ -1,0 +1,14 @@
+<%
+  nav_urls = {
+    'Cohorts charts' => :cohorts,
+    'Privacy Settings charts' => :privacy,
+    'Trends charts' => :trends,
+    'Photo sources' => :photosources
+  }
+%>
+
+<ul id="navigation">
+  <% nav_urls.each do |text, dash| %>
+    <li><%= link_to text, dashboard_path(dash) %></li>
+  <% end %>
+</ul>

@@ -1,7 +1,6 @@
 <%=  javascript_include_tag 'highcharts', 'chart_loading' %>
 
-<p><%= link_to 'Cohorts charts', dashboard_path(:cohorts) %></p>
-<p><%= link_to 'Privacy Settings charts', dashboard_path(:privacy) %></p>
+<%= render :partial => 'nav' %>
 
 <table>
   <tr valign="top">
