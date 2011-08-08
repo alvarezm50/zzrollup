@@ -24,7 +24,7 @@ puts "Deploy the rollup server with the latest code from git."
 confirm_continue
 
 # pull the latest code
-do_cmd "git fetch && git checkout -f master"
+do_cmd "git fetch && git checkout -f master && git pull"
 
 # install any new gems
 do_cmd "bundle install --path ../vendor/bundle --deployment"
