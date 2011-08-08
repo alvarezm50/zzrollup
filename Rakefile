@@ -4,4 +4,10 @@
 require File.expand_path('../config/application', __FILE__)
 require 'rake'
 
+module ::Rollup
+    class Application
+        include Rake::DSL
+    end
+end
+
 Rollup::Application.load_tasks
