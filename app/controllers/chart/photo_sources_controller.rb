@@ -1,16 +1,16 @@
 class Chart::PhotoSourcesController < HighchartsController
 
   def overall_categories
-    data_src = PhotosourcesDatasource.new(
+    data_src = UniversalDatasource.new(
       :calculate_now => true,
       :percent_view => true,
       :whole_history => true,
-      :queries_to_fetch => %w(email facebook flickr instagram kodak photobucket picasaweb shutterfly smugmug zangzing fs.osx iphoto.osx picasa.osx fs.win picasa.win simple.osx simple.win),
-      :series_sum_scheme => {
-        'websites' => %w(facebook flickr instagram kodak photobucket picasaweb shutterfly	smugmug	zangzing),
-        'agent' => %w(fs.osx iphoto.osx picasa.osx fs.win picasa.win),
-        'webui' => %w(simple.osx simple.win)
-      }
+      :queries_to_fetch => %w(email facebook flickr instagram kodak photobucket picasaweb shutterfly smugmug zangzing fs.osx iphoto.osx picasa.osx fs.win picasa.win simple.osx simple.win).map{|q| "Photos.source.#{q}"},
+      :series_calculations => [
+        {:name => 'websites', :op => :sum, :series => %w(facebook flickr instagram kodak photobucket picasaweb shutterfly	smugmug	zangzing).map{|q| "Photos.source.#{q}"}},
+        {:name => 'agent', :op => :sum, :series => %w(fs.osx iphoto.osx picasa.osx fs.win picasa.win).map{|q| "Photos.source.#{q}"}},
+        {:name => 'photos.source.simple', :op => :sum, :series => %w(simple.osx simple.win).map{|q| "Photos.source.#{q}"}}
+      ]
     )
 
     total = data_src.chart_series.inject(0.0) do |sum, s|
@@ -54,11 +54,11 @@ class Chart::PhotoSourcesController < HighchartsController
   end
 
   def specific_categories
-    data_src = PhotosourcesDatasource.new(
+    data_src = UniversalDatasource.new(
       :calculate_now => true,
       :percent_view => true,
       :whole_history => true,
-      :queries_to_fetch => %w(email facebook flickr instagram kodak photobucket picasaweb shutterfly smugmug zangzing fs.osx iphoto.osx picasa.osx fs.win picasa.win simple.osx simple.win)
+      :queries_to_fetch => %w(email facebook flickr instagram kodak photobucket picasaweb shutterfly smugmug zangzing fs.osx iphoto.osx picasa.osx fs.win picasa.win simple.osx simple.win).map{|q| "Photos.source.#{q}"}
     )
 
     total = data_src.chart_series.inject(0.0) do |sum, s|
@@ -102,14 +102,15 @@ class Chart::PhotoSourcesController < HighchartsController
   end
 
   def uploader_agent_trend
-    data_src = PhotosourcesDatasource.new(
+    data_src = UniversalDatasource.new(
       :calculate_now => true,
       :whole_history => true,
-      :queries_to_fetch => %w(fs.osx iphoto.osx picasa.osx fs.win picasa.win simple.osx simple.win),
-      :series_sum_scheme => {
-        'agent' => %w(fs.osx iphoto.osx picasa.osx fs.win picasa.win),
-        'webui' => %w(simple.osx simple.win)
-      }
+      :queries_to_fetch => %w(fs.osx iphoto.osx picasa.osx fs.win picasa.win simple.osx simple.win).map{|q| "Photos.source.#{q}"},
+      :series_calculations => [
+        {:name => 'agent', :op => :sum, :series => %w(fs.osx iphoto.osx picasa.osx fs.win picasa.win).map{|q| "Photos.source.#{q}"}},
+        {:name => 'photos.source.simple', :op => :sum, :series => %w(simple.osx simple.win).map{|q| "Photos.source.#{q}"}}
+      ]
+
     )
 
     respond_to do |wants|
@@ -169,15 +170,16 @@ class Chart::PhotoSourcesController < HighchartsController
   end
   
   def uploader_agent_percent
-    data_src = PhotosourcesDatasource.new(
+    data_src = UniversalDatasource.new(
       :calculate_now => true,
       :whole_history => true,
       :percent_view => true,
-      :queries_to_fetch => %w(fs.osx iphoto.osx picasa.osx fs.win picasa.win simple.osx simple.win),
-      :series_sum_scheme => {
-        'agent' => %w(fs.osx iphoto.osx picasa.osx fs.win picasa.win),
-        'webui' => %w(simple.osx simple.win)
-      }
+      :queries_to_fetch => %w(fs.osx iphoto.osx picasa.osx fs.win picasa.win simple.osx simple.win).map{|q| "Photos.source.#{q}"},
+      :series_calculations => [
+        {:name => 'agent', :op => :sum, :series => %w(fs.osx iphoto.osx picasa.osx fs.win picasa.win).map{|q| "Photos.source.#{q}"}},
+        {:name => 'photos.source.simple', :op => :sum, :series => %w(simple.osx simple.win).map{|q| "Photos.source.#{q}"}}
+      ]
+
     )
     
     total = data_src.chart_series.inject(0.0) do |sum, s|
@@ -250,11 +252,11 @@ class Chart::PhotoSourcesController < HighchartsController
   end
 
   def breakdown
-    data_src = PhotosourcesDatasource.new(
+    data_src = UniversalDatasource.new(
       :calculate_now => true,
       :percent_view => true,
       :whole_history => true,
-      :queries_to_fetch => %w(email facebook flickr instagram kodak photobucket picasaweb shutterfly smugmug zangzing fs.osx iphoto.osx picasa.osx fs.win picasa.win simple.osx simple.win)
+      :queries_to_fetch => %w(email facebook flickr instagram kodak photobucket picasaweb shutterfly smugmug zangzing fs.osx iphoto.osx picasa.osx fs.win picasa.win simple.osx simple.win).map{|q| "Photos.source.#{q}"}
     )
 
     total = data_src.chart_series.inject(0.0) do |sum, s|
@@ -275,7 +277,7 @@ class Chart::PhotoSourcesController < HighchartsController
           :series => series,
           :chart => {
             :renderTo => '',
-            :defaultSeriesType => 'line'
+            :defaultSeriesType => 'area'
           },
           :credits => {
             :enabled => false
