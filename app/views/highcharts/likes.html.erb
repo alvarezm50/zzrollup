@@ -1,0 +1,59 @@
+<%=  javascript_include_tag 'highcharts', 'chart_loading' %>
+
+<%= render :partial => 'nav' %>
+
+<table>
+  <tr valign="top">
+
+  <td>
+  <div id="likes1" class="chart-group">
+    <div>
+      <div id="photos_albums_percent_trend" class="normal-chart-container"/>
+    </div>
+
+    <div>
+      <div id="total_users_percent_trend" class="normal-chart-container"/>
+    </div>
+  </div>
+  </td>
+
+  <td>
+  <div id="likes2" class="chart-group">
+    <div>
+      <div id="likes_by_type" class="normal-chart-container"/>
+    </div>
+
+    <div>
+      <div id="unlikes_percent_by_type" class="normal-chart-container"/>
+    </div>
+  </div>
+  </td>
+
+
+  </tr>
+</table>
+
+
+<script type="text/javascript">
+
+  var all_charts = {
+    photos_albums_percent_trend: {
+      chart: null,
+      url: 'likes/photos_albums_trend.json'
+    },
+    total_users_percent_trend: {
+      chart: null,
+      url: 'likes/total_users.json'
+    },
+    likes_by_type: {
+      chart: null,
+      url: 'likes/likes_by_type.json'
+    },
+    unlikes_percent_by_type: {
+      chart: null,
+      url: 'likes/unlikes_by_category.json'
+    }
+  };
+
+</script>
+
