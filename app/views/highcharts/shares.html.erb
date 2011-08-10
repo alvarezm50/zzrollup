@@ -1,0 +1,75 @@
+<%=  javascript_include_tag 'highcharts', 'chart_loading' %>
+
+<%= render :partial => 'nav' %>
+
+<table>
+  <tr valign="top">
+
+  <td>
+  <div id="shares1" class="chart-group">
+    <div>
+      <div id="total_shares_perc_trend" class="normal-chart-container"/>
+    </div>
+
+    <div>
+      <div id="photo_shares_by_category" class="normal-chart-container"/>
+    </div>
+
+    <div>
+      <div id="album_shares_by_category" class="normal-chart-container"/>
+    </div>
+  </div>
+  </td>
+
+  <td>
+  <div id="shares2" class="chart-group">
+    <div>
+      <div id="total_shares_perc_by_type" class="normal-chart-container"/>
+    </div>
+
+    <div>
+      <div id="toolbar_frame_perc_albums" class="normal-chart-container"/>
+    </div>
+
+    <div>
+      <div id="toolbar_frame_perc_photos" class="normal-chart-container"/>
+    </div>
+  </div>
+  </td>
+
+
+  </tr>
+</table>
+
+
+<script type="text/javascript">
+
+  var all_charts = {
+    total_shares_perc_trend: {
+      chart: null,
+      url: 'shares/total_shared.json'
+    },
+    photo_shares_by_category: {
+      chart: null,
+      url: 'shares/shares_by_type.json?entity=photos'
+    },
+    album_shares_by_category: {
+      chart: null,
+      url: 'shares/shares_by_type.json?entity=albums'
+    },
+    total_shares_perc_by_type: {
+      chart: null,
+      url: 'shares/shares_by_type_percent.json'
+    },
+    toolbar_frame_perc_albums: {
+      chart: null,
+      url: 'shares/toolbar_frame_shares.json?entity=albums'
+    },
+    toolbar_frame_perc_photos: {
+      chart: null,
+      url: 'shares/toolbar_frame_shares.json?entity=photos'
+    }
+  };
+
+</script>
+

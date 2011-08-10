@@ -1,0 +1,2 @@
+module Chart::SharesHelper
+end

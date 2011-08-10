@@ -21,6 +21,13 @@ class UniversalDatasource < CohortsDatasource
     'photos.source.simple.osx' => 'Simple Uploader Mac',
     'photos.source.simple.win' => 'Simple Uploader PC',
 
+    'photo.share.email' => 'via E-Mail',
+    'photo.share.facebook' => 'via Facebook',
+    'photo.share.twitter' => 'via Twitter',
+    'album.share.email' => 'via E-Mail',
+    'album.share.facebook' => 'via Facebook',
+    'album.share.twitter' => 'via Twitter',
+
     'photos.source.simple' => 'Simple Uploader',
   }
 
