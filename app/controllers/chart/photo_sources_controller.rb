@@ -182,15 +182,19 @@ class Chart::PhotoSourcesController < HighchartsController
 
     )
     
-    total = data_src.chart_series.inject(0.0) do |sum, s|
-      sum + s[:data].compact.max
-    end
-    
+    data_row_size = data_src.chart_series.map{|s| s[:data].size }.max
     series = data_src.chart_series.dup
-    series.each do |s|
-      s[:data] = s[:data].map{|v| v / total }
+    totals = Array.new(data_row_size) do |i|
+      series.inject(0.0) do |accumulator, serie|
+        accumulator + (serie[:data][i] || 0)
+      end
     end
 
+    series.each do |s|
+      s[:data].each_with_index do |v, i|
+        s[:data][i] = (v || 0.0) / totals[i]
+      end
+    end
 
     respond_to do |wants|
       wants.xls do
@@ -201,7 +205,7 @@ class Chart::PhotoSourcesController < HighchartsController
           :series => series,
           :chart => {
             :renderTo => '',
-            :defaultSeriesType => 'line'
+            :defaultSeriesType => 'area'
           },
           :credits => {
             :enabled => false
@@ -231,8 +235,8 @@ class Chart::PhotoSourcesController < HighchartsController
               :text => '% of Photos'
             },
             :labels => {:formatter => nil},
-            :min => 0.0
-            #:max => 1.0
+            :min => 0.0,
+            :max => 1.0
           },
           :tooltip => {:formatter => nil},
           :plotOptions => {
@@ -259,12 +263,18 @@ class Chart::PhotoSourcesController < HighchartsController
       :queries_to_fetch => %w(email facebook flickr instagram kodak photobucket picasaweb shutterfly smugmug zangzing fs.osx iphoto.osx picasa.osx fs.win picasa.win simple.osx simple.win).map{|q| "Photos.source.#{q}"}
     )
 
-    total = data_src.chart_series.inject(0.0) do |sum, s|
-      sum + s[:data].compact.max
-    end
+    data_row_size = data_src.chart_series.map{|s| s[:data].size }.max
     series = data_src.chart_series.dup
+    totals = Array.new(data_row_size) do |i|
+      series.inject(0.0) do |accumulator, serie|
+        accumulator + (serie[:data][i] || 0)
+      end
+    end
+
     series.each do |s|
-      s[:data] = s[:data].map{|v| (v || 0.0) / total }
+      s[:data].each_with_index do |v, i|
+        s[:data][i] = (v || 0.0) / totals[i]
+      end
     end
 
 
@@ -307,8 +317,8 @@ class Chart::PhotoSourcesController < HighchartsController
               :text => '% of Photos'
             },
             :labels => {:formatter => nil},
-            :min => 0.0
-            #:max => 1.0
+            :min => 0.0,
+            :max => 1.0
           },
           :tooltip => {:formatter => nil},
           :plotOptions => {
