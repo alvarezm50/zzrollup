@@ -224,9 +224,6 @@ class Chart::LikesController < HighchartsController
           :title => {
             :text => 'Unlikes by Category'
           },
-          :subtitle => {
-            :text => '# of Unliked'
-          },
           :xAxis => {
             :categories => data_src.categories,
             :tickmarkPlacement => 'on',
@@ -243,7 +240,7 @@ class Chart::LikesController < HighchartsController
           },
           :yAxis => {
             :title => {
-              :text => '# of Likes'
+              :text => '# of Unlikes'
             },
             :min => 0,
             :max => 1,
