@@ -1,3 +1,16 @@
+#navigation {
+    list-style-type: none;
+    padding-bottom: 50px;
+}
+
+#navigation li {
+    float: left;
+    padding-left: 8px;
+    padding-right: 8px;
+    border-right: black solid thin;
+}
+
+
 .chart-group {
     display: inline;
     float: left;

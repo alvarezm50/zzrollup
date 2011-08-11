@@ -1,0 +1,52 @@
+<%=  javascript_include_tag 'highcharts', 'chart_loading' %>
+
+<%= render :partial => 'nav' %>
+
+<table>
+  <tr valign="top">
+
+  <td>
+  <div id="email1" class="chart-group">
+    <div>
+      <div id="raw_statistics" class="normal-chart-container"/>
+    </div>
+
+
+    <div>
+      <div id="link_perc_breakdown" class="normal-chart-container"/>
+    </div>
+  </div>
+  </td>
+
+  <td>
+  <div id="email2" class="chart-group">
+    <div>
+      <div id="full_perc_statistics" class="normal-chart-container"/>
+    </div>
+  </div>
+  </td>
+
+  </tr>
+</table>
+
+
+<script type="text/javascript">
+
+  var all_charts = {
+    raw_statistics: {
+      chart: null,
+      url: 'email_breakdown/raw_stats.json'
+    },
+    full_perc_statistics: {
+      chart: null,
+      url: 'email_breakdown/full_stats.json'
+    },
+    link_perc_breakdown: {
+      chart: null,
+      url: 'email_breakdown/link_breakdown.json'
+    }
+
+  };
+
+</script>
+

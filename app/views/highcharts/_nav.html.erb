@@ -5,11 +5,13 @@
     'Trends' => :trends,
     'Photo sources' => :photosources,
     'Likes' => :likes,
+    'Email breakdown' => :email,
     'Shares' => :shares
   }
 %>
 
 <ul id="navigation">
+  <li>&nbsp;</li>
   <% nav_urls.each do |text, dash| %>
     <li><%= link_to text, dashboard_path(dash) %></li>
   <% end %>

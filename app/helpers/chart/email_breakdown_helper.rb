@@ -1,0 +1,2 @@
+module Chart::EmailBreakdownHelper
+end
