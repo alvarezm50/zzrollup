@@ -1,5 +1,5 @@
 class UniversalDatasource < CohortsDatasource
-  attr_accessor :whole_history, :queries_to_fetch, :series_calculations
+  attr_accessor :whole_history, :queries_to_fetch, :series_calculations, :humanize_unknown_series
 
   HUMAN_QUERY_NAMES = {
     #Photo sources (Photos.source)
@@ -39,6 +39,10 @@ class UniversalDatasource < CohortsDatasource
     end
   }
 
+  def initialize(opts = {})
+    @humanize_unknown_series = true
+    super(opts)
+  end
 
   def calculate_chart
     fetch_data!
@@ -118,7 +122,7 @@ protected
     obsolete_series_names = []
     @series_calculations.each do |calc|
       series_to_operate = calc[:series].map do |target_serie_name|
-        @chart_series.select{|s| target_serie_name.casecmp(s[:name])==0 }.first
+        @chart_series.select{|s| target_serie_name.casecmp(s[:name])==0 }.first  || throw("Unkonwn series - #{target_serie_name}")
       end
       obsolete_series_names += calc[:series].map(&:downcase)
       data_row_size = series_to_operate.map{|s| s[:data].size }.max
@@ -141,7 +145,7 @@ protected
   end
 
   def human_query_name(query_name)
-    HUMAN_QUERY_NAMES[query_name.downcase] || query_name #.gsub('.', ' ').humanize
+    HUMAN_QUERY_NAMES[query_name.downcase] || ( @humanize_unknown_series ? query_name.gsub('.', ' ').humanize : query_name )
   end
 
   
