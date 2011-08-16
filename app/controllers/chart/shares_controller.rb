@@ -9,8 +9,8 @@ class Chart::SharesController < HighchartsController
       :series_calculations => [
         {:name => 'PhotosShared', :op => :sum, :series => %w(photo.share.email photo.share.facebook photo.share.twitter)},
         {:name => 'AlbumsShared', :op => :sum, :series => %w(album.share.email album.share.twitter album.share.facebook)},
-        {:name => 'Total Albums', :op => :div, :series => %w(PhotosShared photos.all)},
-        {:name => 'Total Photos', :op => :div, :series => %w(AlbumsShared albums.all)}
+        {:name => 'Total Photos', :op => :div, :series => %w(PhotosShared photos.all)},
+        {:name => 'Total Albums', :op => :div, :series => %w(AlbumsShared albums.all)}
       ]
     )
 
