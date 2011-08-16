@@ -198,6 +198,7 @@ class Chart::LikesController < HighchartsController
       :calculate_now => true,
       :percent_view => true,
       :period => (DateTime.civil(2011, 07, 13)..DateTime.now),
+      #:period => (2.weeks.ago..DateTime.now),
       :queries_to_fetch => %w(like.album.like like.album.unlike like.photo.like	like.photo.unlike like.user.like like.user.unlike),
       :series_calculations => [
         {:name => 'Albums Unliked', :op => :div, :series => %w(like.album.unlike like.album.like)},
@@ -222,7 +223,10 @@ class Chart::LikesController < HighchartsController
             :enabled => false
           },
           :title => {
-            :text => 'Unlikes by Category'
+            :text => '% of Unlikes by Category'
+          },
+          :subtitle => {
+            :text => 'Total Unlikes/Total Likes'
           },
           :xAxis => {
             :categories => data_src.categories,
