@@ -1,5 +1,5 @@
 class UniversalDatasource < CohortsDatasource
-  attr_accessor :whole_history, :queries_to_fetch, :series_calculations, :humanize_unknown_series
+  attr_accessor :whole_history, :queries_to_fetch, :series_calculations, :humanize_unknown_series, :cumulative
 
   HUMAN_QUERY_NAMES = {
     #Photo sources (Photos.source)
@@ -20,15 +20,18 @@ class UniversalDatasource < CohortsDatasource
     'photos.source.picasa.win' => 'Picasa PC',
     'photos.source.simple.osx' => 'Simple Uploader Mac',
     'photos.source.simple.win' => 'Simple Uploader PC',
-
+    'photos.source.simple' => 'Simple Uploader',
+    #Likes
+    'like.album.like' => 'Album like',
+    'like.photo.like' => 'Photo like',
+    'like.user.like' => 'User like',
+    #Shares
     'photo.share.email' => 'via E-Mail',
     'photo.share.facebook' => 'via Facebook',
     'photo.share.twitter' => 'via Twitter',
     'album.share.email' => 'via E-Mail',
     'album.share.facebook' => 'via Facebook',
     'album.share.twitter' => 'via Twitter',
-
-    'photos.source.simple' => 'Simple Uploader',
   }
 
   CALC_OPS = {
@@ -41,6 +44,8 @@ class UniversalDatasource < CohortsDatasource
 
   def initialize(opts = {})
     @humanize_unknown_series = true
+    @cumulative = true
+    self.span = RollupTasks::DAILY_REPORT_INTERVAL
     super(opts)
   end
 
@@ -61,26 +66,36 @@ protected
   def fetch_data!
     @period ||= default_period
     @x_labels_format = '%Y-%m-%d'
-    @span = RollupTasks::DAILY_REPORT_INTERVAL
+    @real_span = RollupTasks::DAILY_REPORT_INTERVAL
 
     fields_to_select = [
-      "DATE_FORMAT(reported_at, '#{@x_labels_format}') AS report_date",
       "query_name",
-      "MAX(sum_value) AS value"
     ]
-    conditions = [
-      RollupResult.public_sanitize_sql(:span => @span),
-      "query_name IN (#{@queries_to_fetch.map{|q| "'#{q}'" }.join(',')})",
-      'sum_value > 0'
-    ]
-    unless whole_history
-      conditions << RollupResult.public_sanitize_sql(:reported_at => @period)
-    end
-
     group_by = [
       'report_date',
       'query_name'
     ]
+    conditions = [
+      RollupResult.public_sanitize_sql(:span => @real_span),
+      "query_name IN (#{@queries_to_fetch.map{|q| "'#{q}'" }.join(',')})",
+      'sum_value > 0'
+    ]
+
+    if @weekly_mode
+      fields_to_select << "DATE_FORMAT(SUBDATE(`reported_at`, INTERVAL WEEKDAY(`reported_at`) DAY), '#{@x_labels_format}') AS report_date"
+      fields_to_select << "ROUND(AVG(sum_value)) AS value"
+      fields_to_select << "DATE_FORMAT(reported_at, '%v %x') AS weekyear"
+      group_by << 'weekyear'
+      conditions << RollupResult.public_sanitize_sql('sum_value > 0')
+    else
+      fields_to_select << "DATE_FORMAT(reported_at, '#{@x_labels_format}') AS report_date"
+      fields_to_select << "MAX(sum_value) AS value"
+      group_by << 'report_date'
+    end
+
+    unless whole_history
+      conditions << RollupResult.public_sanitize_sql(:reported_at => @period)
+    end
 
     sql = <<-SQL
       SELECT #{fields_to_select.join(',')} FROM `rollup_results` 
@@ -109,6 +124,11 @@ protected
         dest_cat = @category_formatter.call(row_cat)
         if idx = @categories.index(dest_cat)
           data_row[idx] = val.to_i
+        end
+      end
+      unless @cumulative
+        0.upto(data_row.size) do |i|
+          data_row[i] = (data_row[i+1] - data_row[i]) rescue nil
         end
       end
       {

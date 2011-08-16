@@ -256,4 +256,119 @@ class Chart::LikesController < HighchartsController
     end
   end
 
+  def likes_by_type_trend
+    data_src = UniversalDatasource.new(
+      :calculate_now => true,
+      :span => params[:span] || 1440,
+      :cumulative => false,
+      :period => (DateTime.civil(2011, 07, 13)..DateTime.now),
+      :queries_to_fetch => %w(like.album.like like.photo.like like.user.like)
+    )
+
+    respond_to do |wants|
+      wants.xls do
+        send_xls(data_src)
+      end
+      wants.json do
+        render :json => {
+          :series => data_src.chart_series,
+          :chart => {
+            :renderTo => '',
+            :defaultSeriesType => 'line'
+          },
+          :credits => {
+            :enabled => false
+          },
+          :title => {
+            :text => 'Likes by Type'
+          },
+          :subtitle => {
+            :text => "Not cumulative, on a #{data_src.span_code} basis"
+          },
+          :xAxis => {
+            :categories => data_src.categories,
+            :tickmarkPlacement => 'on',
+            :title => {
+              :enabled => false
+            },
+            :labels => {
+              :rotation => -90,
+              :align => 'right',
+              :y => 3,
+              :x => 4,
+              :step => (data_src.categories.size/30.0).ceil
+            }
+          },
+          :yAxis => {
+            :title => {
+              :text => "# of Likes#{data_src.weekly_mode? ? ' (average per week)' : ''}"
+            },
+            :min => 0
+          }
+        }
+      end
+    end
+  end
+
+  def photos_albums_perc_trend
+    data_src = UniversalDatasource.new(
+      :calculate_now => true,
+      :span => params[:span] || 1440,
+      :cumulative => false,
+      :percent_view => true,
+      :period => (DateTime.civil(2011, 07, 13)..DateTime.now),
+      :queries_to_fetch => %w(like.album.like like.photo.like albums.all photos.all),
+      :series_calculations => [
+        {:name => 'Photos', :op => :div, :series => %w(like.photo.like photos.all)},
+        {:name => 'Albums', :op => :div, :series => %w(like.album.like albums.all)}
+      ]
+    )
+
+    respond_to do |wants|
+      wants.xls do
+        send_xls(data_src)
+      end
+      wants.json do
+        render :json => {
+          :series => data_src.chart_series,
+          :chart => {
+            :renderTo => '',
+            :defaultSeriesType => 'line'
+          },
+          :credits => {
+            :enabled => false
+          },
+          :title => {
+            :text => '% of Photos or Albums Liked'
+          },
+          :subtitle => {
+            :text => "Not cumulative, on a #{data_src.span_code} basis"
+          },
+          :xAxis => {
+            :categories => data_src.categories,
+            :tickmarkPlacement => 'on',
+            :title => {
+              :enabled => false
+            },
+            :labels => {
+              :rotation => -90,
+              :align => 'right',
+              :y => 3,
+              :x => 4,
+              :step => (data_src.categories.size/30.0).ceil
+            }
+          },
+          :yAxis => {
+            :title => {
+              :text => "% of Likes#{data_src.weekly_mode? ? ' (average per week)' : ''}"
+            },
+            :min => 0,
+            :labels => {:formatter => nil}
+          },
+          :tooltip => {:formatter => nil}
+        }
+      end
+    end
+  end
+
 end

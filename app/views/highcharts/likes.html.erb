@@ -14,6 +14,15 @@
     <div>
       <div id="total_users_percent_trend" class="normal-chart-container"/>
     </div>
+
+    <div>
+      <div id="noncum_by_type_trend_daily" class="normal-chart-container"/>
+    </div>
+
+    <div>
+      <div id="noncum_by_type_trend_weekly" class="normal-chart-container"/>
+    </div>
+
   </div>
   </td>
 
@@ -26,6 +35,15 @@
     <div>
       <div id="unlikes_percent_by_type" class="normal-chart-container"/>
     </div>
+
+    <div>
+      <div id="photos_albums_percent_trend_daily" class="normal-chart-container"/>
+    </div>
+
+    <div>
+      <div id="photos_albums_percent_trend_weekly" class="normal-chart-container"/>
+    </div>
+
   </div>
   </td>
 
@@ -52,6 +70,22 @@
     unlikes_percent_by_type: {
       chart: null,
       url: 'likes/unlikes_by_category.json'
+    },
+    noncum_by_type_trend_daily: {
+      chart: null,
+      url: 'likes/likes_by_type_trend.json?span=1440'
+    },
+    noncum_by_type_trend_weekly: {
+      chart: null,
+      url: 'likes/likes_by_type_trend.json?span=10080'
+    },
+    photos_albums_percent_trend_daily: {
+      chart: null,
+      url: 'likes/photos_albums_perc_trend.json?span=1440'
+    },
+    photos_albums_percent_trend_weekly: {
+      chart: null,
+      url: 'likes/photos_albums_perc_trend.json?span=10080'
     }
   };
 
