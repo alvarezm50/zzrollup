@@ -27,7 +27,7 @@ class Chart::LikesController < HighchartsController
             :enabled => false
           },
           :title => {
-            :text => 'Percent of Photos/Albums Liked'
+            :text => 'Percent of Photos or Albums Liked'
           },
           :xAxis => {
             :categories => data_src.categories,
