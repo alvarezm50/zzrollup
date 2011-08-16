@@ -68,7 +68,7 @@ class Chart::PhotoSourcesController < HighchartsController
         :type => 'pie',
         :data => data_src.chart_series.map do |serie|
           [serie[:name], serie[:data].compact.max / total]
-        end
+        end.sort_by{|d| 1/d[1] }
       }]
 
     respond_to do |wants|
