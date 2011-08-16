@@ -276,6 +276,7 @@ class Chart::PhotoSourcesController < HighchartsController
         s[:data][i] = (v || 0.0) / totals[i]
       end
     end
+    series = series.sort_by{|s| 1.0 / (s[:data].compact.sum / s[:data].compact.size) }
 
 
     respond_to do |wants|
