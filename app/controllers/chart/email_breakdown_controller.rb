@@ -215,7 +215,7 @@ protected
       when 'welcome_email' then 'welcome'
     end
     @grid_entity = case @entity
-      when 'albumshared', 'likealbum', 'contributorinvite' then 'album_grid_url'
+      when 'albumshared', 'likealbum', 'contributorinvite', 'welcome' then 'album_grid_url'
       when 'photoliked', 'photoshared' then 'album_photo_url'
       when 'userliked' then 'like_user_url'
       when 'albumsharedlike', 'photosready' then 'album_activities_url'
