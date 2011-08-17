@@ -217,7 +217,7 @@ class Chart::LikesController < HighchartsController
           :series => data_src.chart_series,
           :chart => {
             :renderTo => '',
-            :defaultSeriesType => 'column'
+            :defaultSeriesType => 'line'
           },
           :credits => {
             :enabled => false
@@ -280,7 +280,7 @@ class Chart::LikesController < HighchartsController
             :enabled => false
           },
           :title => {
-            :text => 'Likes by Type'
+            :text => 'Number of Photos, Albums, or Users Liked'
           },
           :subtitle => {
             :text => "Not cumulative, on a #{data_src.span_code} basis"
@@ -310,17 +310,18 @@ class Chart::LikesController < HighchartsController
     end
   end
 
-  def photos_albums_perc_trend
+  def likes_by_type_perc_trend
     data_src = UniversalDatasource.new(
       :calculate_now => true,
       :span => params[:span] || 1440,
       :cumulative => false,
       :percent_view => true,
       :period => (DateTime.civil(2011, 07, 13)..DateTime.now),
-      :queries_to_fetch => %w(like.album.like like.photo.like albums.all photos.all),
+      :queries_to_fetch => %w(like.album.like like.photo.like like.user.like albums.all photos.all),
       :series_calculations => [
         {:name => 'Photos', :op => :div, :series => %w(like.photo.like photos.all)},
-        {:name => 'Albums', :op => :div, :series => %w(like.album.like albums.all)}
+        {:name => 'Albums', :op => :div, :series => %w(like.album.like albums.all)},
+        {:name => 'Users', :op => :div, :series => %w(like.user.like albums.all)}
       ]
     )
 
@@ -339,7 +340,7 @@ class Chart::LikesController < HighchartsController
             :enabled => false
           },
           :title => {
-            :text => '% of Photos or Albums Liked'
+            :text => '% of Photos, Albums, or Users Liked'
           },
           :subtitle => {
             :text => "Not cumulative, on a #{data_src.span_code} basis"
