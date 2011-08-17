@@ -4,6 +4,7 @@ class Chart::EmailBreakdownController < HighchartsController
   def raw_stats
     data_src = UniversalDatasource.new(
       :calculate_now => true,
+      :cumulative => false,
       :whole_history => true,
       :humanize_unknown_series => false,
       :queries_to_fetch => %W(email.#{@entity}.send	email.#{@entity}.click	email.#{@entity}.open	email.#{@entity}.bounce)
@@ -24,7 +25,10 @@ class Chart::EmailBreakdownController < HighchartsController
             :enabled => false
           },
           :title => {
-            :text => 'Raw Statistics'
+            :text => 'Number of Occurrences'
+          },
+          :subtitle => {
+            :text => "On a #{data_src.span_code} basis"
           },
           :xAxis => {
             :categories => data_src.categories,
@@ -42,7 +46,7 @@ class Chart::EmailBreakdownController < HighchartsController
           },
           :yAxis => {
             :title => {
-              :text => 'Number of Occurences'
+              :text => '# of Occurences'
             },
             :min => 0
           },
@@ -66,11 +70,12 @@ class Chart::EmailBreakdownController < HighchartsController
     data_src = UniversalDatasource.new(
       :calculate_now => true,
       :whole_history => true,
+      :cumulative => false,
       :queries_to_fetch => %W(email.#{@entity}.#{@grid_entity}.click	email.#{@entity}.send	email.#{@entity}.click	email.#{@entity}.open	email.#{@entity}.bounce),
       :series_calculations => [
         {:name => 'Open', :op => :div, :series => %W(email.#{@entity}.open email.#{@entity}.send)},
         {:name => 'Click', :op => :div, :series => %W(email.#{@entity}.click email.#{@entity}.send)},
-        {:name => 'Link', :op => :div, :series => %W(email.#{@entity}.#{@grid_entity}.click email.#{@entity}.send)},
+        {:name => "Link (#{@entity}.#{@grid_entity})", :op => :div, :series => %W(email.#{@entity}.#{@grid_entity}.click email.#{@entity}.send)},
         {:name => 'Bounce', :op => :div, :series => %W(email.#{@entity}.bounce email.#{@entity}.send)},
       ]
     )
@@ -90,7 +95,7 @@ class Chart::EmailBreakdownController < HighchartsController
             :enabled => false
           },
           :title => {
-            :text => 'Statistics'
+            :text => 'Events Occurrences as a % of Sent Emails'
           },
           :xAxis => {
             :categories => data_src.categories,
@@ -136,9 +141,10 @@ class Chart::EmailBreakdownController < HighchartsController
       :calculate_now => true,
       :period => (DateTime.civil(2011, 07, 20)..DateTime.now),
       :percent_view => true,
+      :cumulative => false,
       :queries_to_fetch => %W(email.#{@entity}.#{@grid_entity}.click email.#{@entity}.click),
       :series_calculations => [
-        {:name => '% Clicked', :op => :div, :series => %W(email.#{@entity}.#{@grid_entity}.click email.#{@entity}.click)},
+        {:name => "% Clicked", :op => :div, :series => %W(email.#{@entity}.#{@grid_entity}.click email.#{@entity}.click)},
       ]
     )
 
@@ -160,7 +166,7 @@ class Chart::EmailBreakdownController < HighchartsController
             :text => 'Link Breakdown'
           },
           :subtitle => {
-            :text => '% that clicked link'
+            :text => "As a % of total clicks (#{@entity}.#{@grid_entity})"
           },
           :xAxis => {
             :categories => data_src.categories,
@@ -178,7 +184,7 @@ class Chart::EmailBreakdownController < HighchartsController
           },
           :yAxis => {
             :title => {
-              :text => nil
+              :text => "% of Sent"
             },
             :min => 0,
             :labels => {:formatter => nil}

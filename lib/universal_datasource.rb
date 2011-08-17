@@ -127,9 +127,10 @@ protected
         end
       end
       unless @cumulative
-        0.upto(data_row.size) do |i|
-          data_row[i] = (data_row[i+1] - data_row[i]) rescue nil
+        (data_row.size-1).downto(1) do |i|
+          data_row[i] = (data_row[i] - data_row[i-1]) rescue nil
         end
+        data_row[0] = nil
       end
       {
         :name => query,
