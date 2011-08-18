@@ -1,5 +1,10 @@
 class UniversalDatasource < CohortsDatasource
   attr_accessor :whole_history, :queries_to_fetch, :series_calculations, :humanize_unknown_series, :cumulative
+  TYPE_COLORS = {
+    :album => '#AA4643', #red/maroon
+    :photo => '#4572A7', #blue
+    :user => '#89A54E', #green
+  }
 
   HUMAN_QUERY_NAMES = {
     #Photo sources (Photos.source)
@@ -132,10 +137,12 @@ protected
         end
         data_row[0] = nil
       end
-      {
+      s = {
         :name => query,
         :data => data_row
       }
+      colorize!(s)
+      s
     end
   end
 
@@ -152,10 +159,12 @@ protected
           CALC_OPS[calc[:op]].call(accumulator, serie[:data][i])
         end
       end
-      @chart_series << {
+      new_serie = {
         :name => calc[:name],
         :data => data_row
       }
+      colorize!(new_serie)
+      @chart_series << new_serie
     end
     @chart_series.reject! { |s| obsolete_series_names.include?(s[:name].downcase) }
   end
@@ -167,6 +176,15 @@ protected
 
   def human_query_name(query_name)
     HUMAN_QUERY_NAMES[query_name.downcase] || ( @humanize_unknown_series ? query_name.gsub('.', ' ').humanize : query_name )
+  end
+
+  def colorize!(serie)
+    return if serie[:color]
+    if serie[:type]
+      serie[:color] = TYPE_COLORS[serie[:type]]
+    elsif type = serie[:name].scan(/(album|photo|user)/i).flatten.first
+      serie[:color] = TYPE_COLORS[type.downcase.to_sym]
+    end
   end
 
   

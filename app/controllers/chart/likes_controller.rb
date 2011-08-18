@@ -7,8 +7,8 @@ class Chart::LikesController < HighchartsController
       :period => (DateTime.civil(2011, 07, 13)..DateTime.now),
       :queries_to_fetch => %w(like.album.like like.photo.like albums.all photos.all),
       :series_calculations => [
-        {:name => 'Total Photos', :op => :div, :series => %w(like.photo.like photos.all)},
-        {:name => 'Total Albums', :op => :div, :series => %w(like.album.like albums.all)}
+        {:name => 'Total Photos', :op => :div, :series => %w(like.photo.like photos.all), :type => :photo},
+        {:name => 'Total Albums', :op => :div, :series => %w(like.album.like albums.all), :type => :album}
       ]
     )
 
@@ -74,7 +74,7 @@ class Chart::LikesController < HighchartsController
       :period => (DateTime.civil(2011, 07, 13)..DateTime.now),
       :queries_to_fetch => %w(users.all like.user.like),
       :series_calculations => [
-        {:name => '% of Users', :op => :div, :series => %w(like.user.like users.all)}
+        {:name => '% of Users', :op => :div, :series => %w(like.user.like users.all), :type => :user}
       ]
     )
 
@@ -201,9 +201,9 @@ class Chart::LikesController < HighchartsController
       #:period => (2.weeks.ago..DateTime.now),
       :queries_to_fetch => %w(like.album.like like.album.unlike like.photo.like	like.photo.unlike like.user.like like.user.unlike),
       :series_calculations => [
-        {:name => 'Albums Unliked', :op => :div, :series => %w(like.album.unlike like.album.like)},
-        {:name => 'Photos Unliked', :op => :div, :series => %w(like.photo.unlike like.photo.like)},
-        {:name => 'Users Unliked', :op => :div, :series => %w(like.user.unlike like.user.like)}
+        {:name => 'Albums Unliked', :op => :div, :series => %w(like.album.unlike like.album.like), :type => :album},
+        {:name => 'Photos Unliked', :op => :div, :series => %w(like.photo.unlike like.photo.like), :type => :photo},
+        {:name => 'Users Unliked', :op => :div, :series => %w(like.user.unlike like.user.like), :type => :user}
       ]
 
     )
@@ -319,9 +319,9 @@ class Chart::LikesController < HighchartsController
       :period => (DateTime.civil(2011, 07, 13)..DateTime.now),
       :queries_to_fetch => %w(like.album.like like.photo.like like.user.like albums.all photos.all),
       :series_calculations => [
-        {:name => 'Photos', :op => :div, :series => %w(like.photo.like photos.all)},
-        {:name => 'Albums', :op => :div, :series => %w(like.album.like albums.all)},
-        {:name => 'Users', :op => :div, :series => %w(like.user.like albums.all)}
+        {:name => 'Photos', :op => :div, :series => %w(like.photo.like photos.all), :type => :photo},
+        {:name => 'Albums', :op => :div, :series => %w(like.album.like albums.all), :type => :album},
+        {:name => 'Users', :op => :div, :series => %w(like.user.like albums.all), :type => :user}
       ]
     )
 
