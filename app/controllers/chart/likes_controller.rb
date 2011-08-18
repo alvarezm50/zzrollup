@@ -4,6 +4,7 @@ class Chart::LikesController < HighchartsController
     data_src = UniversalDatasource.new(
       :calculate_now => true,
       :percent_view => true,
+      :colorize => true,
       :period => (DateTime.civil(2011, 07, 13)..DateTime.now),
       :queries_to_fetch => %w(like.album.like like.photo.like albums.all photos.all),
       :series_calculations => [
@@ -71,6 +72,7 @@ class Chart::LikesController < HighchartsController
     data_src = UniversalDatasource.new(
       :calculate_now => true,
       :percent_view => true,
+      :colorize => true,
       :period => (DateTime.civil(2011, 07, 13)..DateTime.now),
       :queries_to_fetch => %w(users.all like.user.like),
       :series_calculations => [
@@ -137,6 +139,7 @@ class Chart::LikesController < HighchartsController
   def likes_by_type
     data_src = UniversalDatasource.new(
       :calculate_now => true,
+      :colorize => true,
       :period => (DateTime.civil(2011, 07, 13)..DateTime.now),
       :queries_to_fetch => %w(like.album.like like.photo.like like.user.like)
     )
@@ -196,6 +199,7 @@ class Chart::LikesController < HighchartsController
   def unlikes_by_category
     data_src = UniversalDatasource.new(
       :calculate_now => true,
+      :colorize => true,
       :percent_view => true,
       :period => (DateTime.civil(2011, 07, 13)..DateTime.now),
       #:period => (2.weeks.ago..DateTime.now),
@@ -260,6 +264,7 @@ class Chart::LikesController < HighchartsController
     data_src = UniversalDatasource.new(
       :calculate_now => true,
       :span => params[:span] || 1440,
+      :colorize => true,
       :cumulative => false,
       :period => (DateTime.civil(2011, 07, 13)..DateTime.now),
       :queries_to_fetch => %w(like.album.like like.photo.like like.user.like)
@@ -316,6 +321,7 @@ class Chart::LikesController < HighchartsController
       :span => params[:span] || 1440,
       :cumulative => false,
       :percent_view => true,
+      :colorize => true,
       :period => (DateTime.civil(2011, 07, 13)..DateTime.now),
       :queries_to_fetch => %w(like.album.like like.photo.like like.user.like albums.all photos.all),
       :series_calculations => [

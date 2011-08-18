@@ -1,0 +1,2 @@
+module Chart::StreamHelper
+end

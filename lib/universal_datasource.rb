@@ -1,5 +1,5 @@
 class UniversalDatasource < CohortsDatasource
-  attr_accessor :whole_history, :queries_to_fetch, :series_calculations, :humanize_unknown_series, :cumulative
+  attr_accessor :whole_history, :queries_to_fetch, :series_calculations, :humanize_unknown_series, :cumulative, :colorize
   TYPE_COLORS = {
     :album => '#AA4643', #red/maroon
     :photo => '#4572A7', #blue
@@ -50,6 +50,7 @@ class UniversalDatasource < CohortsDatasource
   def initialize(opts = {})
     @humanize_unknown_series = true
     @cumulative = true
+    @colorize = false
     self.span = RollupTasks::DAILY_REPORT_INTERVAL
     super(opts)
   end
@@ -179,7 +180,7 @@ protected
   end
 
   def colorize!(serie)
-    return if serie[:color]
+    return if !@colorize || serie[:color]
     if serie[:type]
       serie[:color] = TYPE_COLORS[serie[:type]]
     elsif type = serie[:name].scan(/(album|photo|user)/i).flatten.first

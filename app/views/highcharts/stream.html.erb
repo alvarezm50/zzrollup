@@ -1,0 +1,48 @@
+<%=  javascript_include_tag 'highcharts', 'chart_loading' %>
+
+<%= render :partial => 'nav' %>
+
+<table>
+  <tr valign="top">
+
+  <td>
+  <div id="stream1" class="chart-group">
+    <div>
+      <div id="num_albums" class="normal-chart-container"/>
+    </div>
+
+    <div>
+      <div id="albums_percent_total" class="normal-chart-container"/>
+    </div>
+
+    <div>
+      <div id="albums_percent_by_type" class="normal-chart-container"/>
+    </div>
+
+  </div>
+  </td>
+
+
+  </tr>
+</table>
+
+
+<script type="text/javascript">
+
+  var all_charts = {
+    num_albums: {
+      chart: null,
+      url: 'stream/num_albums.json'
+    },
+    albums_percent_total: {
+      chart: null,
+      url: 'stream/percent_albums_total.json'
+    },
+    albums_percent_by_type: {
+      chart: null,
+      url: 'stream/percent_albums_by_type.json'
+    }
+  };
+
+</script>
+
