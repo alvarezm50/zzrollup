@@ -3,12 +3,13 @@ class Chart::EmailBreakdownController < HighchartsController
 
   def raw_stats
     data_src = UniversalDatasource.new(
-      :calculate_now => true,
       :cumulative => false,
       :whole_history => true,
       :humanize_unknown_series => false,
-      :queries_to_fetch => %W(email.#{@entity}.send	email.#{@entity}.click	email.#{@entity}.open	email.#{@entity}.bounce)
+      :queries_to_fetch => %W(email.#{@entity}.send	email.#{@entity}.click	email.#{@entity}.open	email.#{@entity}.bounce email.#{@entity}.#{@grid_entity}.click)
     )
+    add_optional_trends(data_src)
+    data_src.calculate_chart
 
     respond_to do |wants|
       wants.xls do
@@ -68,7 +69,6 @@ class Chart::EmailBreakdownController < HighchartsController
 
   def full_stats
     data_src = UniversalDatasource.new(
-      :calculate_now => true,
       :whole_history => true,
       :cumulative => false,
       :queries_to_fetch => %W(email.#{@entity}.#{@grid_entity}.click	email.#{@entity}.send	email.#{@entity}.click	email.#{@entity}.open	email.#{@entity}.bounce),
@@ -79,6 +79,8 @@ class Chart::EmailBreakdownController < HighchartsController
         {:name => 'Bounce', :op => :div, :series => %W(email.#{@entity}.bounce email.#{@entity}.send)},
       ]
     )
+    add_optional_trends(data_src)
+    data_src.calculate_chart
 
     respond_to do |wants|
       wants.xls do
@@ -96,6 +98,9 @@ class Chart::EmailBreakdownController < HighchartsController
           },
           :title => {
             :text => 'Events Occurrences as a % of Sent Emails'
+          },
+          :subtitle => {
+            :text => "On a #{data_src.span_code} basis"
           },
           :xAxis => {
             :categories => data_src.categories,
@@ -138,15 +143,16 @@ class Chart::EmailBreakdownController < HighchartsController
 
   def link_breakdown
     data_src = UniversalDatasource.new(
-      :calculate_now => true,
-      :period => (DateTime.civil(2011, 07, 20)..DateTime.now),
+      :whole_history => true,  #:period => (DateTime.civil(2011, 07, 20)..DateTime.now),
       :percent_view => true,
       :cumulative => false,
       :queries_to_fetch => %W(email.#{@entity}.#{@grid_entity}.click email.#{@entity}.click),
       :series_calculations => [
-        {:name => "% Clicked", :op => :div, :series => %W(email.#{@entity}.#{@grid_entity}.click email.#{@entity}.click)},
+        {:name => "Clicks on #{@grid_entity}", :op => :div, :series => %W(email.#{@entity}.#{@grid_entity}.click email.#{@entity}.click)},
       ]
     )
+    add_optional_trends(data_src)
+    data_src.calculate_chart
 
     respond_to do |wants|
       wants.xls do
@@ -166,7 +172,7 @@ class Chart::EmailBreakdownController < HighchartsController
             :text => 'Link Breakdown'
           },
           :subtitle => {
-            :text => "As a % of total clicks (#{@entity}.#{@grid_entity})"
+            :text => "As a % of total clicks"
           },
           :xAxis => {
             :categories => data_src.categories,
@@ -184,13 +190,14 @@ class Chart::EmailBreakdownController < HighchartsController
           },
           :yAxis => {
             :title => {
-              :text => "% of Sent"
+              :text => "% of Total Clicks"
             },
-            :min => 0,
+            :min => 0.0,
+            :max => 1.0,
             :labels => {:formatter => nil}
           },
           :tooltip => {:formatter => nil},
-          :legend => {:enabled => false},
+          #:legend => {:enabled => false},
           :plotOptions => {
             :area => {
               :stacking => 'normal',
@@ -225,6 +232,28 @@ protected
       when 'photoliked', 'photoshared' then 'album_photo_url'
       when 'userliked' then 'like_user_url'
       when 'albumsharedlike', 'photosready' then 'album_activities_url'
+    end
+  end
+
+  def add_optional_trends(datasource)
+    if %w(likealbum photoliked userliked welcome).include?(@entity)
+      if self.action_name=='link_breakdown'
+        datasource.queries_to_fetch << "email.#{@entity}.user_homepage_url.click"
+        datasource.series_calculations << {
+          :name => "Clicks on user_homepage_url",
+          :op => :div,
+          :series => %W(email.#{@entity}.user_homepage_url.click email.#{@entity}.click)
+        }
+      elsif self.action_name=='raw_stats'
+        datasource.queries_to_fetch << "email.#{@entity}.user_homepage_url.click"
+      elsif self.action_name=='full_stats'
+        datasource.queries_to_fetch << "email.#{@entity}.user_homepage_url.click"
+        datasource.series_calculations << {
+          :name => "Link (#{@entity}.user_homepage_url)",
+          :op => :div,
+          :series => %W(email.#{@entity}.user_homepage_url.click email.#{@entity}.send)
+        }
+      end
     end
   end
 

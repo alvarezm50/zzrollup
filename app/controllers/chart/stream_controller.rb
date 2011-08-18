@@ -24,7 +24,7 @@ class Chart::StreamController < ApplicationController
             :text => '# of Albums Streamed'
           },
           :subtitle => {
-            :text => 'By Category'
+            :text => 'by Category'
           },
           :xAxis => {
             :categories => data_src.categories,
@@ -144,7 +144,10 @@ class Chart::StreamController < ApplicationController
             :enabled => false
           },
           :title => {
-            :text => 'Total Streams by Category'
+            :text => 'Total Streams'
+          },
+          :subtitle => {
+            :text => 'by Category'
           },
           :xAxis => {
             :categories => data_src.categories,
