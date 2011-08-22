@@ -75,6 +75,7 @@ class Chart::SharesController < HighchartsController
   def shares_by_type
     data_src = UniversalDatasource.new(
       :calculate_now => true,
+      :colorize => true,
       :period => (DateTime.civil(2011, 07, 13)..DateTime.now),
       :queries_to_fetch => case params[:entity]
         when 'photos' then %w(photo.share.email photo.share.facebook photo.share.twitter)
@@ -138,6 +139,7 @@ class Chart::SharesController < HighchartsController
     data_src = UniversalDatasource.new(
       :calculate_now => true,
       :percent_view => true,
+      :colorize => true,
       :period => (DateTime.civil(2011, 07, 13)..DateTime.now),
       :queries_to_fetch => %w(album.share.email album.share.twitter album.share.facebook photo.share.email photo.share.facebook photo.share.twitter),
       :series_calculations => [
