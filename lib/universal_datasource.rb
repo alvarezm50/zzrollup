@@ -33,6 +33,9 @@ class UniversalDatasource < CohortsDatasource
     'like.album.like' => 'Album like',
     'like.photo.like' => 'Photo like',
     'like.user.like' => 'User like',
+    'like.album.unlike' => 'Album unlike',
+    'like.photo.unlike' => 'Photo unlike',
+    'like.user.unlike'=> 'User unlike',
     #Shares
     'photo.share.email' => 'via EMail',
     'photo.share.facebook' => 'via Facebook',

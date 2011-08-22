@@ -32,4 +32,14 @@ protected
     send_data datasource.produce_xls(series), :content_type => Mime::XLS, :filename => "#{params[:action]}_#{datasource.span_code}_#{DateTime.now.strftime('%Y%m%d%H%M')}.xls"
   end
 
+
+  def wipe_first_weekly_value!(datasource)
+    if datasource.weekly_mode?
+      datasource.categories.shift
+      datasource.chart_series.each do |serie|
+        serie[:data].shift
+      end
+    end
+  end
+
 end

@@ -5,11 +5,12 @@ class Chart::LikesController < HighchartsController
       :calculate_now => true,
       :percent_view => true,
       :colorize => true,
-      :period => (DateTime.civil(2011, 07, 13)..DateTime.now),
-      :queries_to_fetch => %w(like.album.like like.photo.like albums.all photos.all),
+      :period => (DateTime.civil(2011, 07, 14)..DateTime.now),
+      :queries_to_fetch => %w(like.album.like like.photo.like albums.all photos.all users.all like.user.like),
       :series_calculations => [
         {:name => 'Total Photos', :op => :div, :series => %w(like.photo.like photos.all), :type => :photo},
-        {:name => 'Total Albums', :op => :div, :series => %w(like.album.like albums.all), :type => :album}
+        {:name => 'Total Albums', :op => :div, :series => %w(like.album.like albums.all), :type => :album},
+        {:name => 'Total Users', :op => :div, :series => %w(like.user.like users.all), :type => :user}
       ]
     )
 
@@ -28,7 +29,10 @@ class Chart::LikesController < HighchartsController
             :enabled => false
           },
           :title => {
-            :text => 'Percent of Photos or Albums Liked'
+            :text => 'Percent of Photos, Albums, or Users Liked'
+          },
+          :subtitle => {
+            :text => "Cumulative, on a #{data_src.span_code} basis"
           },
           :xAxis => {
             :categories => data_src.categories,
@@ -46,75 +50,7 @@ class Chart::LikesController < HighchartsController
           },
           :yAxis => {
             :title => {
-              :text => '% of Photos/Albums'
-            },
-            :min => 0,
-            :labels => {:formatter => nil}
-          },
-          :plotOptions => {
-            :area => {
-              :stacking => 'normal',
-              :lineColor => '#666666',
-              :lineWidth => 1,
-              :marker => {
-                :lineWidth => 1,
-                :lineColor => '#666666'
-              }
-            }
-          },
-          :tooltip => { :formatter => nil }
-        }
-      end
-    end
-  end
-
-  def total_users
-    data_src = UniversalDatasource.new(
-      :calculate_now => true,
-      :percent_view => true,
-      :colorize => true,
-      :period => (DateTime.civil(2011, 07, 13)..DateTime.now),
-      :queries_to_fetch => %w(users.all like.user.like),
-      :series_calculations => [
-        {:name => '% of Users', :op => :div, :series => %w(like.user.like users.all), :type => :user}
-      ]
-    )
-
-    respond_to do |wants|
-      wants.xls do
-        send_xls(data_src)
-      end
-      wants.json do
-        render :json => {
-          :series => data_src.chart_series,
-          :chart => {
-            :renderTo => '',
-            :defaultSeriesType => 'line'
-          },
-          :credits => {
-            :enabled => false
-          },
-          :title => {
-            :text => 'Percent of Total Users Liked'
-          },
-          :legend => {:enabled => false},
-          :xAxis => {
-            :categories => data_src.categories,
-            :tickmarkPlacement => 'on',
-            :title => {
-              :enabled => false
-            },
-            :labels => {
-              :rotation => -90,
-              :align => 'right',
-              :y => 3,
-              :x => 4,
-              :step => (data_src.categories.size/30.0).ceil
-            }
-          },
-          :yAxis => {
-            :title => {
-              :text => '% of Users'
+              :text => '% of Total Photos/Albums/Users Liked'
             },
             :min => 0,
             :labels => {:formatter => nil}
@@ -140,7 +76,7 @@ class Chart::LikesController < HighchartsController
     data_src = UniversalDatasource.new(
       :calculate_now => true,
       :colorize => true,
-      :period => (DateTime.civil(2011, 07, 13)..DateTime.now),
+      :period => (DateTime.civil(2011, 07, 14)..DateTime.now),
       :queries_to_fetch => %w(like.album.like like.photo.like like.user.like)
     )
 
@@ -159,10 +95,10 @@ class Chart::LikesController < HighchartsController
             :enabled => false
           },
           :title => {
-            :text => 'Total Likes by Type'
+            :text => 'Number of Photos, Albums, or Users Liked'
           },
           :subtitle => {
-            :text => '# of Photo/Album/User'
+            :text => "Cumulative, on a #{data_src.span_code} basis"
           },
           :xAxis => {
             :categories => data_src.categories,
@@ -201,7 +137,7 @@ class Chart::LikesController < HighchartsController
       :calculate_now => true,
       :colorize => true,
       :percent_view => true,
-      :period => (DateTime.civil(2011, 07, 13)..DateTime.now),
+      :period => (DateTime.civil(2011, 07, 14)..DateTime.now),
       #:period => (2.weeks.ago..DateTime.now),
       :queries_to_fetch => %w(like.album.like like.album.unlike like.photo.like	like.photo.unlike like.user.like like.user.unlike),
       :series_calculations => [
@@ -227,10 +163,10 @@ class Chart::LikesController < HighchartsController
             :enabled => false
           },
           :title => {
-            :text => '% of Unlikes by Category'
+            :text => '% of Photos, Albums, or Users Unliked'
           },
           :subtitle => {
-            :text => 'Total Unlikes/Total Likes'
+            :text => "Cumulative, on a #{data_src.span_code} basis"
           },
           :xAxis => {
             :categories => data_src.categories,
@@ -248,7 +184,7 @@ class Chart::LikesController < HighchartsController
           },
           :yAxis => {
             :title => {
-              :text => '# of Unlikes'
+              :text => 'Total # Unlikes/Total # Likes'
             },
             :min => 0,
             :max => 1,
@@ -266,9 +202,11 @@ class Chart::LikesController < HighchartsController
       :span => params[:span] || 1440,
       :colorize => true,
       :cumulative => false,
-      :period => (DateTime.civil(2011, 07, 13)..DateTime.now),
+      :period => (DateTime.civil(2011, 07, 14)..DateTime.now),
       :queries_to_fetch => %w(like.album.like like.photo.like like.user.like)
     )
+
+    wipe_first_weekly_value!(data_src)
 
     respond_to do |wants|
       wants.xls do
@@ -322,7 +260,7 @@ class Chart::LikesController < HighchartsController
       :cumulative => false,
       :percent_view => true,
       :colorize => true,
-      :period => (DateTime.civil(2011, 07, 13)..DateTime.now),
+      :period => (DateTime.civil(2011, 07, 14)..DateTime.now),
       :queries_to_fetch => %w(like.album.like like.photo.like like.user.like albums.all photos.all),
       :series_calculations => [
         {:name => 'Photos', :op => :div, :series => %w(like.photo.like photos.all), :type => :photo},
@@ -331,9 +269,11 @@ class Chart::LikesController < HighchartsController
       ]
     )
 
+    wipe_first_weekly_value!(data_src)
+    
     respond_to do |wants|
       wants.xls do
-        send_xls(data_src)
+        send_xls()
       end
       wants.json do
         render :json => {
@@ -373,6 +313,61 @@ class Chart::LikesController < HighchartsController
             :labels => {:formatter => nil}
           },
           :tooltip => {:formatter => nil}
+        }
+      end
+    end
+  end
+
+  def unlikes_by_type_trend
+    data_src = UniversalDatasource.new(
+      :calculate_now => true,
+      :span => params[:span] || 1440,
+      :cumulative => true,
+      :colorize => true,
+      :period => (DateTime.civil(2011, 07, 14)..DateTime.now),
+      :queries_to_fetch => %w(like.album.unlike like.photo.unlike like.user.unlike)
+    )
+
+    respond_to do |wants|
+      wants.xls do
+        send_xls(data_src)
+      end
+      wants.json do
+        render :json => {
+          :series => data_src.chart_series,
+          :chart => {
+            :renderTo => '',
+            :defaultSeriesType => 'line'
+          },
+          :credits => {
+            :enabled => false
+          },
+          :title => {
+            :text => 'Number of Photos, Albums, or Users Unliked'
+          },
+          :subtitle => {
+            :text => "Cumulative, on a #{data_src.span_code} basis"
+          },
+          :xAxis => {
+            :categories => data_src.categories,
+            :tickmarkPlacement => 'on',
+            :title => {
+              :enabled => false
+            },
+            :labels => {
+              :rotation => -90,
+              :align => 'right',
+              :y => 3,
+              :x => 4,
+              :step => (data_src.categories.size/30.0).ceil
+            }
+          },
+          :yAxis => {
+            :title => {
+              :text => "# of Unlikes#{data_src.weekly_mode? ? ' (average per week)' : ''}"
+            },
+            :min => 0
+          }
         }
       end
     end
