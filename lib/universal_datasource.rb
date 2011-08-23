@@ -166,6 +166,7 @@ protected
       unless @cumulative
         if @weekly_mode
           (data_row.size-1).downto(0) do |i|
+            data_row[i].insert(0, data_row[i-1].last) if i>0
             vals = calculate_noncumulative(data_row[i]).compact #data_row[i] is a sorted array produced by GROUP_CONCAT
             average = vals.sum.to_f / vals.size
             data_row[i] = (average.nil? || average.nan? || average.infinite?) ? nil : average.round.to_i
