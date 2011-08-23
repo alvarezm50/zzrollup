@@ -69,6 +69,10 @@ class UniversalDatasource < CohortsDatasource
     humanize_series_names!
   end
 
+  def chart_subtitle
+    "#{@cumulative ? 'Cumulative' : 'Non-cumulative'}, on a #{@span_code} basis"
+  end
+
   
 protected
   def default_period
@@ -164,7 +168,7 @@ protected
           (data_row.size-1).downto(0) do |i|
             vals = calculate_noncumulative(data_row[i]).compact #data_row[i] is a sorted array produced by GROUP_CONCAT
             average = vals.sum.to_f / vals.size
-            data_row[i] = (average.nil? || average.nan? || average.infinite?) ? nil : average
+            data_row[i] = (average.nil? || average.nan? || average.infinite?) ? nil : average.round.to_i
           end
         else
           data_row = calculate_noncumulative(data_row)

@@ -1,10 +1,12 @@
 class Chart::SharesController < HighchartsController
 
-  def total_shared
+  def total_shared_perc
     data_src = UniversalDatasource.new(
       :calculate_now => true,
       :percent_view => true,
       :period => (DateTime.civil(2011, 07, 13)..DateTime.now),
+      :cumulative => params[:non_cumulative]!='true',
+      :span => params[:span] || 1440,
       :queries_to_fetch => %w(albums.all photos.all album.share.email album.share.twitter album.share.facebook photo.share.email photo.share.facebook photo.share.twitter),
       :series_calculations => [
         {:name => 'PhotosShared', :op => :sum, :series => %w(photo.share.email photo.share.facebook photo.share.twitter)},
@@ -29,10 +31,10 @@ class Chart::SharesController < HighchartsController
             :enabled => false
           },
           :title => {
-            :text => 'Total Photos/Albums Shared'
+            :text => 'Percentage of Photos or Albums Shared'
           },
           :subtitle => {
-            :text => 'Percentage'
+            :text => data_src.chart_subtitle
           },
           :xAxis => {
             :categories => data_src.categories,
@@ -71,6 +73,78 @@ class Chart::SharesController < HighchartsController
       end
     end
   end
+
+  def total_shared
+    data_src = UniversalDatasource.new(
+      :calculate_now => true,
+      :cumulative => params[:non_cumulative]!='true',
+      :span => params[:span] || 1440,
+      :period => (DateTime.civil(2011, 07, 13)..DateTime.now),
+      :queries_to_fetch => %w(album.share.email album.share.twitter album.share.facebook photo.share.email photo.share.facebook photo.share.twitter),
+      :series_calculations => [
+        {:name => 'Total Photos', :op => :sum, :series => %w(photo.share.email photo.share.facebook photo.share.twitter)},
+        {:name => 'Total Albums', :op => :sum, :series => %w(album.share.email album.share.twitter album.share.facebook)}
+      ]
+    )
+
+    respond_to do |wants|
+      wants.xls do
+        send_xls(data_src)
+      end
+      wants.json do
+        render :json => {
+          :series => data_src.chart_series,
+          :chart => {
+            :renderTo => '',
+            :defaultSeriesType => 'line'
+          },
+          :credits => {
+            :enabled => false
+          },
+          :title => {
+            :text => 'Number of Photos or Albums Shared'
+          },
+          :subtitle => {
+            :text => data_src.chart_subtitle
+          },
+          :xAxis => {
+            :categories => data_src.categories,
+            :tickmarkPlacement => 'on',
+            :title => {
+              :enabled => false
+            },
+            :labels => {
+              :rotation => -90,
+              :align => 'right',
+              :y => 3,
+              :x => 4,
+              :step => (data_src.categories.size/30.0).ceil
+            }
+          },
+          :yAxis => {
+            :title => {
+              :text => '# Shared'
+            },
+            :min => 0,
+            :labels => {:formatter => nil}
+          },
+          :plotOptions => {
+            :area => {
+              :stacking => 'normal',
+              :lineColor => '#666666',
+              :lineWidth => 1,
+              :marker => {
+                :lineWidth => 1,
+                :lineColor => '#666666'
+              }
+            }
+          },
+          :tooltip => { :formatter => nil }
+        }
+      end
+    end
+  end
+
 
   def shares_by_type
     data_src = UniversalDatasource.new(
@@ -168,10 +242,10 @@ class Chart::SharesController < HighchartsController
             :enabled => false
           },
           :title => {
-            :text => 'Total Shares by Category'
+            :text => "% of Photos and Albums Shared (Email/FB/Twitter)"
           },
           :subtitle => {
-            :text => 'Percentage'
+            :text => data_src.chart_subtitle
           },
           :xAxis => {
             :categories => data_src.categories,

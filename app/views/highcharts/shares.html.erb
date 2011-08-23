@@ -8,7 +8,19 @@
   <td>
   <div id="shares1" class="chart-group">
     <div>
-      <div id="total_shares_perc_trend" class="normal-chart-container"/>
+      <div id="noncum_total_shares_trend_daily" class="normal-chart-container"/>
+    </div>
+
+    <div>
+      <div id="noncum_total_shares_trend_weekly" class="normal-chart-container"/>
+    </div>
+
+    <div>
+      <div id="cum_total_shares_trend_daily" class="normal-chart-container"/>
+    </div>
+
+    <div>
+      <div id="total_shares_perc_by_type" class="normal-chart-container"/>
     </div>
 
     <div>
@@ -18,13 +30,22 @@
     <div>
       <div id="album_shares_by_category" class="normal-chart-container"/>
     </div>
+
   </div>
   </td>
 
   <td>
   <div id="shares2" class="chart-group">
     <div>
-      <div id="total_shares_perc_by_type" class="normal-chart-container"/>
+      <div id="noncum_total_shares_percent_trend_daily" class="normal-chart-container"/>
+    </div>
+
+    <div>
+      <div id="noncum_total_shares_percent_trend_weekly" class="normal-chart-container"/>
+    </div>
+
+    <div>
+      <div id="cum_total_shares_perc_trend_daily" class="normal-chart-container"/>
     </div>
 
     <div>
@@ -34,6 +55,7 @@
     <div>
       <div id="toolbar_frame_perc_photos" class="normal-chart-container"/>
     </div>
+
   </div>
   </td>
 
@@ -45,9 +67,9 @@
 <script type="text/javascript">
 
   var all_charts = {
-    total_shares_perc_trend: {
+    cum_total_shares_perc_trend_daily: {
       chart: null,
-      url: 'shares/total_shared.json'
+      url: 'shares/total_shared_perc.json?span=1440'
     },
     photo_shares_by_category: {
       chart: null,
@@ -68,6 +90,26 @@
     toolbar_frame_perc_photos: {
       chart: null,
       url: 'shares/toolbar_frame_shares.json?entity=photos'
+    },
+    noncum_total_shares_trend_daily: {
+      chart: null,
+      url: 'shares/total_shared.json?span=1440&non_cumulative=true'
+    },
+    noncum_total_shares_trend_weekly: {
+      chart: null,
+      url: 'shares/total_shared.json?span=10080&non_cumulative=true'
+    },
+    noncum_total_shares_percent_trend_daily: {
+      chart: null,
+      url: 'shares/total_shared_perc.json?span=1440&non_cumulative=true'
+    },
+    noncum_total_shares_percent_trend_weekly: {
+      chart: null,
+      url: 'shares/total_shared_perc.json?span=10080&non_cumulative=true'
+    },
+    cum_total_shares_trend_daily: {
+      chart: null,
+      url: 'shares/total_shared.json?span=1440'
     }
   };
 
