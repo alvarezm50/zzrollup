@@ -40,7 +40,7 @@ class UniversalDatasource < CohortsDatasource
     'photo.share.email' => 'via EMail',
     'photo.share.facebook' => 'via Facebook',
     'photo.share.twitter' => 'via Twitter',
-    'album.share.email' => 'via E-Mail',
+    'album.share.email' => 'via EMail',
     'album.share.facebook' => 'via Facebook',
     'album.share.twitter' => 'via Twitter',
   }
@@ -84,7 +84,6 @@ protected
       "query_name",
     ]
     group_by = [
-      'report_date',
       'query_name'
     ]
     conditions = [
@@ -95,7 +94,12 @@ protected
 
     if @weekly_mode
       fields_to_select << "DATE_FORMAT(SUBDATE(`reported_at`, INTERVAL WEEKDAY(`reported_at`) DAY), '#{@x_labels_format}') AS report_date"
-      fields_to_select << "ROUND(AVG(sum_value)) AS value"
+      if @cumulative
+        fields_to_select << "ROUND(AVG(sum_value)) AS value"
+      else
+        fields_to_select << "GROUP_CONCAT(sum_value) AS value"
+        fields_to_select << "GROUP_CONCAT(reported_at) AS value_order"
+      end
       fields_to_select << "DATE_FORMAT(reported_at, '%v %x') AS weekyear"
       group_by << 'weekyear'
       conditions << RollupResult.public_sanitize_sql('sum_value > 0')
@@ -121,28 +125,50 @@ protected
     @rollup_data_rows.each do |row|
       query = row['query_name']
       @formed_data[query] ||= {}
-      @formed_data[query][row['report_date']] = row['value']
+      @formed_data[query][row['report_date']] = if @weekly_mode && !@cumulative
+        vals = row['value'].split(',')
+        order = row['value_order'].split(',').map{|d| Date.parse(d) }
+        [vals, order].transpose.sort_by{|e| e.last }.map {|e| e.first.to_i }
+      else
+        row['value'].to_i
+      end
     end
+  end
+
+  # Calculates non-cumulative average
+  # 
+  # +data_array+ - array of values
+  def calculate_noncumulative(data_array)
+    data_row = []
+    (data_array.size-1).downto(1) do |i|
+      data_row[i] = (data_array[i] - data_array[i-1]) rescue nil
+    end
+    data_row[0] = nil
+    data_row
   end
 
   def make_chart_series!
     @category_formatter ||= Proc.new {|original_category| original_category }
     @categories ||= @rollup_data_rows.map{|row| row['report_date']}.uniq
 
-
     @chart_series = @formed_data.map do |query, values|
       data_row = Array.new(@categories.size)
       values.each do |row_cat, val| #This should keep the order
         dest_cat = @category_formatter.call(row_cat)
         if idx = @categories.index(dest_cat)
-          data_row[idx] = val.to_i
+          data_row[idx] = val
         end
       end
       unless @cumulative
-        (data_row.size-1).downto(1) do |i|
-          data_row[i] = (data_row[i] - data_row[i-1]) rescue nil
+        if @weekly_mode
+          (data_row.size-1).downto(0) do |i|
+            vals = calculate_noncumulative(data_row[i]).compact #data_row[i] is a sorted array produced by GROUP_CONCAT
+            average = vals.sum.to_f / vals.size
+            data_row[i] = (average.nil? || average.nan? || average.infinite?) ? nil : average
+          end
+        else
+          data_row = calculate_noncumulative(data_row)
         end
-        data_row[0] = nil
       end
       s = {
         :name => query,

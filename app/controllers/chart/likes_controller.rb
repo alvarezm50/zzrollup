@@ -206,7 +206,7 @@ class Chart::LikesController < HighchartsController
       :queries_to_fetch => %w(like.album.like like.photo.like like.user.like)
     )
 
-    wipe_first_weekly_value!(data_src)
+    trim_empty_edges!(data_src)
 
     respond_to do |wants|
       wants.xls do
@@ -269,7 +269,7 @@ class Chart::LikesController < HighchartsController
       ]
     )
 
-    wipe_first_weekly_value!(data_src)
+    trim_empty_edges!(data_src)
     
     respond_to do |wants|
       wants.xls do

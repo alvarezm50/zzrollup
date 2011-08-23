@@ -33,13 +33,23 @@ protected
   end
 
 
-  def wipe_first_weekly_value!(datasource)
-    if datasource.weekly_mode?
-      datasource.categories.shift
-      datasource.chart_series.each do |serie|
-        serie[:data].shift
+  def trim_empty_edges!(datasource)
+    deletion_positions = []
+    indexes = (0..datasource.categories.size-1).to_a
+    [indexes, indexes.reverse].each do |range|
+      range.each do |i|
+        do_cut = !datasource.chart_series.map{|s| s[:data][i] }.any?
+        deletion_positions << i if do_cut
+        break unless do_cut
       end
     end
+    deletion_positions.each do |idx|
+      datasource.categories.delete_at(idx)
+      datasource.chart_series.each do |serie|
+        serie[:data].delete_at(idx)
+      end
+    end
+    deletion_positions.size
   end
 
 end
