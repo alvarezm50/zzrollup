@@ -32,7 +32,7 @@ class Chart::LikesController < HighchartsController
             :text => 'Percent of Photos, Albums, or Users Liked'
           },
           :subtitle => {
-            :text => "Cumulative, on a #{data_src.span_code} basis"
+            :text => data_src.chart_subtitle
           },
           :xAxis => {
             :categories => data_src.categories,
@@ -98,7 +98,7 @@ class Chart::LikesController < HighchartsController
             :text => 'Number of Photos, Albums, or Users Liked'
           },
           :subtitle => {
-            :text => "Cumulative, on a #{data_src.span_code} basis"
+            :text => data_src.chart_subtitle
           },
           :xAxis => {
             :categories => data_src.categories,
@@ -166,7 +166,7 @@ class Chart::LikesController < HighchartsController
             :text => '% of Photos, Albums, or Users Unliked'
           },
           :subtitle => {
-            :text => "Cumulative, on a #{data_src.span_code} basis"
+            :text => data_src.chart_subtitle
           },
           :xAxis => {
             :categories => data_src.categories,
@@ -226,7 +226,7 @@ class Chart::LikesController < HighchartsController
             :text => 'Number of Photos, Albums, or Users Liked'
           },
           :subtitle => {
-            :text => "Not cumulative, on a #{data_src.span_code} basis"
+            :text => data_src.chart_subtitle
           },
           :xAxis => {
             :categories => data_src.categories,
@@ -289,7 +289,7 @@ class Chart::LikesController < HighchartsController
             :text => '% of Photos, Albums, or Users Liked'
           },
           :subtitle => {
-            :text => "Not cumulative, on a #{data_src.span_code} basis"
+            :text => data_src.chart_subtitle
           },
           :xAxis => {
             :categories => data_src.categories,
@@ -346,7 +346,7 @@ class Chart::LikesController < HighchartsController
             :text => 'Number of Photos, Albums, or Users Unliked'
           },
           :subtitle => {
-            :text => "Cumulative, on a #{data_src.span_code} basis"
+            :text => data_src.chart_subtitle
           },
           :xAxis => {
             :categories => data_src.categories,

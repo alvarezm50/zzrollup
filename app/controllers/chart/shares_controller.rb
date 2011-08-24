@@ -172,10 +172,10 @@ class Chart::SharesController < HighchartsController
             :enabled => false
           },
           :title => {
-            :text => 'Shares by Category'
+            :text => "Number of #{params[:entity].camelcase} Shared (Email/FB/Twitter)"
           },
           :subtitle => {
-            :text => "# of #{params[:entity].camelcase}"
+            :text => data_src.chart_subtitle
           },
           :xAxis => {
             :categories => data_src.categories,
@@ -193,7 +193,7 @@ class Chart::SharesController < HighchartsController
           },
           :yAxis => {
             :title => {
-              :text => '# of Shares'
+              :text => "# of #{params[:entity].camelcase} Shared"
             },
             :min => 0,
             :labels => {:formatter => nil}
@@ -321,10 +321,10 @@ class Chart::SharesController < HighchartsController
             :enabled => false
           },
           :title => {
-            :text => "#{entity.camelcase}: Total Shares by Category"
+            :text => "% of #{entity.camelcase}s Shared by Toolbar or Frame"
           },
           :subtitle => {
-            :text => 'Percentage'
+            :text => data_src.chart_subtitle
           },
           :xAxis => {
             :categories => data_src.categories,

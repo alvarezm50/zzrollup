@@ -37,7 +37,7 @@ class UniversalDatasource < CohortsDatasource
     'like.photo.unlike' => 'Photo unlike',
     'like.user.unlike'=> 'User unlike',
     #Shares
-    'photo.share.email' => 'via EMail',
+    'photo.share.email' => 'via Email',
     'photo.share.facebook' => 'via Facebook',
     'photo.share.twitter' => 'via Twitter',
     'album.share.email' => 'via EMail',
@@ -70,7 +70,7 @@ class UniversalDatasource < CohortsDatasource
   end
 
   def chart_subtitle
-    "#{@cumulative ? 'Cumulative' : 'Non-cumulative'}, on a #{@span_code} basis"
+    "#{@cumulative ? 'Cumulative' : 'Non-cumulative'}, on a #{@span_code} basis" # (#{@period.begin.strftime('%d %b %y')} - #{@period.end.strftime('%d %b %y')})"
   end
 
   
