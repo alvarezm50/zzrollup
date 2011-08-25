@@ -8,11 +8,16 @@
   <td>
   <div id="stream1" class="chart-group">
     <div>
-      <div id="num_albums" class="normal-chart-container"/>
+      <div id="noncum_num_albums_daily" class="normal-chart-container"/>
     </div>
 
     <div>
-      <div id="albums_percent_total" class="normal-chart-container"/>
+      <div id="noncum_num_albums_weekly" class="normal-chart-container"/>
+    </div>
+
+
+    <div>
+      <div id="cum_num_albums" class="normal-chart-container"/>
     </div>
 
     <div>
@@ -22,6 +27,23 @@
   </div>
   </td>
 
+  <td>
+  <div id="stream1" class="chart-group">
+    <div>
+      <div id="noncum_perc_albums_daily" class="normal-chart-container"/>
+    </div>
+
+    <div>
+      <div id="noncum_perc_albums_weekly" class="normal-chart-container"/>
+    </div>
+      
+    <div>
+      <div id="albums_percent_total" class="normal-chart-container"/>
+    </div>
+  </div>
+  </td>
+
+
 
   </tr>
 </table>
@@ -30,13 +52,33 @@
 <script type="text/javascript">
 
   var all_charts = {
-    num_albums: {
+    noncum_num_albums_daily: {
       chart: null,
-      url: 'stream/num_albums.json'
+      url: 'stream/totals.json?non_cumulative=true'
     },
+    noncum_num_albums_weekly: {
+      chart: null,
+      url: 'stream/totals.json?non_cumulative=true&span=10080'
+    },
+
+    noncum_perc_albums_daily: {
+      chart: null,
+      url: 'stream/percent_totals.json?non_cumulative=true'
+    },
+    noncum_perc_albums_weekly: {
+      chart: null,
+      url: 'stream/percent_totals.json?non_cumulative=true&span=10080'
+    },
+
+
+    cum_num_albums: {
+      chart: null,
+      url: 'stream/totals.json'
+    },
+
     albums_percent_total: {
       chart: null,
-      url: 'stream/percent_albums_total.json'
+      url: 'stream/percent_totals.json'
     },
     albums_percent_by_type: {
       chart: null,

@@ -1,7 +1,9 @@
 class Chart::StreamController < ApplicationController
-  def num_albums
+  def totals #num_albums
     data_src = UniversalDatasource.new(
       :calculate_now => true,
+      :span => params[:span] || 1440,
+      :cumulative => params[:non_cumulative]!='true',
       :period => (DateTime.civil(2011, 07, 13)..DateTime.now),
       :queries_to_fetch => %w(album.stream.email album.stream.facebook album.stream.twitter)
     )
@@ -21,10 +23,10 @@ class Chart::StreamController < ApplicationController
             :enabled => false
           },
           :title => {
-            :text => '# of Albums Streamed'
+            :text => "# of Albums Streamed"
           },
           :subtitle => {
-            :text => 'by Category'
+            :text => data_src.chart_subtitle
           },
           :xAxis => {
             :categories => data_src.categories,
@@ -58,9 +60,11 @@ class Chart::StreamController < ApplicationController
     end
   end
 
-  def percent_albums_total
+  def percent_totals
     data_src = UniversalDatasource.new(
       :calculate_now => true,
+      :span => params[:span] || 1440,
+      :cumulative => params[:non_cumulative]!='true',
       :period => (DateTime.civil(2011, 07, 13)..DateTime.now),
       :queries_to_fetch => %w(album.stream.email album.stream.facebook album.stream.twitter albums.all),
       :series_calculations => [
@@ -87,7 +91,10 @@ class Chart::StreamController < ApplicationController
             :enabled => false
           },
           :title => {
-            :text => 'Total Albums Streamed'
+            :text => '% of Albums Streamed'
+          },
+          :subtitle => {
+            :text => data_src.chart_subtitle
           },
           :xAxis => {
             :categories => data_src.categories,
