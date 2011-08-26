@@ -1,7 +1,7 @@
 class Chart::PhotoSourcesController < HighchartsController
 
   def overall_categories
-    data_src = UniversalDatasource.new(
+    data_src =RollupData::UniversalDatasource.new(
       :calculate_now => true,
       :percent_view => true,
       :whole_history => true,
@@ -54,7 +54,7 @@ class Chart::PhotoSourcesController < HighchartsController
   end
 
   def specific_categories
-    data_src = UniversalDatasource.new(
+    data_src =RollupData::UniversalDatasource.new(
       :calculate_now => true,
       :percent_view => true,
       :whole_history => true,
@@ -102,7 +102,7 @@ class Chart::PhotoSourcesController < HighchartsController
   end
 
   def uploader_agent_trend
-    data_src = UniversalDatasource.new(
+    data_src =RollupData::UniversalDatasource.new(
       :calculate_now => true,
       :whole_history => true,
       :queries_to_fetch => %w(fs.osx iphoto.osx picasa.osx fs.win picasa.win simple.osx simple.win).map{|q| "Photos.source.#{q}"},
@@ -170,7 +170,7 @@ class Chart::PhotoSourcesController < HighchartsController
   end
   
   def uploader_agent_percent
-    data_src = UniversalDatasource.new(
+    data_src =RollupData::UniversalDatasource.new(
       :calculate_now => true,
       :whole_history => true,
       :percent_view => true,
@@ -256,7 +256,7 @@ class Chart::PhotoSourcesController < HighchartsController
   end
 
   def breakdown
-    data_src = UniversalDatasource.new(
+    data_src =RollupData::UniversalDatasource.new(
       :calculate_now => true,
       :percent_view => true,
       :whole_history => true,

@@ -1,7 +1,7 @@
 class Chart::LikesController < HighchartsController
 
   def photos_albums_trend
-    data_src = UniversalDatasource.new(
+    data_src =RollupData::UniversalDatasource.new(
       :calculate_now => true,
       :percent_view => true,
       :colorize => true,
@@ -73,7 +73,7 @@ class Chart::LikesController < HighchartsController
   end
 
   def likes_by_type
-    data_src = UniversalDatasource.new(
+    data_src =RollupData::UniversalDatasource.new(
       :calculate_now => true,
       :colorize => true,
       :period => (DateTime.civil(2011, 07, 14)..DateTime.now),
@@ -133,7 +133,7 @@ class Chart::LikesController < HighchartsController
   end
 
   def unlikes_by_category
-    data_src = UniversalDatasource.new(
+    data_src =RollupData::UniversalDatasource.new(
       :calculate_now => true,
       :colorize => true,
       :percent_view => true,
@@ -197,7 +197,7 @@ class Chart::LikesController < HighchartsController
   end
 
   def likes_by_type_trend
-    data_src = UniversalDatasource.new(
+    data_src =RollupData::UniversalDatasource.new(
       :calculate_now => true,
       :span => params[:span] || 1440,
       :colorize => true,
@@ -254,7 +254,7 @@ class Chart::LikesController < HighchartsController
   end
 
   def likes_by_type_perc_trend
-    data_src = UniversalDatasource.new(
+    data_src =RollupData::UniversalDatasource.new(
       :calculate_now => true,
       :span => params[:span] || 1440,
       :cumulative => false,
@@ -319,7 +319,7 @@ class Chart::LikesController < HighchartsController
   end
 
   def unlikes_by_type_trend
-    data_src = UniversalDatasource.new(
+    data_src =RollupData::UniversalDatasource.new(
       :calculate_now => true,
       :span => params[:span] || 1440,
       :cumulative => true,
