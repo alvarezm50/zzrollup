@@ -40,17 +40,6 @@ class Chart::TrendsController < HighchartsController
             :title => {
               :text => 'Number of Photos'
             },
-          },
-          :plotOptions => {
-            :area => {
-              :stacking => 'normal',
-              :lineColor => '#666666',
-              :lineWidth => 1,
-              :marker => {
-                :lineWidth => 1,
-                :lineColor => '#666666'
-              }
-            }
           }
         }
       end
@@ -219,7 +208,7 @@ class Chart::TrendsController < HighchartsController
           },
           :series => series,
           :xAxis => {
-            :categories => categories
+            :categories => data_src.categories
           },
           :title => {
             :text => 'Average Photos/Day'
