@@ -1,16 +1,14 @@
 module RollupData
   class UniversalDatasource
-    include ActionView::Helpers::DateHelper
-
     include Humanization
     include Colorization
     include RowCalculation
     include Reporting
 
-    attr_accessor :query_name_mask, :period, :categories, :category_formatter, :percent_view
+    attr_accessor :period, :categories, :category_formatter, :percent_view
     attr_reader :span, :span_code, :chart_series
 
-    attr_accessor :whole_history, :queries_to_fetch, :series_calculations, :humanize_unknown_series, :cumulative, :colorize
+    attr_accessor :whole_history, :queries_to_fetch, :series_calculations, :humanize_unknown_series, :cumulative, :colorize, :emarginate
 
 
     def initialize(opts = {})
@@ -47,6 +45,7 @@ module RollupData
       transform_data!
       make_chart_series!
       make_calculations! if @series_calculations
+      trim_empty_edges! if @emarginate
       humanize_series_names!
     end
 
@@ -152,6 +151,26 @@ module RollupData
         s
       end
     end
+
+  def trim_empty_edges!
+    deletion_positions = []
+    indexes = (0..self.categories.size-1).to_a
+    [indexes, indexes.reverse].each do |range|
+      range.each do |i|
+        do_cut = !self.chart_series.map{|s| s[:data][i] }.any?
+        deletion_positions << i if do_cut
+        break unless do_cut
+      end
+    end
+    deletion_positions.each do |idx|
+      self.categories.delete_at(idx)
+      self.chart_series.each do |serie|
+        serie[:data].delete_at(idx)
+      end
+    end
+    deletion_positions.size
+  end
+
 
 
   end

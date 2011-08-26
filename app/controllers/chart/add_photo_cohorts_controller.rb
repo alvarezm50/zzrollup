@@ -136,13 +136,15 @@ class Chart::AddPhotoCohortsController < HighchartsController
   end
 
   def cumulative_active_users_by_cohort
-    cohort_src = RollupData::CohortsDatasource.new(:span => params[:span] || 1440)
-    set_cohort_intersection_params(cohort_src, {:days_count => 60, :weeks_count => 10})
+    cohort_src = RollupData::CohortsDatasource.new(
+      :span => params[:span] || 1440,
+      :cohort_intersection_params => {:days_count => 60, :weeks_count => 10}
+    )
 
     series = []
     (1..CohortManager.cohort_current).each do |cohort|
       cohort_beginning = CohortManager.cohort_beginning_date(cohort)
-      cohort_src.period = (cohort_beginning..@distance.since(cohort_beginning))
+      cohort_src.period = (cohort_beginning..cohort_src.distance.since(cohort_beginning))
       cohort_src.query_name_mask = "Cohort.photos_10.#{cohort}"
       cohort_src.calculate_chart
       series << cohort_src.chart_series.first if cohort_src.chart_series.first
@@ -166,7 +168,7 @@ class Chart::AddPhotoCohortsController < HighchartsController
             :text => 'Cumulative Active Users (10+ Photos) by Cohort'
           },
           :subtitle => {
-            :text => "#{cohort_src.span_code.humanize}#{cohort_src.weekly_mode? ? ' average' : ''}, First #{@ticks_count} #{@tick_name.downcase}s"
+            :text => "#{cohort_src.span_code.humanize}#{cohort_src.weekly_mode? ? ' average' : ''}, First #{cohort_src.ticks_count} #{cohort_src.tick_name.downcase}s"
           },
           :legend => {
             :layout => 'vertical'
@@ -195,14 +197,16 @@ class Chart::AddPhotoCohortsController < HighchartsController
   end
 
   def cumulative_active_users_by_cohort_percent
-    data_src = RollupData::CohortsDatasource.new(:span => params[:span] || 1440, :percent_view => true)
-    set_cohort_intersection_params(data_src, {:days_count => 60, :weeks_count => 10})
+    data_src = RollupData::CohortsDatasource.new(
+      :span => params[:span] || 1440, :percent_view => true,
+      :cohort_intersection_params => {:days_count => 60, :weeks_count => 10}
+    )
 
     users_series = []
     photos10_series = []
     (1..CohortManager.cohort_current).each do |cohort|
       cohort_beginning = CohortManager.cohort_beginning_date(cohort)
-      data_src.period = (cohort_beginning..@distance.since(cohort_beginning))
+      data_src.period = (cohort_beginning..data_src.distance.since(cohort_beginning))
 
       data_src.query_name_mask = "Cohort.users.#{cohort}"
       data_src.calculate_chart
@@ -240,7 +244,7 @@ class Chart::AddPhotoCohortsController < HighchartsController
             :text => 'Cumulative % Active Users (10+ Photos) by Cohort'
           },
           :subtitle => {
-            :text => "#{data_src.span_code.humanize}#{data_src.weekly_mode? ? ' average' : ''}, First #{@ticks_count} #{@tick_name.downcase}s"
+            :text => "#{data_src.span_code.humanize}#{data_src.weekly_mode? ? ' average' : ''}, First #{data_src.ticks_count} #{data_src.tick_name.downcase}s"
           },
           :legend => {
             :layout => 'vertical'

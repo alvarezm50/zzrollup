@@ -1,6 +1,15 @@
 module RollupData
   class CohortsDatasource < UniversalDatasource
+    include ActionView::Helpers::DateHelper
 
+    attr_accessor :cohort_intersection_params, :query_name_mask
+    attr_reader :distance, :ticks_count, :tick_name
+    
+    def initialize(opts = {})
+      @cohort_intersection_params = opts.delete(:cohort_intersection_params)
+      super(opts)
+      set_cohort_intersection_params(@cohort_intersection_params) if @cohort_intersection_params.is_a?(Hash)
+    end
 
     def chart_subtitle
       "#{@weekly_mode ? 'Weekly average' : @span_code.humanize}, #{distance_of_time_in_words(@period.first, @period.last)}"
@@ -91,6 +100,32 @@ module RollupData
         }
       end
       @chart_series
+    end
+
+    def set_cohort_intersection_params(opts = {})
+      if self.weekly_mode?
+        @ticks_count = opts[:weeks_count]
+        @tick_name = "Week"
+        @distance = @ticks_count.weeks
+        self.category_formatter = Proc.new do |cohort_num, week_start_date|
+            cohort_beginning = CohortManager.cohort_beginning_date(cohort_num)
+            week_begins = Date.parse(week_start_date)
+
+            week_num = (week_begins - cohort_beginning).abs.to_i/7
+            "#{@tick_name} #{week_num+1}"
+        end
+      else
+        @ticks_count = opts[:days_count]
+        @tick_name = "Day"
+        @distance = @ticks_count.days
+        self.category_formatter = Proc.new do |cohort_num, original_category|
+            cohort_beginning = CohortManager.cohort_beginning_date(cohort_num)
+            date = Date.parse(original_category)
+            day = date - cohort_beginning
+            "#{@tick_name} #{day}"
+        end
+      end
+      self.categories = (1..@ticks_count).map{|i| "#{@tick_name} #{i}"}
     end
 
 

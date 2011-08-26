@@ -202,11 +202,10 @@ class Chart::LikesController < HighchartsController
       :span => params[:span] || 1440,
       :colorize => true,
       :cumulative => false,
+      :emarginate => true,
       :period => (DateTime.civil(2011, 07, 14)..DateTime.now),
       :queries_to_fetch => %w(like.album.like like.photo.like like.user.like)
     )
-
-    trim_empty_edges!(data_src)
 
     respond_to do |wants|
       wants.xls do
@@ -260,6 +259,7 @@ class Chart::LikesController < HighchartsController
       :cumulative => false,
       :percent_view => true,
       :colorize => true,
+      :emarginate => true,
       :period => (DateTime.civil(2011, 07, 14)..DateTime.now),
       :queries_to_fetch => %w(like.album.like like.photo.like like.user.like albums.all photos.all),
       :series_calculations => [
@@ -268,8 +268,6 @@ class Chart::LikesController < HighchartsController
         {:name => 'Users', :op => :div, :series => %w(like.user.like albums.all), :type => :user}
       ]
     )
-
-    trim_empty_edges!(data_src)
     
     respond_to do |wants|
       wants.xls do
