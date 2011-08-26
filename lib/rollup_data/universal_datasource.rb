@@ -1,19 +1,46 @@
 module RollupData
-  class UniversalDatasource < CohortsDatasource
+  class UniversalDatasource
+    include ActionView::Helpers::DateHelper
+
     include Humanization
     include Colorization
     include RowCalculation
+    include Reporting
+
+    attr_accessor :query_name_mask, :period, :categories, :category_formatter, :percent_view
+    attr_reader :span, :span_code, :chart_series
 
     attr_accessor :whole_history, :queries_to_fetch, :series_calculations, :humanize_unknown_series, :cumulative, :colorize
 
 
     def initialize(opts = {})
+      #Defaults
       @humanize_unknown_series = true
       @cumulative = true
       @colorize = false
       self.span = RollupTasks::DAILY_REPORT_INTERVAL
-      super(opts)
+      #Setting attributes from opts
+      calc_now = opts.delete(:calculate_now) || false
+      opts.each {|param, val| self.send("#{param}=", val) }
+      calculate_chart if calc_now
     end
+
+    def span=(val)
+      @span = val.to_i
+      @span_code = RollupTasks.kind(@span)
+
+      @x_labels_format = case @span_code
+        when 'monthly' then '%b 1, %Y'
+        when 'daily', 'weekly' then '%Y-%m-%d'
+        else '%Y-%m-%d %H:%i'
+      end
+      @weekly_mode = (@span_code=='weekly')
+    end
+
+    def weekly_mode?
+      @weekly_mode
+    end
+
 
     def calculate_chart
       fetch_data!

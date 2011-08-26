@@ -1,31 +1,6 @@
 module RollupData
-  class CohortsDatasource
-    include ActionView::Helpers::DateHelper
+  class CohortsDatasource < UniversalDatasource
 
-    attr_accessor :query_name_mask, :period, :categories, :category_formatter, :percent_view
-    attr_reader :span, :span_code, :chart_series
-
-    def initialize(opts = {})
-      calc_now = opts.delete(:calculate_now) || false
-      opts.each {|param, val| self.send("#{param}=", val) }
-      calculate_chart if calc_now
-    end
-
-    def span=(val)
-      @span = val.to_i
-      @span_code = RollupTasks.kind(@span)
-
-      @x_labels_format = case @span_code
-        when 'monthly' then '%b 1, %Y'
-        when 'daily', 'weekly' then '%Y-%m-%d'
-        else '%Y-%m-%d %H:%i'
-      end
-      @weekly_mode = (@span_code=='weekly')
-    end
-
-    def weekly_mode?
-      @weekly_mode
-    end
 
     def chart_subtitle
       "#{@weekly_mode ? 'Weekly average' : @span_code.humanize}, #{distance_of_time_in_words(@period.first, @period.last)}"
@@ -36,49 +11,6 @@ module RollupData
       transform_data!
       make_chart_series!
     end
-
-    XLS_FORMAT = {
-      :series_names => Spreadsheet::Format.new(
-         :bold => true,
-         :bottom => true
-      ),
-      :categories => Spreadsheet::Format.new(
-         :bold => true,
-         :right => true,
-         :horizontal_align => :right
-      )
-    }
-
-    XLS_CELL_TYPE = {
-      :float => Spreadsheet::Format.new( :number_format => '0.00' ),
-      :percent => Spreadsheet::Format.new( :number_format => '0.00%' ),
-    }
-
-    def produce_xls(custom_series = nil)
-      workbook = Spreadsheet::Workbook.new
-      worksheet = workbook.create_worksheet(:name => 'Chart data')
-      0.upto(@categories.size) { |i| worksheet.column(i).width = 15 }
-      worksheet.row(0).default_format = XLS_FORMAT[:series_names]
-      worksheet.column(0).default_format = XLS_FORMAT[:categories]
-      worksheet.row(0).set_format(0, worksheet.default_format)
-
-      series = custom_series || @chart_series
-      series.each_with_index do |serie, serie_idx|
-        worksheet.row(0)[1+serie_idx] = serie[:name]
-      end
-      @categories.each_with_index do |cat, cat_idx|
-        worksheet.row(1+cat_idx)[0] = cat
-        series.each_with_index do |serie, serie_idx|
-          worksheet.row(1+cat_idx)[1+serie_idx] = serie[:data][cat_idx]
-          worksheet.row(1+cat_idx).set_format(1+serie_idx, XLS_CELL_TYPE[:percent]) if @percent_view
-        end
-      end
-
-      report_io = StringIO.new
-      workbook.write(report_io)
-      report_io.string
-    end
-
 
   protected
     def default_period
