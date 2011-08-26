@@ -1,6 +1,12 @@
 module RollupData
-  class DailyGrowthDatasource < TrendsDatasource
+  class DailyGrowthDatasource < UniversalDatasource
 
+    def calculate_chart
+      fetch_data!
+      @category_formatter ||= Proc.new {|original_category| original_category }
+      @categories ||= @rollup_data_rows.map{|row| row['report_date']}.uniq
+      make_chart_series!
+    end
 
   protected
     def default_period
