@@ -18,7 +18,10 @@ class Chart::TrendsController < HighchartsController
             :enabled => false
           },
           :title => {
-            :text => 'Daily Growth of Photos By Month'
+            :text => '# of Photos'
+          },
+          :subtitle => {
+            :text => 'Not Cumulative, Daily for First 30 Days'
           },
           :xAxis => {
             :categories => data_src.categories,
@@ -84,7 +87,7 @@ class Chart::TrendsController < HighchartsController
             :text => 'Average Photos per Album'
           },
           :subtitle => {
-            :text => 'Weekly'
+            :text => 'Cumulative, on a weekly basis'
           },
           :legend => {
             :enabled => false
@@ -141,7 +144,10 @@ class Chart::TrendsController < HighchartsController
             :enabled => false
           },
           :title => {
-            :text => 'Total Albums'
+            :text => 'Total # of Albums'
+          },
+          :subtitle => {
+            :text => 'Cumulative, on a weekly basis'
           },
           :legend => {
             :enabled => false
@@ -199,7 +205,10 @@ class Chart::TrendsController < HighchartsController
             :enabled => false
           },
           :title => {
-            :text => 'Total Photos'
+            :text => 'Total # of Photos'
+          },
+          :subtitle => {
+            :text => 'Cumulative, on a weekly basis'
           },
           :legend => {
             :enabled => false
@@ -268,7 +277,10 @@ class Chart::TrendsController < HighchartsController
             :categories => categories
           },
           :title => {
-            :text => 'Average Photos/Day per Month'
+            :text => 'Average Photos/Day'
+          },
+          :subtitle => {
+            :text => 'Cumulative, on a monthly basis'
           },
           :yAxis => {
             :labels => { :formatter => nil },
