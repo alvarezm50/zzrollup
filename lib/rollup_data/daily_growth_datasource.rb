@@ -19,7 +19,8 @@ module RollupData
       ]
       conditions = [
         RollupResult.public_sanitize_sql(:reported_at => @period),
-        RollupResult.public_sanitize_sql(["span = ? AND query_name = ?", @span, @query_name_mask])
+        RollupResult.public_sanitize_sql(:span => @span),
+        RollupResult.public_sanitize_sql(:query_name => @queries_to_fetch),
       ]
       group_by = [
         'report_date'

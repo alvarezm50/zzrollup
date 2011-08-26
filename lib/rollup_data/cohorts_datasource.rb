@@ -36,6 +36,10 @@ module RollupData
 
     def fetch_data!
       @period ||= default_period
+      
+      if !@queries_to_fetch && @query_name_mask
+        @queries_to_fetch = (1..CohortManager.cohort_current).to_a.map{|cohort_num| "#{@query_name_mask}.#{cohort_num}"  }
+      end
 
       fields_to_select = []
       conditions = []
@@ -58,9 +62,9 @@ module RollupData
 
       conditions << RollupResult.public_sanitize_sql(:reported_at => @period)
       conditions << RollupResult.public_sanitize_sql([
-        "cohort > 0 AND span = ? AND query_name LIKE ?",
-        !@weekly_mode ? @span : RollupTasks::DAILY_REPORT_INTERVAL, @query_name_mask
+        "cohort > 0 AND span = ?", !@weekly_mode ? @span : RollupTasks::DAILY_REPORT_INTERVAL
       ])
+      conditions << RollupResult.public_sanitize_sql(:query_name => @queries_to_fetch)
 
       #rollup_data_rows = RollupResult.select(fields_to_select.join(',')).group(!@weekly_mode ? :report_date : :weekyear).group(:cohort).where(:reported_at => @period).where("cohort > 0 AND span = ? AND query_name LIKE '#{query_name_mask}'", !@weekly_mode ? @span : RollupTasks::DAILY_REPORT_INTERVAL).order(:report_date)
       sql = <<-SQL

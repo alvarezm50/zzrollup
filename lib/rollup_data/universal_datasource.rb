@@ -72,7 +72,7 @@ module RollupData
       ]
       conditions = [
         RollupResult.public_sanitize_sql(:span => @real_span),
-        "query_name IN (#{@queries_to_fetch.map{|q| "'#{q}'" }.join(',')})",
+        RollupResult.public_sanitize_sql(:query_name => @queries_to_fetch),
         'sum_value > 0'
       ]
 

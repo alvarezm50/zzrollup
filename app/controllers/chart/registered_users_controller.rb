@@ -2,7 +2,7 @@ class Chart::RegisteredUsersController < HighchartsController
   
   def registered_users_cumulative
     data_src = RollupData::CohortsDatasource.new(
-      :query_name_mask => 'Cohort.users._',
+      :query_name_mask => 'Cohort.users',
       :span => params[:span] || 1440,
       :calculate_now => true
     )
@@ -75,7 +75,7 @@ class Chart::RegisteredUsersController < HighchartsController
     (1..CohortManager.cohort_current).to_a.each do |cohort|
       cohort_beginning = CohortManager.cohort_beginning_date(cohort)
       cohort_src.period = (cohort_beginning..cohort_src.distance.since(cohort_beginning))
-      cohort_src.query_name_mask = "Cohort.users.#{cohort}"
+      cohort_src.queries_to_fetch = ["Cohort.users.#{cohort}"]
       cohort_src.calculate_chart
       series << cohort_src.chart_series.first if cohort_src.chart_series.first
     end
@@ -137,7 +137,7 @@ class Chart::RegisteredUsersController < HighchartsController
     (2..CohortManager.cohort_current).each do |cohort| # starting from 2 fixes ticket #2516
       cohort_beginning = CohortManager.cohort_beginning_date(cohort)
       cohort_src.period = (cohort_beginning..cohort_src.ticks_count.days.since(cohort_beginning))
-      cohort_src.query_name_mask = "Cohort.users.#{cohort}"
+      cohort_src.queries_to_fetch = ["Cohort.users.#{cohort}"]
       cohort_src.calculate_chart
       series << cohort_src.chart_series.first if cohort_src.chart_series.first
     end

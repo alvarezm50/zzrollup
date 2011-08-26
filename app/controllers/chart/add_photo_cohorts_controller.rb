@@ -2,7 +2,7 @@ class Chart::AddPhotoCohortsController < HighchartsController
 
   def active_users_by_cohort #Charts 1
     data_src = RollupData::CohortsDatasource.new(
-      :query_name_mask => 'Cohort.photos_10._',
+      :query_name_mask => 'Cohort.photos_10',
       :span => params[:span] || 1440,
       :calculate_now => true
     )
@@ -67,12 +67,12 @@ class Chart::AddPhotoCohortsController < HighchartsController
 
   def active_users_percent_by_cohort #Charts 2
     users_src = RollupData::CohortsDatasource.new(
-      :query_name_mask => 'Cohort.users._',
+      :query_name_mask => 'Cohort.users',
       :span => params[:span] || 1440,
       :calculate_now => true, :percent_view => true
     )
     photos10_src = RollupData::CohortsDatasource.new(
-      :query_name_mask => 'Cohort.photos_10._',
+      :query_name_mask => 'Cohort.photos_10',
       :span => params[:span] || 1440,
       :categories => users_src.categories,
       :calculate_now => true
@@ -145,7 +145,7 @@ class Chart::AddPhotoCohortsController < HighchartsController
     (1..CohortManager.cohort_current).each do |cohort|
       cohort_beginning = CohortManager.cohort_beginning_date(cohort)
       cohort_src.period = (cohort_beginning..cohort_src.distance.since(cohort_beginning))
-      cohort_src.query_name_mask = "Cohort.photos_10.#{cohort}"
+      cohort_src.queries_to_fetch = ["Cohort.photos_10.#{cohort}"]
       cohort_src.calculate_chart
       series << cohort_src.chart_series.first if cohort_src.chart_series.first
     end
@@ -208,11 +208,11 @@ class Chart::AddPhotoCohortsController < HighchartsController
       cohort_beginning = CohortManager.cohort_beginning_date(cohort)
       data_src.period = (cohort_beginning..data_src.distance.since(cohort_beginning))
 
-      data_src.query_name_mask = "Cohort.users.#{cohort}"
+      data_src.queries_to_fetch = ["Cohort.users.#{cohort}"]
       data_src.calculate_chart
       users_series << data_src.chart_series.first if data_src.chart_series.first
       
-      data_src.query_name_mask = "Cohort.photos_10.#{cohort}"
+      data_src.queries_to_fetch = ["Cohort.photos_10.#{cohort}"]
       data_src.calculate_chart
       photos10_series << data_src.chart_series.first if data_src.chart_series.first
     end

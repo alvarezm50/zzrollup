@@ -1,7 +1,7 @@
 class Chart::TrendsController < HighchartsController
   
   def daily_growth
-    data_src = RollupData::DailyGrowthDatasource.new(:query_name_mask => 'Photos.all', :calculate_now => true)
+    data_src = RollupData::DailyGrowthDatasource.new(:queries_to_fetch => %w(Photos.all), :calculate_now => true)
     
     respond_to do |wants|
       wants.xls do
@@ -58,8 +58,8 @@ class Chart::TrendsController < HighchartsController
   end
   
   def photos_per_album_avg
-    photos_src = RollupData::TrendsDatasource.new(:query_name_mask => 'Photos.all', :calculate_now => true)
-    albums_src = RollupData::TrendsDatasource.new(:query_name_mask => 'Albums.all', :calculate_now => true)
+    photos_src = RollupData::TrendsDatasource.new(:queries_to_fetch => %w(Photos.all), :calculate_now => true)
+    albums_src = RollupData::TrendsDatasource.new(:queries_to_fetch => %w(Albums.all), :calculate_now => true)
     
     series = photos_src.chart_series.enum_with_index.map do |serie, i|
       data = serie[:data].enum_with_index.map do |val, idx|
@@ -127,7 +127,7 @@ class Chart::TrendsController < HighchartsController
   end
 
   def total_albums
-    albums_src = RollupData::TrendsDatasource.new(:query_name_mask => 'Albums.all', :calculate_now => true)
+    albums_src = RollupData::TrendsDatasource.new(:queries_to_fetch => %w(Albums.all), :calculate_now => true)
 
     respond_to do |wants|
       wants.xls do
@@ -188,7 +188,7 @@ class Chart::TrendsController < HighchartsController
 
 
   def total_photos
-    albums_src = RollupData::TrendsDatasource.new(:query_name_mask => 'Photos.all', :calculate_now => true)
+    albums_src = RollupData::TrendsDatasource.new(:queries_to_fetch => %w(Photos.all), :calculate_now => true)
 
     respond_to do |wants|
       wants.xls do
@@ -249,7 +249,7 @@ class Chart::TrendsController < HighchartsController
 
 
   def photos_per_day_monthly
-    data_src = RollupData::DailyGrowthDatasource.new(:query_name_mask => 'Photos.all', :calculate_now => true)
+    data_src = RollupData::DailyGrowthDatasource.new(:queries_to_fetch => %w(Photos.all), :calculate_now => true)
 
     categories = []
     values = []
