@@ -1,7 +1,7 @@
 class Chart::AddPhotoCohortsController < HighchartsController
 
   def active_users_by_cohort #Charts 1
-    data_src = CohortsDatasource.new(
+    data_src = RollupData::CohortsDatasource.new(
       :query_name_mask => 'Cohort.photos_10._',
       :span => params[:span] || 1440,
       :calculate_now => true
@@ -66,12 +66,12 @@ class Chart::AddPhotoCohortsController < HighchartsController
   end
 
   def active_users_percent_by_cohort #Charts 2
-    users_src = CohortsDatasource.new(
+    users_src = RollupData::CohortsDatasource.new(
       :query_name_mask => 'Cohort.users._',
       :span => params[:span] || 1440,
       :calculate_now => true, :percent_view => true
     )
-    photos10_src = CohortsDatasource.new(
+    photos10_src = RollupData::CohortsDatasource.new(
       :query_name_mask => 'Cohort.photos_10._',
       :span => params[:span] || 1440,
       :categories => users_src.categories,
@@ -83,7 +83,7 @@ class Chart::AddPhotoCohortsController < HighchartsController
         perc_val = (val.to_f / users_src.chart_series[cohort][:data][idx]) rescue nil
         (perc_val.nil? || perc_val.nan? || perc_val.infinite?) ? nil : perc_val
       end
-      {:name => serie[:name], :data => percent_serie_data, :color => CohortsDatasource.cohort_web_color(serie[:beginning_date])}
+      {:name => serie[:name], :data => percent_serie_data, :color => RollupData::CohortsDatasource.cohort_web_color(serie[:beginning_date])}
     end
 
     respond_to do |wants|
@@ -136,7 +136,7 @@ class Chart::AddPhotoCohortsController < HighchartsController
   end
 
   def cumulative_active_users_by_cohort
-    cohort_src = CohortsDatasource.new(:span => params[:span] || 1440)
+    cohort_src = RollupData::CohortsDatasource.new(:span => params[:span] || 1440)
     set_cohort_intersection_params(cohort_src, {:days_count => 60, :weeks_count => 10})
 
     series = []
@@ -195,7 +195,7 @@ class Chart::AddPhotoCohortsController < HighchartsController
   end
 
   def cumulative_active_users_by_cohort_percent
-    data_src = CohortsDatasource.new(:span => params[:span] || 1440, :percent_view => true)
+    data_src = RollupData::CohortsDatasource.new(:span => params[:span] || 1440, :percent_view => true)
     set_cohort_intersection_params(data_src, {:days_count => 60, :weeks_count => 10})
 
     users_series = []
@@ -219,7 +219,7 @@ class Chart::AddPhotoCohortsController < HighchartsController
         perc_val = (val.to_f / users_series[cohort][:data][idx]) rescue nil
         (perc_val.nil? || perc_val.nan? || perc_val.infinite?) ? nil : perc_val
       end
-      { :name => serie[:name], :data => percent_serie_data, :color => CohortsDatasource.cohort_web_color(serie[:beginning_date]) }
+      { :name => serie[:name], :data => percent_serie_data, :color => RollupData::CohortsDatasource.cohort_web_color(serie[:beginning_date]) }
     end
 
     respond_to do |wants|

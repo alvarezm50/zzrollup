@@ -1,7 +1,7 @@
 class Chart::RegisteredUsersController < HighchartsController
   
   def registered_users_cumulative
-    data_src = CohortsDatasource.new(
+    data_src = RollupData::CohortsDatasource.new(
       :query_name_mask => 'Cohort.users._',
       :span => params[:span] || 1440,
       :calculate_now => true
@@ -66,7 +66,7 @@ class Chart::RegisteredUsersController < HighchartsController
 
 
   def cumulative_registered_users_by_cohort #Charts 3
-    cohort_src = CohortsDatasource.new(:span => params[:span] || 1440)
+    cohort_src = RollupData::CohortsDatasource.new(:span => params[:span] || 1440)
     set_cohort_intersection_params(cohort_src, {:days_count => 31, :weeks_count => 6})
 
     series = []
@@ -126,7 +126,7 @@ class Chart::RegisteredUsersController < HighchartsController
   end
 
   def registered_users_by_cohort
-    cohort_src = CohortsDatasource.new(:span => params[:span] || 1440)
+    cohort_src = RollupData::CohortsDatasource.new(:span => params[:span] || 1440)
     set_cohort_intersection_params(cohort_src, {:days_count => 31, :weeks_count => 6})
 
     series = []
