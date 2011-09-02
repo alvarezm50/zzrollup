@@ -2,7 +2,7 @@ class Chart::EmailBreakdownController < HighchartsController
   before_filter :detect_entity
 
   def raw_stats
-    data_src = UniversalDatasource.new(
+    data_src =RollupData::UniversalDatasource.new(
       :cumulative => false,
       :whole_history => true,
       :humanize_unknown_series => false,
@@ -68,7 +68,7 @@ class Chart::EmailBreakdownController < HighchartsController
   end
 
   def full_stats
-    data_src = UniversalDatasource.new(
+    data_src =RollupData::UniversalDatasource.new(
       :whole_history => true,
       :cumulative => false,
       :queries_to_fetch => %W(email.#{@entity}.#{@grid_entity}.click	email.#{@entity}.send	email.#{@entity}.click	email.#{@entity}.open	email.#{@entity}.bounce),
@@ -142,7 +142,7 @@ class Chart::EmailBreakdownController < HighchartsController
 
 
   def link_breakdown
-    data_src = UniversalDatasource.new(
+    data_src =RollupData::UniversalDatasource.new(
       :whole_history => true,  #:period => (DateTime.civil(2011, 07, 20)..DateTime.now),
       :percent_view => true,
       :cumulative => false,

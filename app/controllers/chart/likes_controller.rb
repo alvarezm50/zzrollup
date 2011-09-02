@@ -1,7 +1,7 @@
 class Chart::LikesController < HighchartsController
 
   def photos_albums_trend
-    data_src = UniversalDatasource.new(
+    data_src =RollupData::UniversalDatasource.new(
       :calculate_now => true,
       :percent_view => true,
       :colorize => true,
@@ -73,7 +73,7 @@ class Chart::LikesController < HighchartsController
   end
 
   def likes_by_type
-    data_src = UniversalDatasource.new(
+    data_src =RollupData::UniversalDatasource.new(
       :calculate_now => true,
       :colorize => true,
       :period => (DateTime.civil(2011, 07, 14)..DateTime.now),
@@ -133,7 +133,7 @@ class Chart::LikesController < HighchartsController
   end
 
   def unlikes_by_category
-    data_src = UniversalDatasource.new(
+    data_src =RollupData::UniversalDatasource.new(
       :calculate_now => true,
       :colorize => true,
       :percent_view => true,
@@ -197,16 +197,15 @@ class Chart::LikesController < HighchartsController
   end
 
   def likes_by_type_trend
-    data_src = UniversalDatasource.new(
+    data_src =RollupData::UniversalDatasource.new(
       :calculate_now => true,
       :span => params[:span] || 1440,
       :colorize => true,
       :cumulative => false,
+      :emarginate => true,
       :period => (DateTime.civil(2011, 07, 14)..DateTime.now),
       :queries_to_fetch => %w(like.album.like like.photo.like like.user.like)
     )
-
-    trim_empty_edges!(data_src)
 
     respond_to do |wants|
       wants.xls do
@@ -254,12 +253,13 @@ class Chart::LikesController < HighchartsController
   end
 
   def likes_by_type_perc_trend
-    data_src = UniversalDatasource.new(
+    data_src =RollupData::UniversalDatasource.new(
       :calculate_now => true,
       :span => params[:span] || 1440,
       :cumulative => false,
       :percent_view => true,
       :colorize => true,
+      :emarginate => true,
       :period => (DateTime.civil(2011, 07, 14)..DateTime.now),
       :queries_to_fetch => %w(like.album.like like.photo.like like.user.like albums.all photos.all),
       :series_calculations => [
@@ -268,8 +268,6 @@ class Chart::LikesController < HighchartsController
         {:name => 'Users', :op => :div, :series => %w(like.user.like albums.all), :type => :user}
       ]
     )
-
-    trim_empty_edges!(data_src)
     
     respond_to do |wants|
       wants.xls do
@@ -319,7 +317,7 @@ class Chart::LikesController < HighchartsController
   end
 
   def unlikes_by_type_trend
-    data_src = UniversalDatasource.new(
+    data_src =RollupData::UniversalDatasource.new(
       :calculate_now => true,
       :span => params[:span] || 1440,
       :cumulative => true,

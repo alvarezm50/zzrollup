@@ -1,7 +1,7 @@
 class Chart::SharesController < HighchartsController
 
   def total_shared_perc
-    data_src = UniversalDatasource.new(
+    data_src =RollupData::UniversalDatasource.new(
       :calculate_now => true,
       :percent_view => true,
       :period => (DateTime.civil(2011, 07, 13)..DateTime.now),
@@ -75,7 +75,7 @@ class Chart::SharesController < HighchartsController
   end
 
   def total_shared
-    data_src = UniversalDatasource.new(
+    data_src =RollupData::UniversalDatasource.new(
       :calculate_now => true,
       :cumulative => params[:non_cumulative]!='true',
       :span => params[:span] || 1440,
@@ -147,7 +147,7 @@ class Chart::SharesController < HighchartsController
 
 
   def shares_by_type
-    data_src = UniversalDatasource.new(
+    data_src =RollupData::UniversalDatasource.new(
       :calculate_now => true,
       :colorize => true,
       :period => (DateTime.civil(2011, 07, 13)..DateTime.now),
@@ -210,7 +210,7 @@ class Chart::SharesController < HighchartsController
   end
 
   def shares_by_type_percent
-    data_src = UniversalDatasource.new(
+    data_src =RollupData::UniversalDatasource.new(
       :calculate_now => true,
       :percent_view => true,
       :colorize => true,
@@ -292,7 +292,7 @@ class Chart::SharesController < HighchartsController
       when 'albums' then 'album'
     end
 
-    data_src = UniversalDatasource.new(
+    data_src =RollupData::UniversalDatasource.new(
       :calculate_now => true,
       :percent_view => true,
       :period => (DateTime.civil(2011, 07, 13)..DateTime.now),

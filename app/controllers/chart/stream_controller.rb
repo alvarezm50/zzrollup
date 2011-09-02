@@ -1,6 +1,6 @@
 class Chart::StreamController < ApplicationController
   def totals #num_albums
-    data_src = UniversalDatasource.new(
+    data_src = RollupData::UniversalDatasource.new(
       :calculate_now => true,
       :span => params[:span] || 1440,
       :cumulative => params[:non_cumulative]!='true',
@@ -61,7 +61,7 @@ class Chart::StreamController < ApplicationController
   end
 
   def percent_totals
-    data_src = UniversalDatasource.new(
+    data_src =RollupData::UniversalDatasource.new(
       :calculate_now => true,
       :span => params[:span] || 1440,
       :cumulative => params[:non_cumulative]!='true',
@@ -124,7 +124,7 @@ class Chart::StreamController < ApplicationController
   end
 
   def percent_albums_by_type
-    data_src = UniversalDatasource.new(
+    data_src =RollupData::UniversalDatasource.new(
       :calculate_now => true,
       :period => (DateTime.civil(2011, 07, 13)..DateTime.now),
       :queries_to_fetch => %w(album.stream.email album.stream.facebook album.stream.twitter),

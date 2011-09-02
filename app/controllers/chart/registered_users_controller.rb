@@ -1,8 +1,8 @@
 class Chart::RegisteredUsersController < HighchartsController
   
   def registered_users_cumulative
-    data_src = CohortsDatasource.new(
-      :query_name_mask => 'Cohort.users._',
+    data_src = RollupData::CohortsDatasource.new(
+      :query_name_mask => 'Cohort.users',
       :span => params[:span] || 1440,
       :calculate_now => true
     )
@@ -66,14 +66,16 @@ class Chart::RegisteredUsersController < HighchartsController
 
 
   def cumulative_registered_users_by_cohort #Charts 3
-    cohort_src = CohortsDatasource.new(:span => params[:span] || 1440)
-    set_cohort_intersection_params(cohort_src, {:days_count => 31, :weeks_count => 6})
+    cohort_src = RollupData::CohortsDatasource.new(
+      :span => params[:span] || 1440,
+      :cohort_intersection_params => {:days_count => 31, :weeks_count => 6}
+    )
 
     series = []
     (1..CohortManager.cohort_current).to_a.each do |cohort|
       cohort_beginning = CohortManager.cohort_beginning_date(cohort)
-      cohort_src.period = (cohort_beginning..@distance.since(cohort_beginning))
-      cohort_src.query_name_mask = "Cohort.users.#{cohort}"
+      cohort_src.period = (cohort_beginning..cohort_src.distance.since(cohort_beginning))
+      cohort_src.queries_to_fetch = ["Cohort.users.#{cohort}"]
       cohort_src.calculate_chart
       series << cohort_src.chart_series.first if cohort_src.chart_series.first
     end
@@ -96,7 +98,7 @@ class Chart::RegisteredUsersController < HighchartsController
             :text => 'Cumulative Registered Users by Cohort'
           },
           :subtitle => {
-            :text => "#{cohort_src.span_code.humanize}#{cohort_src.weekly_mode? ? ' average' : ''}, First #{@ticks_count} #{@tick_name.downcase}s"
+            :text => "#{cohort_src.span_code.humanize}#{cohort_src.weekly_mode? ? ' average' : ''}, First #{cohort_src.ticks_count} #{cohort_src.tick_name.downcase}s"
           },
           :legend => {
             :layout => 'vertical'
@@ -126,14 +128,16 @@ class Chart::RegisteredUsersController < HighchartsController
   end
 
   def registered_users_by_cohort
-    cohort_src = CohortsDatasource.new(:span => params[:span] || 1440)
-    set_cohort_intersection_params(cohort_src, {:days_count => 31, :weeks_count => 6})
+    cohort_src = RollupData::CohortsDatasource.new(
+      :span => params[:span] || 1440,
+      :cohort_intersection_params => {:days_count => 31, :weeks_count => 6}
+    )
 
     series = []
     (2..CohortManager.cohort_current).each do |cohort| # starting from 2 fixes ticket #2516
       cohort_beginning = CohortManager.cohort_beginning_date(cohort)
-      cohort_src.period = (cohort_beginning..@ticks_count.days.since(cohort_beginning))
-      cohort_src.query_name_mask = "Cohort.users.#{cohort}"
+      cohort_src.period = (cohort_beginning..cohort_src.ticks_count.days.since(cohort_beginning))
+      cohort_src.queries_to_fetch = ["Cohort.users.#{cohort}"]
       cohort_src.calculate_chart
       series << cohort_src.chart_series.first if cohort_src.chart_series.first
     end
@@ -166,7 +170,7 @@ class Chart::RegisteredUsersController < HighchartsController
             :text => 'Registered Users by Cohort'
           },
           :subtitle => {
-            :text => "#{cohort_src.span_code.humanize}#{cohort_src.weekly_mode? ? ' average' : ''}, First #{@ticks_count} #{@tick_name.downcase}s"
+            :text => "#{cohort_src.span_code.humanize}#{cohort_src.weekly_mode? ? ' average' : ''}, First #{cohort_src.ticks_count} #{cohort_src.tick_name.downcase}s"
           },
           :legend => {
             :layout => 'vertical'
