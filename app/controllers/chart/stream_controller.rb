@@ -17,13 +17,13 @@ class Chart::StreamController < ApplicationController
           :series => data_src.chart_series,
           :chart => {
             :renderTo => '',
-            :defaultSeriesType => 'column'
+            :defaultSeriesType => 'line'
           },
           :credits => {
             :enabled => false
           },
           :title => {
-            :text => "# of Albums Streamed"
+            :text => "# of Albums Streamed (Email/FB/Twitter)"
           },
           :subtitle => {
             :text => data_src.chart_subtitle
@@ -49,11 +49,6 @@ class Chart::StreamController < ApplicationController
             :min => 0,
             :labels => {:formatter => nil}
           },
-          :plotOptions => {
-            :column => {
-              :stacking => 'normal'
-            }
-          },
           :tooltip => { :formatter => nil }
         }
       end
@@ -68,8 +63,9 @@ class Chart::StreamController < ApplicationController
       :period => (DateTime.civil(2011, 07, 13)..DateTime.now),
       :queries_to_fetch => %w(album.stream.email album.stream.facebook album.stream.twitter albums.all),
       :series_calculations => [
-        {:name => 'total', :op => :sum, :series => %w(album.stream.email album.stream.facebook album.stream.twitter)},
-        {:name => 'trend', :op => :div, :series => %w(total albums.all)}
+        {:name => 'Email', :op => :div, :series => %w(album.stream.email albums.all)},
+        {:name => 'Facebook', :op => :div, :series => %w(album.stream.facebook albums.all)},
+        {:name => 'Twitter', :op => :div, :series => %w(album.stream.twitter albums.all)}
       ]
     )
 
@@ -87,11 +83,8 @@ class Chart::StreamController < ApplicationController
           :credits => {
             :enabled => false
           },
-          :legend => {
-            :enabled => false
-          },
           :title => {
-            :text => '% of Albums Streamed'
+            :text => '% of Albums Streamed (Email/FB/Twitter)'
           },
           :subtitle => {
             :text => data_src.chart_subtitle
@@ -151,10 +144,10 @@ class Chart::StreamController < ApplicationController
             :enabled => false
           },
           :title => {
-            :text => 'Total Streams'
+            :text => '% of Email, FB and Twitter Streams'
           },
           :subtitle => {
-            :text => 'by Category'
+            :text => data_src.chart_subtitle
           },
           :xAxis => {
             :categories => data_src.categories,
