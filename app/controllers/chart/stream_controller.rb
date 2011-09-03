@@ -1,4 +1,4 @@
-class Chart::StreamController < ApplicationController
+class Chart::StreamController < HighchartsController
   def totals #num_albums
     data_src = RollupData::UniversalDatasource.new(
       :calculate_now => true,
