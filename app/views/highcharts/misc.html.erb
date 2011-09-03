@@ -1,0 +1,70 @@
+<%=  javascript_include_tag 'highcharts', 'chart_loading' %>
+
+<%= render :partial => 'nav' %>
+
+<table>
+  <tr valign="top">
+
+  <td>
+  <div id="misc-1" class="chart-group">
+    <div>
+      <div id="noncum_photos_number_daily" class="normal-chart-container"/>
+    </div>
+    <div>
+      <div id="noncum_photos_number_weekly" class="normal-chart-container"/>
+    </div>
+    <div>
+      <div id="cum_photos_number_daily" class="normal-chart-container"/>
+    </div>
+  </div>
+  </td>
+
+  <td>
+  <div id="misc-2" class="chart-group">
+    <div>
+      <div id="noncum_photos_percent_daily" class="normal-chart-container"/>
+    </div>
+    <div>
+      <div id="noncum_photos_percent_weekly" class="normal-chart-container"/>
+    </div>
+    <div>
+      <div id="cum_photos_percent_daily" class="normal-chart-container"/>
+    </div>
+  </div>
+  </td>
+
+
+  </tr>
+</table>
+
+
+<script type="text/javascript">
+
+  var all_charts = {
+    noncum_photos_number_daily: {
+      chart: null,
+      url: 'misc/totals.json?span=1440&non_cumulative=true'
+    },
+    noncum_photos_number_weekly: {
+      chart: null,
+      url: 'misc/totals.json?span=10080&non_cumulative=true'
+    },
+    cum_photos_number_daily: {
+      chart: null,
+      url: 'misc/totals.json?span=1440'
+    },
+    noncum_photos_percent_daily: {
+      chart: null,
+      url: 'misc/part_of_total.json?span=1440&non_cumulative=true'
+    },
+    noncum_photos_percent_weekly: {
+      chart: null,
+      url: 'misc/part_of_total.json?span=10080&non_cumulative=true'
+    },
+    cum_photos_percent_daily: {
+      chart: null,
+      url: 'misc/part_of_total.json?span=1440'
+    }};
+
+</script>
+
