@@ -271,7 +271,7 @@ class Chart::LikesController < HighchartsController
     
     respond_to do |wants|
       wants.xls do
-        send_xls()
+        send_xls(data_src)
       end
       wants.json do
         render :json => {
