@@ -1,7 +1,11 @@
 class Chart::TrendsController < HighchartsController
   
   def daily_growth
-    data_src = RollupData::DailyGrowthDatasource.new(:queries_to_fetch => %w(Photos.all), :calculate_now => true)
+    @entity = case params[:entity]
+      when 'photos' then 'photos'
+      when 'albums' then 'albums'
+    end
+    data_src = RollupData::DailyGrowthDatasource.new(:queries_to_fetch => %W(#{@entity}.all), :calculate_now => true)
     
     respond_to do |wants|
       wants.xls do
@@ -18,10 +22,10 @@ class Chart::TrendsController < HighchartsController
             :enabled => false
           },
           :title => {
-            :text => '# of Photos'
+            :text => "# of #{@entity.humanize}"
           },
           :subtitle => {
-            :text => 'Not Cumulative, Daily for First 30 Days'
+            :text => 'Non-cumulative, Daily for First 30 Days'
           },
           :xAxis => {
             :categories => data_src.categories,
@@ -119,7 +123,8 @@ class Chart::TrendsController < HighchartsController
       when 'albums' then 'albums'
     end
     albums_src = RollupData::UniversalDatasource.new(
-      :span => 10080,
+      :span => params[:span],
+      :cumulative => params[:non_cumulative]!='true',
       :queries_to_fetch => %W(#{@entity}.all),
       :calculate_now => true
     )

@@ -8,13 +8,16 @@
   <td>
   <div id="trends-1" class="chart-group">
     <div>
-      <div id="daily_growth" class="normal-chart-container"/>
+      <div id="noncum_photos_number_daily" class="normal-chart-container"/>
+    </div>
+    <div>
+      <div id="total_photos" class="normal-chart-container"/>
+    </div>
+    <div>
+      <div id="noncum_albums_number_daily" class="normal-chart-container"/>
     </div>
     <div>
       <div id="photos_per_album" class="normal-chart-container"/>
-    </div>
-    <div>
-      <div id="cum_photos_per_day_monthly" class="normal-chart-container"/>
     </div>
   </div>
   </td>
@@ -22,10 +25,16 @@
   <td>
   <div id="trends-2" class="chart-group">
     <div>
-      <div id="total_albums" class="normal-chart-container"/>
+      <div id="daily_growth_photos" class="normal-chart-container"/>
     </div>
     <div>
-      <div id="total_photos" class="normal-chart-container"/>
+      <div id="cum_photos_per_day_monthly" class="normal-chart-container"/>
+    </div>
+    <div>
+      <div id="daily_growth_albums" class="normal-chart-container"/>
+    </div>
+    <div>
+      <div id="total_albums" class="normal-chart-container"/>
     </div>
   </div>
   </td>
@@ -38,9 +47,13 @@
 <script type="text/javascript">
 
   var all_charts = {
-    daily_growth: {
+    noncum_photos_number_daily: {
       chart: null,
-      url: 'trends/daily_growth.json'
+      url: 'trends/totals.json?entity=photos&span=1440&non_cumulative=true'
+    },
+    daily_growth_photos: {
+      chart: null,
+      url: 'trends/daily_growth.json?entity=photos'
     },
     photos_per_album: {
       chart: null,
@@ -48,11 +61,19 @@
     },
     total_albums: {
       chart: null,
-      url: 'trends/totals.json?entity=albums'
+      url: 'trends/totals.json?entity=albums&span=10080'
+    },
+    noncum_albums_number_daily: {
+      chart: null,
+      url: 'trends/totals.json?entity=albums&span=1440&non_cumulative=true'
     },
     total_photos: {
       chart: null,
-      url: 'trends/totals.json?entity=photos'
+      url: 'trends/totals.json?entity=photos&span=10080'
+    },
+    daily_growth_albums: {
+      chart: null,
+      url: 'trends/daily_growth.json?entity=albums'
     },
     cum_photos_per_day_monthly: {
       chart: null,
