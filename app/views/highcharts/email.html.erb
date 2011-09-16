@@ -139,6 +139,20 @@
     </div>
     </td>
 
+    <td>
+    <div id="commentz" class="chart-group">
+      <h2>Photo Comment</h2><br/>
+      <div>
+        <div id="comments_raw_statistics" class="normal-chart-container"/>
+      </div>
+      <div>
+        <div id="comments_full_perc_statistics" class="normal-chart-container"/>
+      </div>
+      <div>
+        <div id="comments_link_perc_breakdown" class="normal-chart-container"/>
+      </div>
+    </div>
+    </td>
   </tr>
 </table>
 
@@ -261,6 +275,19 @@
     welcome_link_perc_breakdown: {
       chart: null,
       url: 'email_breakdown/link_breakdown.json?entity=welcome_email'
+    },
+
+    comments_raw_statistics: {
+      chart: null,
+      url: 'email_breakdown/raw_stats.json?entity=photo_comment'
+    },
+    comments_full_perc_statistics: {
+      chart: null,
+      url: 'email_breakdown/full_stats.json?entity=photo_comment'
+    },
+    comments_link_perc_breakdown: {
+      chart: null,
+      url: 'email_breakdown/link_breakdown.json?entity=photo_comment'
     }
   };
 

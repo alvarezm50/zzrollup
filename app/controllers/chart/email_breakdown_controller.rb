@@ -226,16 +226,19 @@ protected
       when 'photo_shared' then 'photoshared'
       when 'photos_ready' then 'photosready'
       when 'welcome_email' then 'welcome'
+      #email.photocomment.album_photo_url_with_comments.click
+      when 'photo_comment' then 'photocomment'
     end
     @grid_entity = case @entity
       when 'albumshared', 'likealbum', 'contributorinvite', 'welcome' then 'album_grid_url'
       when 'photoliked', 'photoshared' then 'album_photo_url'
       when 'userliked' then 'like_user_url'
       when 'albumsharedlike', 'photosready' then 'album_activities_url'
+      when 'photocomment' then 'album_photo_url_with_comments'
     end
   end
 
-  def add_optional_trends(datasource)
+  def add_optional_trends(datasource) 
     if %w(likealbum photoliked userliked welcome).include?(@entity)
       if self.action_name=='link_breakdown'
         datasource.queries_to_fetch << "email.#{@entity}.user_homepage_url.click"
