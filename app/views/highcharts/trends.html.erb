@@ -8,13 +8,10 @@
   <td>
   <div id="trends-1" class="chart-group">
     <div>
-      <div id="noncum_photos_number_daily" class="normal-chart-container"/>
+      <div id="noncum_photos_albums_number_daily" class="normal-chart-container"/>
     </div>
     <div>
       <div id="total_photos" class="normal-chart-container"/>
-    </div>
-    <div>
-      <div id="noncum_albums_number_daily" class="normal-chart-container"/>
     </div>
     <div>
       <div id="photos_per_album" class="normal-chart-container"/>
@@ -33,9 +30,6 @@
     <div>
       <div id="daily_growth_albums" class="normal-chart-container"/>
     </div>
-    <div>
-      <div id="total_albums" class="normal-chart-container"/>
-    </div>
   </div>
   </td>
 
@@ -47,9 +41,9 @@
 <script type="text/javascript">
 
   var all_charts = {
-    noncum_photos_number_daily: {
+    noncum_photos_albums_number_daily: {
       chart: null,
-      url: 'trends/totals.json?entity=photos&span=1440&non_cumulative=true'
+      url: 'trends/totals.json?span=1440&non_cumulative=true'
     },
     daily_growth_photos: {
       chart: null,
@@ -58,14 +52,6 @@
     photos_per_album: {
       chart: null,
       url: 'trends/photos_per_album_avg.json'
-    },
-    total_albums: {
-      chart: null,
-      url: 'trends/totals.json?entity=albums&span=10080'
-    },
-    noncum_albums_number_daily: {
-      chart: null,
-      url: 'trends/totals.json?entity=albums&span=1440&non_cumulative=true'
     },
     total_photos: {
       chart: null,

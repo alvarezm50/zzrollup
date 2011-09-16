@@ -2,6 +2,8 @@ module RollupData
   module Humanization
 
     HUMAN_QUERY_NAMES = {
+      'photos.all' => 'Photos',
+      'albums.all' => 'Albums',
       #Photo sources (Photos.source)
       'photos.source.flickr' => 'Flickr',
       'photos.source.facebook' => 'Facebook',

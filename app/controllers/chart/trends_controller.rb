@@ -42,7 +42,7 @@ class Chart::TrendsController < HighchartsController
           },
           :yAxis => {
             :title => {
-              :text => 'Number of Photos'
+              :text => "Number of #{@entity.humanize}"
             },
           }
         }
@@ -118,14 +118,11 @@ class Chart::TrendsController < HighchartsController
   end
 
   def totals
-    @entity = case params[:entity]
-      when 'photos' then 'photos'
-      when 'albums' then 'albums'
-    end
     albums_src = RollupData::UniversalDatasource.new(
+      :period => (DateTime.civil(2011, 5, 1)..DateTime.now),
       :span => params[:span],
       :cumulative => params[:non_cumulative]!='true',
-      :queries_to_fetch => %W(#{@entity}.all),
+      :queries_to_fetch => %W(photos.all albums.all),
       :calculate_now => true
     )
 
@@ -144,13 +141,10 @@ class Chart::TrendsController < HighchartsController
             :enabled => false
           },
           :title => {
-            :text => "Total # of #{@entity.humanize}"
+            :text => "# of Photos and Albums"
           },
           :subtitle => {
             :text => albums_src.chart_subtitle
-          },
-          :legend => {
-            :enabled => false
           },
           :xAxis => {
             :categories => albums_src.categories,
@@ -162,12 +156,13 @@ class Chart::TrendsController < HighchartsController
               :rotation => -90,
               :align => 'right',
               :y => 3,
-              :x => 4
+              :x => 4,
+              :step => (albums_src.categories.size/30.0).ceil
             }
           },
           :yAxis => {
             :title => {
-              :text => "Number of #{@entity.humanize}"
+              :text => "Number of Photos and Albums"
             },
           },
           :plotOptions => {
