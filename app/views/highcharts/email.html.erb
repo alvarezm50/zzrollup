@@ -3,293 +3,40 @@
 <%= render :partial => 'nav' %>
 
 <table>
-  <tr valign="top">
-    <td>
-    <div id="albumshare" class="chart-group">
-      <h2>Album Shared</h2><br/>
-      <div>
-        <div id="albumshare_raw_statistics" class="normal-chart-container"/>
-      </div>
-      <div>
-        <div id="albumshare_full_perc_statistics" class="normal-chart-container"/>
-      </div>
-      <div>
-        <div id="albumshare_link_perc_breakdown" class="normal-chart-container"/>
-      </div>
-    </div>
-    </td>
-
-    <td>
-    <div id="albumlike" class="chart-group">
-      <h2>Album Liked</h2><br/>
-      <div>
-        <div id="albumlike_raw_statistics" class="normal-chart-container"/>
-      </div>
-      <div>
-        <div id="albumlike_full_perc_statistics" class="normal-chart-container"/>
-      </div>
-      <div>
-        <div id="albumlike_link_perc_breakdown" class="normal-chart-container"/>
-      </div>
-    </div>
-    </td>
-
-    <td>
-    <div id="photolike" class="chart-group">
-      <h2>Photo Liked</h2><br/>
-      <div>
-        <div id="photolike_raw_statistics" class="normal-chart-container"/>
-      </div>
-      <div>
-        <div id="photolike_full_perc_statistics" class="normal-chart-container"/>
-      </div>
-      <div>
-        <div id="photolike_link_perc_breakdown" class="normal-chart-container"/>
-      </div>
-    </div>
-    </td>
-
-    <td>
-    <div id="userlike" class="chart-group">
-      <h2>User Liked</h2><br/>
-      <div>
-        <div id="userlike_raw_statistics" class="normal-chart-container"/>
-      </div>
-      <div>
-        <div id="userlike_full_perc_statistics" class="normal-chart-container"/>
-      </div>
-      <div>
-        <div id="userlike_link_perc_breakdown" class="normal-chart-container"/>
-      </div>
-    </div>
-    </td>
-
-    <td>
-    <div id="albumupdate" class="chart-group">
-      <h2>Album Updated (Album Shared Like)</h2><br/>
-      <div>
-        <div id="albumupdate_raw_statistics" class="normal-chart-container"/>
-      </div>
-      <div>
-        <div id="albumupdate_full_perc_statistics" class="normal-chart-container"/>
-      </div>
-      <div>
-        <div id="albumupdate_link_perc_breakdown" class="normal-chart-container"/>
-      </div>
-    </div>
-    </td>
-
-    <td>
-    <div id="contribinvite" class="chart-group">
-      <h2>Contributor Invite</h2><br/>
-      <div>
-        <div id="contribinvite_raw_statistics" class="normal-chart-container"/>
-      </div>
-      <div>
-        <div id="contribinvite_full_perc_statistics" class="normal-chart-container"/>
-      </div>
-      <div>
-        <div id="contribinvite_link_perc_breakdown" class="normal-chart-container"/>
-      </div>
-    </div>
-    </td>
-
-    <td>
-    <div id="photoshare" class="chart-group">
-      <h2>Photo Shared</h2><br/>
-      <div>
-        <div id="photoshare_raw_statistics" class="normal-chart-container"/>
-      </div>
-      <div>
-        <div id="photoshare_full_perc_statistics" class="normal-chart-container"/>
-      </div>
-      <div>
-        <div id="photoshare_link_perc_breakdown" class="normal-chart-container"/>
-      </div>
-    </div>
-    </td>
-
-    <td>
-    <div id="photoready" class="chart-group">
-      <h2>Photos Ready</h2><br/>
-      <div>
-        <div id="photoready_raw_statistics" class="normal-chart-container"/>
-      </div>
-      <div>
-        <div id="photoready_full_perc_statistics" class="normal-chart-container"/>
-      </div>
-      <div>
-        <div id="photoready_link_perc_breakdown" class="normal-chart-container"/>
-      </div>
-    </div>
-    </td>
-
-    <td>
-    <div id="welcome" class="chart-group">
-      <h2>Welcome Email</h2><br/>
-      <div>
-        <div id="welcome_raw_statistics" class="normal-chart-container"/>
-      </div>
-      <div>
-        <div id="welcome_full_perc_statistics" class="normal-chart-container"/>
-      </div>
-      <div>
-        <div id="welcome_link_perc_breakdown" class="normal-chart-container"/>
-      </div>
-    </div>
-    </td>
-
-    <td>
-    <div id="commentz" class="chart-group">
-      <h2>Photo Comment</h2><br/>
-      <div>
-        <div id="comments_raw_statistics" class="normal-chart-container"/>
-      </div>
-      <div>
-        <div id="comments_full_perc_statistics" class="normal-chart-container"/>
-      </div>
-      <div>
-        <div id="comments_link_perc_breakdown" class="normal-chart-container"/>
-      </div>
-    </div>
-    </td>
-  </tr>
+  <tr valign="top" id="charts-row"></tr>
 </table>
 
 
 <script type="text/javascript">
 
-  var all_charts = {
-    albumshare_raw_statistics: {
-      chart: null,
-      url: 'email_breakdown/raw_stats.json?entity=album_share'
-    },
-    albumshare_full_perc_statistics: {
-      chart: null,
-      url: 'email_breakdown/full_stats.json?entity=album_share'
-    },
-    albumshare_link_perc_breakdown: {
-      chart: null,
-      url: 'email_breakdown/link_breakdown.json?entity=album_share'
-    },
-
-    albumlike_raw_statistics: {
-      chart: null,
-      url: 'email_breakdown/raw_stats.json?entity=album_like'
-    },
-    albumlike_full_perc_statistics: {
-      chart: null,
-      url: 'email_breakdown/full_stats.json?entity=album_like'
-    },
-    albumlike_link_perc_breakdown: {
-      chart: null,
-      url: 'email_breakdown/link_breakdown.json?entity=album_like'
-    },
-
-    photolike_raw_statistics: {
-      chart: null,
-      url: 'email_breakdown/raw_stats.json?entity=photo_like'
-    },
-    photolike_full_perc_statistics: {
-      chart: null,
-      url: 'email_breakdown/full_stats.json?entity=photo_like'
-    },
-    photolike_link_perc_breakdown: {
-      chart: null,
-      url: 'email_breakdown/link_breakdown.json?entity=photo_like'
-    },
-
-    userlike_raw_statistics: {
-      chart: null,
-      url: 'email_breakdown/raw_stats.json?entity=user_like'
-    },
-    userlike_full_perc_statistics: {
-      chart: null,
-      url: 'email_breakdown/full_stats.json?entity=user_like'
-    },
-    userlike_link_perc_breakdown: {
-      chart: null,
-      url: 'email_breakdown/link_breakdown.json?entity=user_like'
-    },
-
-    albumupdate_raw_statistics: {
-      chart: null,
-      url: 'email_breakdown/raw_stats.json?entity=album_updated'
-    },
-    albumupdate_full_perc_statistics: {
-      chart: null,
-      url: 'email_breakdown/full_stats.json?entity=album_updated'
-    },
-    albumupdate_link_perc_breakdown: {
-      chart: null,
-      url: 'email_breakdown/link_breakdown.json?entity=album_updated'
-    },
-
-    contribinvite_raw_statistics: {
-      chart: null,
-      url: 'email_breakdown/raw_stats.json?entity=contributor_invite'
-    },
-    contribinvite_full_perc_statistics: {
-      chart: null,
-      url: 'email_breakdown/full_stats.json?entity=contributor_invite'
-    },
-    contribinvite_link_perc_breakdown: {
-      chart: null,
-      url: 'email_breakdown/link_breakdown.json?entity=contributor_invite'
-    },
-
-    photoshare_raw_statistics: {
-      chart: null,
-      url: 'email_breakdown/raw_stats.json?entity=photo_shared'
-    },
-    photoshare_full_perc_statistics: {
-      chart: null,
-      url: 'email_breakdown/full_stats.json?entity=photo_shared'
-    },
-    photoshare_link_perc_breakdown: {
-      chart: null,
-      url: 'email_breakdown/link_breakdown.json?entity=photo_shared'
-    },
-
-    photoready_raw_statistics: {
-      chart: null,
-      url: 'email_breakdown/raw_stats.json?entity=photos_ready'
-    },
-    photoready_full_perc_statistics: {
-      chart: null,
-      url: 'email_breakdown/full_stats.json?entity=photos_ready'
-    },
-    photoready_link_perc_breakdown: {
-      chart: null,
-      url: 'email_breakdown/link_breakdown.json?entity=photos_ready'
-    },
-
-    welcome_raw_statistics: {
-      chart: null,
-      url: 'email_breakdown/raw_stats.json?entity=welcome_email'
-    },
-    welcome_full_perc_statistics: {
-      chart: null,
-      url: 'email_breakdown/full_stats.json?entity=welcome_email'
-    },
-    welcome_link_perc_breakdown: {
-      chart: null,
-      url: 'email_breakdown/link_breakdown.json?entity=welcome_email'
-    },
-
-    comments_raw_statistics: {
-      chart: null,
-      url: 'email_breakdown/raw_stats.json?entity=photo_comment'
-    },
-    comments_full_perc_statistics: {
-      chart: null,
-      url: 'email_breakdown/full_stats.json?entity=photo_comment'
-    },
-    comments_link_perc_breakdown: {
-      chart: null,
-      url: 'email_breakdown/link_breakdown.json?entity=photo_comment'
-    }
+  var email_types = {
+    'albumshared': 'Album Shared',
+    'likealbum': 'Album Liked',
+    'photoliked': 'Photo Liked',
+    'userliked': 'User Liked',
+    'albumsharedlike': 'Album Updated (Album Shared Like)',
+    'contributorinvite': 'Contributor Invite',
+    'photoshared': 'Photo Shared',
+    'photosready': 'Photos Ready',
+    'welcome': 'Welcome Email',
+    'photocomment': 'Photo Comment'
   };
+
+  var all_charts = {};
+
+  $.each(email_types, function(email_type, title){
+    var new_cell_html = "<td><div id=\""+email_type+"-charts\" class=\"chart-group\">";
+    new_cell_html += "<h2>"+title+"</h2><br/>";
+    new_cell_html += "<div><div id=\""+email_type+"_raw_statistics\" class=\"normal-chart-container\"/></div>";
+    new_cell_html += "<div><div id=\""+email_type+"_full_perc_statistics\" class=\"normal-chart-container\"/></div>";
+    new_cell_html += "<div><div id=\""+email_type+"_link_perc_breakdown\" class=\"normal-chart-container\"/></div>";
+    new_cell_html += "</div></td>";
+    $(new_cell_html).appendTo($("#charts-row"));
+
+    all_charts[email_type+"_raw_statistics"] = {chart: null, url: 'email_breakdown/raw_stats.json?email_type='+email_type}
+    all_charts[email_type+"_full_perc_statistics"] = {chart: null, url: 'email_breakdown/full_stats.json?email_type='+email_type}
+    all_charts[email_type+"_link_perc_breakdown"] = {chart: null, url: 'email_breakdown/link_breakdown.json?email_type='+email_type}
+  });
 
 </script>
 
