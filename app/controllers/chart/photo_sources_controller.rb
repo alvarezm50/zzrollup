@@ -1,13 +1,14 @@
 class Chart::PhotoSourcesController < HighchartsController
+  PHOTO_SERVICES = %w(email facebook flickr instagram kodak photobucket picasaweb shutterfly smugmug dropbox zangzing fs.osx iphoto.osx picasa.osx fs.win picasa.win simple.osx simple.win)
 
   def overall_categories
     data_src =RollupData::UniversalDatasource.new(
       :calculate_now => true,
       :percent_view => true,
       :whole_history => true,
-      :queries_to_fetch => %w(email facebook flickr instagram kodak photobucket picasaweb shutterfly smugmug zangzing fs.osx iphoto.osx picasa.osx fs.win picasa.win simple.osx simple.win).map{|q| "Photos.source.#{q}"},
+      :queries_to_fetch => PHOTO_SERVICES.map{|q| "Photos.source.#{q}"},
       :series_calculations => [
-        {:name => 'websites', :op => :sum, :series => %w(facebook flickr instagram kodak photobucket picasaweb shutterfly	smugmug	zangzing).map{|q| "Photos.source.#{q}"}},
+        {:name => 'websites', :op => :sum, :series => %w(facebook flickr instagram kodak photobucket picasaweb shutterfly	smugmug dropbox	zangzing).map{|q| "Photos.source.#{q}"}},
         {:name => 'agent', :op => :sum, :series => %w(fs.osx iphoto.osx picasa.osx fs.win picasa.win).map{|q| "Photos.source.#{q}"}},
         {:name => 'photos.source.simple', :op => :sum, :series => %w(simple.osx simple.win).map{|q| "Photos.source.#{q}"}}
       ]
@@ -58,7 +59,7 @@ class Chart::PhotoSourcesController < HighchartsController
       :calculate_now => true,
       :percent_view => true,
       :whole_history => true,
-      :queries_to_fetch => %w(email facebook flickr instagram kodak photobucket picasaweb shutterfly smugmug zangzing fs.osx iphoto.osx picasa.osx fs.win picasa.win simple.osx simple.win).map{|q| "Photos.source.#{q}"}
+      :queries_to_fetch => PHOTO_SERVICES.map{|q| "Photos.source.#{q}"}
     )
 
     total = data_src.chart_series.inject(0.0) do |sum, s|
@@ -260,7 +261,7 @@ class Chart::PhotoSourcesController < HighchartsController
       :calculate_now => true,
       :percent_view => true,
       :whole_history => true,
-      :queries_to_fetch => %w(email facebook flickr instagram kodak photobucket picasaweb shutterfly smugmug zangzing fs.osx iphoto.osx picasa.osx fs.win picasa.win simple.osx simple.win).map{|q| "Photos.source.#{q}"}
+      :queries_to_fetch => PHOTO_SERVICES.map{|q| "Photos.source.#{q}"}
     )
 
     data_row_size = data_src.chart_series.map{|s| s[:data].size }.max

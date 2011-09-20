@@ -11,6 +11,7 @@ module RollupData
       'photos.source.photobucket' => 'Photobucket',
       'photos.source.instagram' => 'Instagram',
       'photos.source.smugmug' => 'Smugmug',
+      'photos.source.dropbox' => 'Dropbox',
       'photos.source.kodak' => 'Kodak Gallery',
       'photos.source.picasaweb' => 'Picasa Web',
       'photos.source.email' => 'E-Mail',
