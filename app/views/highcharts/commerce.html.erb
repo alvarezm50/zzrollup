@@ -1,0 +1,85 @@
+<%=  javascript_include_tag 'highcharts', 'chart_loading' %>
+
+<%= render :partial => 'nav' %>
+
+<table>
+  <tr valign="top">
+
+  <td>
+  <div id="commerce-1" class="chart-group">
+    <div>
+      <div id="noncum_clicks_number_daily" class="normal-chart-container"/>
+    </div>
+    <div>
+      <div id="noncum_clicks_number_weekly" class="normal-chart-container"/>
+    </div>
+    <div>
+      <div id="cum_clicks_number_daily" class="normal-chart-container"/>
+    </div>
+    <div>
+      <div id="cum_photo_clicks_detail_daily" class="normal-chart-container"/>
+    </div>
+  </div>
+  </td>
+
+  <td>
+  <div id="commerce-2" class="chart-group">
+    <div>
+      <div id="noncum_clicks_perc_daily" class="normal-chart-container"/>
+    </div>
+    <div>
+      <div id="noncum_clicks_perc_weekly" class="normal-chart-container"/>
+    </div>
+    <div>
+      <div id="cum_clicks_perc_daily" class="normal-chart-container"/>
+    </div>
+    <div>
+      <div id="noncum_photo_clicks_detail_daily" class="normal-chart-container"/>
+    </div>
+  </div>
+  </td>
+
+
+  </tr>
+</table>
+
+
+<script type="text/javascript">
+
+  var all_charts = {
+    noncum_clicks_number_daily: {
+      chart: null,
+      url: 'commerce/buy_clicks.json?span=1440&non_cumulative=true'
+    },
+    noncum_clicks_perc_daily: {
+      chart: null,
+      url: 'commerce/buy_clicks_perc.json?span=1440&non_cumulative=true'
+    },
+    noncum_clicks_number_weekly: {
+      chart: null,
+      url: 'commerce/buy_clicks.json?span=10080&non_cumulative=true'
+    },
+    noncum_clicks_perc_weekly: {
+      chart: null,
+      url: 'commerce/buy_clicks_perc.json?span=10080&non_cumulative=true'
+    },
+    cum_clicks_number_daily: {
+      chart: null,
+      url: 'commerce/buy_clicks.json?span=1440'
+    },
+    cum_clicks_perc_daily: {
+      chart: null,
+      url: 'commerce/buy_clicks_perc.json?span=1440'
+    },
+    cum_photo_clicks_detail_daily: {
+      chart: null,
+      url: 'commerce/buy_photo_clicks.json'
+    },
+    noncum_photo_clicks_detail_daily: {
+      chart: null,
+      url: 'commerce/buy_photo_clicks.json?non_cumulative=true'
+    }
+  };
+
+</script>
+
