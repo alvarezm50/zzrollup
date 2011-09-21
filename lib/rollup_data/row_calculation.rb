@@ -28,7 +28,7 @@ module RollupData
       obsolete_series_names = []
       @series_calculations.each do |calc|
         series_to_operate = calc[:series].map do |target_serie_name|
-          @chart_series.select{|s| target_serie_name.casecmp(s[:name])==0 }.first  || throw("Unkonwn serie - #{target_serie_name}")
+          @chart_series.select{|s| target_serie_name.casecmp(s[:name])==0 }.first || throw("Unkonwn serie - #{target_serie_name}")
         end
         obsolete_series_names += calc[:series].map(&:downcase)
         data_row_size = series_to_operate.map{|s| s[:data].size }.max
