@@ -162,7 +162,7 @@ class Chart::EmailBreakdownController < HighchartsController
           :series => data_src.chart_series,
           :chart => {
             :renderTo => '',
-            :defaultSeriesType => 'line'
+            :defaultSeriesType => 'area'
           },
           :credits => {
             :enabled => false
@@ -216,23 +216,6 @@ class Chart::EmailBreakdownController < HighchartsController
 protected
   def discover_entities
     @email_type = params[:email_type]
-    @urls = RollupResult.connection.select_values("SELECT DISTINCT query_name FROM rollup_results WHERE query_name LIKE 'email.#{@email_type}.%_url%.click' AND span = 1440")
-=begin
-    @entity = case params[:entity]
-      when 'album_share' then 'albumshared'
-      when 'album_like' then 'likealbum'
-      when 'photo_like' then 'photoliked'
-      when 'user_like' then 'userliked'
-      when 'album_updated' then 'albumsharedlike'
-      when 'contributor_invite' then 'contributorinvite'
-      when 'photo_shared' then 'photoshared'
-      when 'photos_ready' then 'photosready'
-      when 'welcome_email' then 'welcome'
-      #email.photocomment.album_photo_url_with_comments.click
-      when 'photo_comment' then 'photocomment'
-    end
-=end
-
     @grid_entity = case @email_type
       when 'albumshared', 'likealbum', 'contributorinvite', 'welcome' then 'album_grid_url'
       when 'photoliked', 'photoshared' then 'album_photo_url'
@@ -240,6 +223,8 @@ protected
       when 'albumsharedlike', 'photosready' then 'album_activities_url'
       when 'photocomment' then 'album_photo_url_with_comments'
     end
+
+    @urls = RollupResult.connection.select_values("SELECT DISTINCT query_name FROM rollup_results WHERE query_name LIKE 'email.#{@email_type}.%_url%.click' AND span = 1440")
   end
 
   def send_click_open_bounce

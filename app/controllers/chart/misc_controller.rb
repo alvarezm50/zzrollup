@@ -49,7 +49,8 @@ class Chart::MiscController < HighchartsController
             :title => {
               :text => nil
             },
-            :min => 0
+            :min => 0,
+            :step => (data_src.categories.size/30.0).ceil
           },
           :plotOptions => {
             :area => {
