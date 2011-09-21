@@ -40,7 +40,8 @@ class Chart::AddPhotoCohortsController < HighchartsController
               :rotation => -90,
               :align => 'right',
               :y => 3,
-              :x => 4
+              :x => 4,
+              :step => (data_src.categories.size/30.0).ceil
             }
           },
           :yAxis => {
@@ -119,7 +120,8 @@ class Chart::AddPhotoCohortsController < HighchartsController
               :rotation => -90,
               :align => 'right',
               :y => 3,
-              :x => 4
+              :x => 4,
+              :step => (users_src.categories.size/30.0).ceil
             }
           },
           :yAxis => {

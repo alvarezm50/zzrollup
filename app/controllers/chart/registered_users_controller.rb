@@ -40,7 +40,8 @@ class Chart::RegisteredUsersController < HighchartsController
               :rotation => -90,
               :align => 'right',
               :y => 3,
-              :x => 4
+              :x => 4,
+              :step => (data_src.categories.size/30.0).ceil
             }
           },
           :yAxis => {
@@ -113,7 +114,8 @@ class Chart::RegisteredUsersController < HighchartsController
               :rotation => -45,
               :align => 'right',
               :y => 7,
-              :x => 5
+              :x => 5,
+              :step => (cohort_src.categories.size/30.0).ceil
             }
           },
           :yAxis => {
@@ -184,7 +186,8 @@ class Chart::RegisteredUsersController < HighchartsController
             :labels => {
               :rotation => -45,
               :align => 'right',
-              :x => 5
+              :x => 5,
+              :step => (cohort_src.categories.size/30.0).ceil
             }
           },
           :yAxis => {

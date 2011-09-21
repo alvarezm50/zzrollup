@@ -26,7 +26,7 @@ module RollupData
       case @span_code
         when 'monthly' then (6.months.ago..Time.now)
         when 'weekly' then (8.weeks.ago..Time.now)
-        when 'daily' then (60.days.ago..Time.now)
+        when 'daily' then (6.months.ago..Time.now) #(60.days.ago..Time.now)
         when 'hourly' then (4.days.ago..Time.now)
         when 'half-hourly' then (2.days.ago..Time.now)
         when 'quarter-hourly' then (1.day.ago..Time.now)
