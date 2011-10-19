@@ -74,6 +74,19 @@ SELECT ru.cohort, count(ru.cohort) FROM
 GROUP BY ru.cohort
     "})
 
+    mgr.name = "Cohort.photos_1"
+    sums = mgr.cohorts_query(PhotoDB.connection,
+               lambda {|begin_date, end_date|  "
+SELECT ru.cohort, count(ru.cohort) FROM
+  (SELECT u.id, cohort, count(p.id) as photo_count FROM users as u, photos as p
+  WHERE u.id = p.user_id AND
+  (p.created_at  >= #{begin_date} AND p.created_at < #{end_date})
+  GROUP BY u.id
+  HAVING photo_count >= 1) as ru
+GROUP BY ru.cohort
+    "})
+
+
 #    mgr = CohortManager.new("dummy", span, first, last)
 #    # first find the users that have likes within the range
 #    mgr.add_users_query(ZZADB.connection,
