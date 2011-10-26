@@ -28,7 +28,7 @@
 
   <td>
   <div id="add-10photos-group" class="chart-group">
-    <h2>Add Photo Cohorts</h2>
+    <h2>Add Photo Cohorts (10+)</h2>
     <div>
       <div id="addphoto_cum_active_users_daily" class="normal-chart-container"/>
     </div>
@@ -52,6 +52,36 @@
     </div>
     <div>
       <div id="addphoto_perc_active_users_monthly" class="normal-chart-container"/>
+    </div>
+  </div>
+  </td>
+
+  <td>
+  <div id="add-10photos-group" class="chart-group">
+    <h2>Add Photo Cohorts (1+)</h2>
+    <div>
+      <div id="addphoto1_cum_active_users_daily" class="normal-chart-container"/>
+    </div>
+    <div>
+      <div id="addphoto1_cum_perc_active_users_daily" class="normal-chart-container"/>
+    </div>
+    <div>
+      <div id="addphoto1_daily_cum_active_users" class="normal-chart-container"/>
+    </div>
+    <div>
+      <div id="addphoto1_daily_cum_perc_active_users" class="normal-chart-container"/>
+    </div>
+    <div>
+      <div id="addphoto1_cum_active_users_weekly" class="normal-chart-container"/>
+    </div>
+    <div>
+      <div id="addphoto1_cum_perc_active_users_weekly" class="normal-chart-container"/>
+    </div>
+    <div>
+      <div id="addphoto1_active_users_monthly" class="normal-chart-container"/>
+    </div>
+    <div>
+      <div id="addphoto1_perc_active_users_monthly" class="normal-chart-container"/>
     </div>
   </div>
   </td>
@@ -116,7 +146,7 @@
     },
 
 
-    //Add Photo Cohorts
+    //Add Photo Cohorts 10
     addphoto_cum_active_users_daily: {
       url: 'add_photo_cohorts/active_users_by_cohort.json?span=1440', chart: null
     },
@@ -141,6 +171,33 @@
     addphoto_perc_active_users_monthly: {
       url: 'add_photo_cohorts/active_users_percent_by_cohort.json?span=43200', chart: null
     },
+
+    //Add Photo Cohorts 1
+    addphoto1_cum_active_users_daily: {
+      url: 'add_photo_cohorts/active_users_by_cohort.json?span=1440&photos=1', chart: null
+    },
+    addphoto1_cum_perc_active_users_daily: {
+      url: 'add_photo_cohorts/active_users_percent_by_cohort.json?span=1440&photos=1', chart: null
+    },
+    addphoto1_daily_cum_active_users: {
+      url: 'add_photo_cohorts/cumulative_active_users_by_cohort.json?photos=1', chart: null
+    },
+    addphoto1_daily_cum_perc_active_users: {
+      url: 'add_photo_cohorts/cumulative_active_users_by_cohort_percent.json?photos=1', chart: null
+    },
+    addphoto1_cum_active_users_weekly: {
+      url: 'add_photo_cohorts/active_users_by_cohort.json?span=10080&photos=1', chart: null
+    },
+    addphoto1_cum_perc_active_users_weekly: {
+      url: 'add_photo_cohorts/active_users_percent_by_cohort.json?span=10080&photos=1', chart: null
+    },
+    addphoto1_active_users_monthly: {
+      url: 'add_photo_cohorts/active_users_by_cohort.json?span=43200&photos=1', chart: null
+    },
+    addphoto1_perc_active_users_monthly: {
+      url: 'add_photo_cohorts/active_users_percent_by_cohort.json?span=43200&photos=1', chart: null
+    },
+
 
     //Share cohorts
     shares_cum_active_users_daily: {
