@@ -8,7 +8,7 @@ class Chart::PhotoSourcesController < HighchartsController
       :whole_history => true,
       :queries_to_fetch => PHOTO_SERVICES.map{|q| "Photos.source.#{q}"},
       :series_calculations => [
-        {:name => 'websites', :op => :sum, :series => %w(facebook flickr instagram kodak photobucket picasaweb shutterfly	smugmug dropbox	zangzing).map{|q| "Photos.source.#{q}"}},
+        {:name => 'websites', :op => :sum, :series => %w(facebook flickr instagram kodak photobucket picasaweb shutterfly	smugmug dropbox	mobileme zangzing).map{|q| "Photos.source.#{q}"}},
         {:name => 'agent', :op => :sum, :series => %w(fs.osx iphoto.osx picasa.osx fs.win picasa.win).map{|q| "Photos.source.#{q}"}},
         {:name => 'photos.source.simple', :op => :sum, :series => %w(simple.osx simple.win).map{|q| "Photos.source.#{q}"}}
       ]
