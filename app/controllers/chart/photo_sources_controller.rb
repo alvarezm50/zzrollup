@@ -1,5 +1,5 @@
 class Chart::PhotoSourcesController < HighchartsController
-  PHOTO_SERVICES = %w(email facebook flickr instagram kodak photobucket picasaweb shutterfly smugmug dropbox zangzing fs.osx iphoto.osx picasa.osx fs.win picasa.win simple.osx simple.win)
+  PHOTO_SERVICES = %w(email facebook flickr instagram kodak photobucket picasaweb shutterfly smugmug dropbox mobileme zangzing fs.osx iphoto.osx picasa.osx fs.win picasa.win simple.osx simple.win)
 
   def overall_categories
     data_src =RollupData::UniversalDatasource.new(
