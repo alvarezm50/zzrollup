@@ -212,11 +212,16 @@ class Chart::AddPhotoCohortsController < HighchartsController
 
       data_src.queries_to_fetch = ["Cohort.users.#{cohort}"]
       data_src.calculate_chart
-      users_series << data_src.chart_series.first if data_src.chart_series.first
+      users_series << data_src.chart_series.first
       
       data_src.queries_to_fetch = ["Cohort.photos_#{photos_q}.#{cohort}"]
       data_src.calculate_chart
-      photos10_series << data_src.chart_series.first if data_src.chart_series.first
+      photos10_series << data_src.chart_series.first
+
+      if (!users_series.empty? && users_series.last.nil?) || (!photos10_series.empty?  && photos10_series.last.nil?)
+        users_series.pop
+        photos10_series.pop
+      end
     end
 
 
