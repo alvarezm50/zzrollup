@@ -20,23 +20,25 @@
     'photoshared': 'Photo Shared',
     'photosready': 'Photos Ready',
     'welcome': 'Welcome Email',
-    'photocomment': 'Photo Comment'
+    'photocomment': 'Photo Comment',
+    'store%2Eorderconfirmed': 'Order Confirmed',
+    'store%2Eordershipped': 'Order Shipped'
   };
 
   var all_charts = {};
 
   $.each(email_types, function(email_type, title){
-    var new_cell_html = "<td><div id=\""+email_type+"-charts\" class=\"chart-group\">";
+    var div_prefix = email_type.replace('%2E', '_');
+    var new_cell_html = "<td><div id=\""+div_prefix+"-charts\" class=\"chart-group\">";
     new_cell_html += "<h2>"+title+"</h2><br/>";
-    new_cell_html += "<div><div id=\""+email_type+"_raw_statistics\" class=\"normal-chart-container\"/></div>";
-    new_cell_html += "<div><div id=\""+email_type+"_full_perc_statistics\" class=\"normal-chart-container\"/></div>";
-    new_cell_html += "<div><div id=\""+email_type+"_link_perc_breakdown\" class=\"normal-chart-container\"/></div>";
+    new_cell_html += "<div><div id=\""+div_prefix+"_raw_statistics\" class=\"normal-chart-container\"/></div>";
+    new_cell_html += "<div><div id=\""+div_prefix+"_full_perc_statistics\" class=\"normal-chart-container\"/></div>";
+    new_cell_html += "<div><div id=\""+div_prefix+"_link_perc_breakdown\" class=\"normal-chart-container\"/></div>";
     new_cell_html += "</div></td>";
     $(new_cell_html).appendTo($("#charts-row"));
-
-    all_charts[email_type+"_raw_statistics"] = {chart: null, url: 'email_breakdown/raw_stats.json?email_type='+email_type}
-    all_charts[email_type+"_full_perc_statistics"] = {chart: null, url: 'email_breakdown/full_stats.json?email_type='+email_type}
-    all_charts[email_type+"_link_perc_breakdown"] = {chart: null, url: 'email_breakdown/link_breakdown.json?email_type='+email_type}
+    all_charts[div_prefix+"_raw_statistics"] = {chart: null, url: 'email_breakdown/raw_stats.json?email_type='+email_type}
+    all_charts[div_prefix+"_full_perc_statistics"] = {chart: null, url: 'email_breakdown/full_stats.json?email_type='+email_type}
+    all_charts[div_prefix+"_link_perc_breakdown"] = {chart: null, url: 'email_breakdown/link_breakdown.json?email_type='+email_type}
   });
 
 </script>
