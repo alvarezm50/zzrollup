@@ -4,6 +4,7 @@ class Chart::AddPhotoCohortsController < HighchartsController
     data_src = RollupData::CohortsDatasource.new(
       :query_name_mask => "Cohort.photos_#{photos_q}",
       :span => params[:span] || 1440,
+      :period => photos_period,
       :calculate_now => true
     )
 
@@ -70,12 +71,14 @@ class Chart::AddPhotoCohortsController < HighchartsController
     users_src = RollupData::CohortsDatasource.new(
       :query_name_mask => 'Cohort.users',
       :span => params[:span] || 1440,
+      :period => photos_period,
       :calculate_now => true, :percent_view => true
     )
     photos10_src = RollupData::CohortsDatasource.new(
       :query_name_mask => "Cohort.photos_#{photos_q}",
       :span => params[:span] || 1440,
       :categories => users_src.categories,
+      :period => photos_period,
       :calculate_now => true
     )
 
@@ -140,6 +143,7 @@ class Chart::AddPhotoCohortsController < HighchartsController
   def cumulative_active_users_by_cohort
     cohort_src = RollupData::CohortsDatasource.new(
       :span => params[:span] || 1440,
+      :period => photos_period,
       :cohort_intersection_params => {:days_count => 60, :weeks_count => 10}
     )
 
@@ -201,6 +205,7 @@ class Chart::AddPhotoCohortsController < HighchartsController
   def cumulative_active_users_by_cohort_percent
     data_src = RollupData::CohortsDatasource.new(
       :span => params[:span] || 1440, :percent_view => true,
+      :period => photos_period,
       :cohort_intersection_params => {:days_count => 60, :weeks_count => 10}
     )
 
@@ -212,11 +217,16 @@ class Chart::AddPhotoCohortsController < HighchartsController
 
       data_src.queries_to_fetch = ["Cohort.users.#{cohort}"]
       data_src.calculate_chart
-      users_series << data_src.chart_series.first if data_src.chart_series.first
+      users_series << data_src.chart_series.first
       
       data_src.queries_to_fetch = ["Cohort.photos_#{photos_q}.#{cohort}"]
       data_src.calculate_chart
-      photos10_series << data_src.chart_series.first if data_src.chart_series.first
+      photos10_series << data_src.chart_series.first
+
+      if (!users_series.empty? && users_series.last.nil?) || (!photos10_series.empty?  && photos10_series.last.nil?)
+        users_series.pop
+        photos10_series.pop
+      end
     end
 
 
@@ -277,6 +287,10 @@ class Chart::AddPhotoCohortsController < HighchartsController
   end
 
 protected
+
+  def photos_period
+    (photos_q==1) ? (Time.utc(2011, 10, 20)..Time.now) : nil
+  end
 
   def photos_q
     case params[:photos]
