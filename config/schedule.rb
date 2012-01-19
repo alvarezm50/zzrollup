@@ -25,9 +25,9 @@ every 1.day, :at => '6:55 am' do
 end
 
 # short term stats
-every 15.minutes do
-   runner "RollupTasks.minimal_sweep"
-end
+#every 15.minutes do
+#   runner "RollupTasks.minimal_sweep"
+#end
 
 # even though TZ is set, time still appear to be in UTC
 # so instead of last day of month we specify first day
