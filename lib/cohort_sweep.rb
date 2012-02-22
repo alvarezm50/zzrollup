@@ -38,7 +38,7 @@ WHERE (event LIKE 'photo.share.%' OR event LIKE 'album.share.%' OR event LIKE 'a
                lambda {|begin_date, end_date, in_set|  "
 SELECT ru.cohort, count(ru.cohort) FROM
   (SELECT u.id, cohort, count(p.id) as photo_count FROM users as u, photos as p
-  WHERE u.id = p.user_id AND
+  WHERE u.id = p.user_id AND auto_by_contact=false AND
   (p.created_at  >= #{begin_date} AND p.created_at < #{end_date})
   GROUP BY u.id
   HAVING photo_count >= 10) as ru
@@ -55,7 +55,7 @@ GROUP BY ru.cohort
     sums = mgr.cohorts_query_in(PhotoDB.connection,
                lambda {|begin_date, end_date, in_set|  "
 SELECT cohort, count(id) FROM users
-WHERE id IN #{in_set}
+WHERE id IN #{in_set} AND auto_by_contact=false
 GROUP BY cohort
     "})
 
@@ -67,7 +67,7 @@ GROUP BY cohort
                lambda {|begin_date, end_date|  "
 SELECT ru.cohort, count(ru.cohort) FROM
   (SELECT u.id, cohort, count(p.id) as photo_count FROM users as u, photos as p
-  WHERE u.id = p.user_id AND
+  WHERE u.id = p.user_id AND auto_by_contact=false AND
   (p.created_at  >= #{begin_date} AND p.created_at < #{end_date})
   GROUP BY u.id
   HAVING photo_count >= 10) as ru
@@ -79,7 +79,7 @@ GROUP BY ru.cohort
                lambda {|begin_date, end_date|  "
 SELECT ru.cohort, count(ru.cohort) FROM
   (SELECT u.id, cohort, count(p.id) as photo_count FROM users as u, photos as p
-  WHERE u.id = p.user_id AND
+  WHERE u.id = p.user_id AND auto_by_contact=false AND
   (p.created_at  >= #{begin_date} AND p.created_at < #{end_date})
   GROUP BY u.id
   HAVING photo_count >= 1) as ru
@@ -139,7 +139,7 @@ GROUP BY ru.cohort
   # Get the total users per cohort and a sum of all
   def self.total_users(span, first, last)
     grouped_query(PhotoDB.connection, "Cohort.users", span,
-               "SELECT cohort, count(id) FROM users GROUP BY cohort ORDER BY cohort", true, true)
+               "SELECT cohort, count(id) FROM users WHERE auto_by_contact=false GROUP BY cohort ORDER BY cohort", true, true)
   end
 
 
