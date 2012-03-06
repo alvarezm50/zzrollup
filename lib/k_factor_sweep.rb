@@ -4,7 +4,7 @@ class KFactorSweep < BaseSweep
   end
 
   def self.full(span)
-    [:joining, :visiting].each do |set_type|
+    [:new, :visiting].each do |set_type|
       [1, 7, 30].each do |days_count|
         query_name = "k_factor.#{set_type}_user.#{days_count}_days"
         k_value = calc_k_value(days_count, set_type)
@@ -16,7 +16,7 @@ class KFactorSweep < BaseSweep
   end
 
   def self.calc_k_value(days_count, set_type)
-    time_field = if set_type == :joining
+    time_field = if set_type == :new
       'created_at'
     elsif set_type == :visiting
       'last_request_at'
