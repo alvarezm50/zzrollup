@@ -1,0 +1,71 @@
+<%=  javascript_include_tag 'highcharts', 'chart_loading' %>
+
+<%= render :partial => 'nav' %>
+
+<table>
+  <tr valign="top">
+
+  <td>
+  <div id="new-users" class="chart-group">
+    <div>
+      <div id="new_users_1" class="normal-chart-container"/>
+    </div>
+    <div>
+      <div id="new_users_7" class="normal-chart-container"/>
+    </div>
+    <div>
+      <div id="new_users_30" class="normal-chart-container"/>
+    </div>
+  </div>
+  </td>
+
+    <td>
+    <div id="visiting-users" class="chart-group">
+      <div>
+        <div id="visiting_users_1" class="normal-chart-container"/>
+      </div>
+      <div>
+        <div id="visiting_users_7" class="normal-chart-container"/>
+      </div>
+      <div>
+        <div id="visiting_users_30" class="normal-chart-container"/>
+      </div>
+    </div>
+    </td>
+
+
+  </tr>
+</table>
+
+
+<script type="text/javascript">
+
+  var all_charts = {
+    new_users_1: {
+        chart: null,
+        url: 'virality/k_factor.json?span=1440&days=1&kind=new'
+    },
+    new_users_7: {
+        chart: null,
+        url: 'virality/k_factor.json?span=1440&days=7&kind=new'
+    },
+    new_users_30: {
+        chart: null,
+        url: 'virality/k_factor.json?span=1440&days=30&kind=new'
+    },
+    visiting_users_1: {
+        chart: null,
+        url: 'virality/k_factor.json?span=1440&days=1&kind=visiting'
+    },
+    visiting_users_7: {
+        chart: null,
+        url: 'virality/k_factor.json?span=1440&days=7&kind=visiting'
+    },
+    visiting_users_30: {
+        chart: null,
+        url: 'virality/k_factor.json?span=1440&days=30&kind=visiting'
+    }
+  };
+
+</script>
+
