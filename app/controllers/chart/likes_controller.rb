@@ -73,7 +73,7 @@ class Chart::LikesController < HighchartsController
   end
 
   def likes_by_type
-    data_src =RollupData::UniversalDatasource.new(
+    data_src = RollupData::UniversalDatasource.new(
       :calculate_now => true,
       :colorize => true,
       :period => (DateTime.civil(2011, 07, 14)..DateTime.now),
