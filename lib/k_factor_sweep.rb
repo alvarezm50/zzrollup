@@ -39,19 +39,19 @@ class KFactorSweep < BaseSweep
     users_count_query = "select count(*) from users where #{time_field} > DATE_ADD(NOW(), INTERVAL -#{days_count} DAY) and auto_by_contact = 0"
 
     # we need to remove these because they joined from an invite during this period and so shouldn't count against us
-    users_joined_from_invite_query = <<-SQL
-        select count(distinct users.id) from invitations, tracked_links, users
-           where invitations.tracked_link_id = tracked_links.id
-             and tracked_links.created_at > DATE_ADD(NOW(), INTERVAL -#{days_count} DAY)
-             and invitations.status = 'complete'
-		         and invitations.invited_user_id = users.id
-    SQL
+    #users_joined_from_invite_query = <<-SQL
+    #    select count(distinct users.id) from invitations, tracked_links, users
+    #       where invitations.tracked_link_id = tracked_links.id
+    #         and tracked_links.created_at > DATE_ADD(NOW(), INTERVAL -#{days_count} DAY)
+    #         and invitations.status = 'complete'
+		 #        and invitations.invited_user_id = users.id
+    #SQL
 
     completed_invitations_sent = db.select_value(completed_invitations_sent_query)
     users_count = db.select_value(users_count_query)
-    users_joined_from_invite_count = db.select_value(users_joined_from_invite_query)
+    #users_joined_from_invite_count = db.select_value(users_joined_from_invite_query)
 
-    k = completed_invitations_sent.to_f / (users_count - users_joined_from_invite_count)
+    k = completed_invitations_sent.to_f / users_count
     k.nan? ? nil : k*100
   end
 
