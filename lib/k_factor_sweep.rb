@@ -36,7 +36,7 @@ class KFactorSweep < BaseSweep
     SQL
 
     # this is the total number of active or joined users during time perion
-    users_count_query = "select count(*) from users where #{time_field} > DATE_ADD(NOW(), INTERVAL -#{days_count} DAY)"
+    users_count_query = "select count(*) from users where #{time_field} > DATE_ADD(NOW(), INTERVAL -#{days_count} DAY) and auto_by_contact = 0"
 
     # we need to remove these because they joined from an invite during this period and so shouldn't count against us
     users_joined_from_invite_query = <<-SQL
