@@ -166,6 +166,7 @@ ORDER BY n.reported_at, n.query_name
     protected_run { CohortSweep.full(span) }
     protected_run { GASweep.full(span) }
     protected_run { KFactorSweep.full(span) }
+    protected_run { NonUsersSweep.full(span) }
   end
 
   # sweeps the final set for the sweep span
