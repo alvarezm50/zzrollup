@@ -19,18 +19,26 @@
   </div>
   </td>
 
-    <td>
+  <td>
     <div id="visiting-users" class="chart-group">
-      <div>
+    <div>
         <div id="visiting_users_1" class="normal-chart-container"/>
-      </div>
-      <div>
-        <div id="visiting_users_7" class="normal-chart-container"/>
-      </div>
-      <div>
-        <div id="visiting_users_30" class="normal-chart-container"/>
-      </div>
     </div>
+    <div>
+        <div id="visiting_users_7" class="normal-chart-container"/>
+    </div>
+    <div>
+        <div id="visiting_users_30" class="normal-chart-container"/>
+    </div>
+    </div>
+  </td>
+
+    <td>
+      <div id="share-email" class="chart-group">
+          <div>
+              <div id="share_email_unique_non_users" class="normal-chart-container"/>
+          </div>
+      </div>
     </td>
 
 
@@ -64,6 +72,10 @@
     visiting_users_30: {
         chart: null,
         url: 'virality/k_factor.json?span=1440&days=30&kind=visiting'
+    },
+    share_email_unique_non_users: {
+        chart: null,
+        url: 'virality/unique_nonreg_emails.json?span=1440'
     }
   };
 

@@ -1,0 +1,1 @@
+Array.send :include, MeanMedian
